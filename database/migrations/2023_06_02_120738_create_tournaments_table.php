@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('tournaments', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->enum('type', ['league', 'elimination', 'group+elimination'])->default('league');
+            $table->integer('rounds');
             $table->timestamps();
         });
     }
