@@ -16,5 +16,9 @@
         "tailwindcss": "^3.3.2",
         "vite": "^4.0.0",
         "vue": "^3.2.41"
+    },
+    "dependencies": {
+        "@vuelidate/core": "^2.0.2",
+        "@vuelidate/validators": "^2.0.2"
     }
 }

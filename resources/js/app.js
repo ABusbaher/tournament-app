@@ -5,7 +5,7 @@ import { createApp, h } from 'vue/dist/vue.esm-bundler';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
-import AddTournamentForm from "@/Pages/Profile/Partials/AddTournamentForm.vue";
+import AddTournamentForm from "@/Pages/Tournaments/Partials/AddTournamentForm.vue";
 import AllTournaments from "@/Pages/Tournaments/AllTournaments.vue";
 import BasePagination from "@/Components/BasePagination.vue";
 

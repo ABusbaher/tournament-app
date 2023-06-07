@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import AddTournamentForm from "@/Pages/Profile/Partials/AddTournamentForm.vue";
+import AddTournamentForm from "@/Pages/Tournaments/Partials/AddTournamentForm.vue";
 import BasePagination from "@/Components/BasePagination.vue";
 
 const tournaments = ref([]);

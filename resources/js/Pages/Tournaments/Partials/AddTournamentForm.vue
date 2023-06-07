@@ -6,27 +6,26 @@ import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import SelectInput from "@/Components/SelectInput.vue";
-import { useForm } from '@inertiajs/vue3';
-import { nextTick, ref, defineEmits } from 'vue';
+import { ref, defineEmits, reactive } from 'vue';
+import { useVuelidate } from '@vuelidate/core'
+import { required, minLength, helpers, numeric, minValue, maxValue } from '@vuelidate/validators'
 
 const addTournament = ref(false);
-const nameInput = ref(null);
-const selectedType = ref('');
 
-const form = useForm({
-    name: '',
-    rounds: '',
-    types: [
-        { value: 'league', label: 'League' },
-        { value: 'knockout', label: 'Knockout' },
-        { value: 'league+knockout', label: 'League+Knockout' }
-    ],
-});
-
-const data = {
+const state = reactive({
     name: '',
     rounds: '',
     type: '',
+})
+const rules = {
+    name: { required, minLength: minLength(3) },
+    rounds: { required, numeric, minValue: minValue(1), maxValue: maxValue(4) },
+    type: { required }
+}
+
+const v$ = useVuelidate(rules, state)
+
+const data = {
     types: [
         { value: 'league', label: 'League' },
         { value: 'elimination', label: 'Elimination (Cup)' },
@@ -36,39 +35,32 @@ const data = {
 
 const openForm = () => {
     addTournament.value = true;
-
-    nextTick(() => nameInput.value.focus());
 };
 const emit = defineEmits(['tournamentCreated']);
 
 const submitForm = () => {
+    v$.value.$touch();
+    if (v$.value.$invalid) {
+        return;
+    }
     axios.post('tournaments', {
-        name: data.name,
-        rounds: data.rounds,
-        type: selectedType.value,
+        name: state.name,
+        rounds: state.rounds,
+        type: state.type,
     }).then(response => {
         emit('tournamentCreated', response.data['tournament']);
         closeModal();
     })
         .catch(error => {
-            console.log(error);
-            // Handle error
+            console.log(error.response.data);
         });
 };
 
 const closeModal = () => {
     addTournament.value = false;
-    data.rounds = '';
-    data.name = '';
-    selectedType.value = ''
-    form.reset();
-};
-
-const errorBehavior = () => {
-    console.log(selectedType)
-    // addTournament.value = false;
-    nameInput.value.focus();
-    // form.reset();
+    state.rounds = '';
+    state.name = '';
+    state.type = ''
 };
 </script>
 
@@ -82,36 +74,38 @@ const errorBehavior = () => {
                     Add Tournament
                 </h2>
 
-                <div class="mt-6">
+                <div :class="['mt-6', { error: v$.name.$errors.length }]">
                     <InputLabel for="name" value="Tournament name" />
 
                     <TextInput
                         id="name"
                         ref="nameInput"
-                        v-model="data.name"
+                        v-model="state.name"
                         type="text"
                         class="mt-1 block w-3/4"
                         placeholder="Tournament name"
                     />
-
-                    <InputError :message="form.errors.name" class="mt-2" />
+                    <div class="input-errors mt-2" v-for="error of v$.name.$errors" :key="error.$uid">
+                        <InputError :message="error.$message" class="mt-2" />
+                    </div>
                 </div>
 
-                <div class="mt-6">
+                <div :class="['mt-6', { error: v$.rounds.$errors.length }]">
                     <InputLabel for="rounds" value="Number of rounds" />
 
                     <TextInput
                         id="rounds"
                         ref="nameInput"
-                        v-model="data.rounds"
+                        v-model="state.rounds"
                         type="number"
                         min="1"
                         max="4"
                         class="mt-1 block w-3/4"
                         placeholder="1 - 4"
                     />
-
-                    <InputError :message="form.errors.rounds" class="mt-2" />
+                    <div class="input-errors mt-2" v-for="error of v$.rounds.$errors" :key="error.$uid">
+                        <InputError :message="error.$message" class="mt-2" />
+                    </div>
                 </div>
 
                 <div class="mt-6">
@@ -120,12 +114,13 @@ const errorBehavior = () => {
                     <SelectInput
                         id="types"
                         name="types"
-                        v-model="selectedType"
+                        v-model="state.type"
                         :options="data.types"
                         class="mt-1 block w-3/4"
                     />
-
-                    <InputError :message="form.errors.types" class="mt-2" />
+                    <div class="input-errors mt-2" v-for="error of v$.type.$errors" :key="error.$uid">
+                        <InputError :message="error.$message" class="mt-2" />
+                    </div>
                 </div>
 
                 <div class="mt-6 flex justify-end">
@@ -133,8 +128,6 @@ const errorBehavior = () => {
 
                     <PrimaryButton
                         class="ml-3"
-                        :class="{ 'opacity-25': form.processing }"
-                        :disabled="form.processing"
                         @click="submitForm"
                     >
                         Add Tournament
