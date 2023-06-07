@@ -6,12 +6,16 @@ import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import AddTournamentForm from "@/Pages/Profile/Partials/AddTournamentForm.vue";
+import AllTournaments from "@/Pages/Tournaments/AllTournaments.vue";
+import BasePagination from "@/Components/BasePagination.vue";
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
 const app = createApp({
     components: {
-        AddTournamentForm
+        AddTournamentForm,
+        AllTournaments,
+        BasePagination,
     }
 });
 app.mount('#app');

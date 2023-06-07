@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/tournaments', [TournamentController::class, 'index'])->name('all-tournaments');
-Route::post('/tournaments', [TournamentController::class, 'store'])->name('create-tournament');
-
+Route::get('/tournaments', [TournamentController::class, 'index'])->name('tournament.all');
+Route::post('/tournaments', [TournamentController::class, 'store'])->name('tournament.create');
+Route::get('/tournamentsAll', [TournamentController::class, 'getAll'])->name('tournament.getAll');
 require __DIR__.'/auth.php';

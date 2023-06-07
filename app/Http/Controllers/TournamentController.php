@@ -12,8 +12,14 @@ class TournamentController extends Controller
     public function index(): View
     {
         return view('tournament.all', [
-           'tournaments' => Tournament::paginate(10)
+           'tournaments' => Tournament::orderBy('created_at', 'desc')->paginate(5)
         ]);
+    }
+
+    public function getAll(): JsonResponse
+    {
+        $tournaments = Tournament::orderBy('created_at', 'desc')->paginate(5);
+        return response()->json(['tournaments' => $tournaments]);
     }
 
     public function store(CreateTournamentRequest $tournamentRequest): JsonResponse
