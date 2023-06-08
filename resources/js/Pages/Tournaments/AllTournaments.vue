@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue';
 import AddTournamentForm from "@/Pages/Tournaments/Partials/AddTournamentForm.vue";
 import BasePagination from "@/Components/BasePagination.vue";
+import EditTournamentForm from "@/Pages/Tournaments/Partials/EditTournamentForm.vue";
 
 const tournaments = ref([]);
 const currentPage = ref(1);
@@ -33,10 +34,21 @@ const handleTournamentCreated = (newTournament) => {
     tournaments.value.unshift(newTournament);
     tournaments.value.pop();
 };
+
+const handleTournamentUpdate = (updatedTournament) => {
+    tournaments.value = tournaments.value.map(item => {
+        if (item.id === updatedTournament.id) {
+            Object.assign(item, updatedTournament)
+        }
+        return item;
+    })
+};
+
+
 // Fetch the tournaments when the component is mounted
 onMounted(() => {
     const page = new URLSearchParams(window.location.search).get('page') || 1;
-    fetchTournaments(`/tournamentsAll?page=${page}`)
+    fetchTournaments(`api/tournaments?page=${page}`)
 });
 
 </script>
@@ -73,12 +85,13 @@ onMounted(() => {
                 <td class="py-3 px-4 text-center">{{ tournament.rounds }}</td>
                 <td class="py-3 px-4 text-center">{{ tournament.id }}</td>
                 <td class="py-3 px-4 text-center">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                    <a href="#" class="font-medium text-red-600 dark:text-red-500 hover:underline">Remove</a>
+                    <edit-tournament-form @tournamentEdited="handleTournamentUpdate" :tournamentId="tournament.id" />
+                    <button class="font-medium text-red-600 dark:text-red-500 hover:underline">Remove</button>
                 </td>
             </tr>
         </tbody>
     </table>
+
     <base-pagination
         :current-page="currentPage"
         @emitNextPage="fetchTournaments(nextPageLink)"

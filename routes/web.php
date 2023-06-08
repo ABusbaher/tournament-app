@@ -37,6 +37,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/tournaments', [TournamentController::class, 'index'])->name('tournament.all');
-Route::post('/tournaments', [TournamentController::class, 'store'])->name('tournament.create');
-Route::get('/tournamentsAll', [TournamentController::class, 'getAll'])->name('tournament.getAll');
+//Route::post('/tournaments', [TournamentController::class, 'store'])->name('tournament.create');
+//Route::get('/tournamentsAll', [TournamentController::class, 'getAll'])->name('tournament.getAll');
 require __DIR__.'/auth.php';

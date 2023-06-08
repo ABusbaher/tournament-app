@@ -5,73 +5,75 @@ import InputLabel from '@/Components/InputLabel.vue';
 import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import SelectInput from "@/Components/SelectInput.vue";
 import { ref, defineEmits, reactive } from 'vue';
 import { useVuelidate } from '@vuelidate/core'
-import { required, minLength, helpers, numeric, minValue, maxValue } from '@vuelidate/validators'
+import { required, minLength } from '@vuelidate/validators'
 
-const addTournament = ref(false);
+const editTournament = ref(false);
+const props = defineProps({
+    tournamentId: {
+        type: Number,
+        required: true,
+    },
+});
 
 const state = reactive({
     name: '',
-    rounds: '',
     type: '',
+    rounds: '',
+    id: null,
 })
 const rules = {
     name: { required, minLength: minLength(3) },
-    rounds: { required, numeric, minValue: minValue(1), maxValue: maxValue(4) },
-    type: { required }
 }
 
 const v$ = useVuelidate(rules, state)
 
-const data = {
-    types: [
-        { value: 'league', label: 'League' },
-        { value: 'elimination', label: 'Elimination (Cup)' },
-        { value: 'group+elimination', label: 'Group+Elimination' }
-    ],
-};
-
 const openModal = () => {
-    addTournament.value = true;
+    editTournament.value = true;
+    axios.get(`/api/tournaments/${props.tournamentId}`)
+        .then(response => {
+            state.name = response.data['name'];
+            state.type = response.data['type'];
+            state.rounds = response.data['rounds'].toString();
+            state.id = response.data['id'];
+        })
+        .catch(error => {
+            console.log(error);
+        });
 };
-const emit = defineEmits(['tournamentCreated']);
+const emit = defineEmits(['tournamentEdited']);
 
 const submitForm = () => {
     v$.value.$touch();
     if (v$.value.$invalid) {
         return;
     }
-    axios.post('api/tournaments', {
+    axios.patch(`/api/tournaments/${props.tournamentId}`, {
         name: state.name,
-        rounds: state.rounds,
-        type: state.type,
     }).then(response => {
-        emit('tournamentCreated', response.data['tournament']);
+        // console.log(response.data);
+        const updatedTournament = response.data;
+        emit('tournamentEdited', updatedTournament);
         closeModal();
     })
-        .catch(error => {
-            console.log(error.response.data);
-        });
+   .catch(error => {
+       console.log(error.response);
+   });
 };
 
 const closeModal = () => {
-    addTournament.value = false;
-    state.rounds = '';
-    state.name = '';
-    state.type = ''
+    editTournament.value = false;
 };
 </script>
 
 <template>
     <section class="space-y-6">
-        <PrimaryButton @click="openModal">Add Tournament</PrimaryButton>
-
-        <Modal :show="addTournament" @close="closeModal">
+        <button @click="openModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
+        <Modal :show="editTournament" @close="closeModal">
             <div class="p-6">
                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                    Add Tournament
+                    Edit Tournament
                 </h2>
 
                 <div :class="['mt-6', { error: v$.name.$errors.length }]">
@@ -90,37 +92,30 @@ const closeModal = () => {
                     </div>
                 </div>
 
-                <div :class="['mt-6', { error: v$.rounds.$errors.length }]">
+                <div class="mt-6">
                     <InputLabel for="rounds" value="Number of rounds" />
 
                     <TextInput
+                        readonly
                         id="rounds"
                         ref="nameInput"
                         v-model="state.rounds"
                         type="number"
-                        min="1"
-                        max="4"
                         class="mt-1 block w-3/4"
-                        placeholder="1 - 4"
                     />
-                    <div class="input-errors mt-2" v-for="error of v$.rounds.$errors" :key="error.$uid">
-                        <InputError :message="error.$message" class="mt-2" />
-                    </div>
                 </div>
 
                 <div class="mt-6">
-                    <InputLabel for="types" value="Choose type of tournament"/>
+                    <InputLabel for="types" value="Type of tournament"/>
 
-                    <SelectInput
+                    <TextInput
+                        readonly
                         id="types"
-                        name="types"
+                        ref="nameInput"
                         v-model="state.type"
-                        :options="data.types"
+                        type="text"
                         class="mt-1 block w-3/4"
                     />
-                    <div class="input-errors mt-2" v-for="error of v$.type.$errors" :key="error.$uid">
-                        <InputError :message="error.$message" class="mt-2" />
-                    </div>
                 </div>
 
                 <div class="mt-6 flex justify-end">
@@ -130,7 +125,7 @@ const closeModal = () => {
                         class="ml-3"
                         @click="submitForm"
                     >
-                        Add Tournament
+                        Edit Tournament
                     </PrimaryButton>
                 </div>
             </div>
