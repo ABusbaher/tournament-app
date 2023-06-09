@@ -3,6 +3,8 @@ import { ref, onMounted } from 'vue';
 import AddTournamentForm from "@/Pages/Tournaments/Partials/AddTournamentForm.vue";
 import BasePagination from "@/Components/BasePagination.vue";
 import EditTournamentForm from "@/Pages/Tournaments/Partials/EditTournamentForm.vue";
+import DeleteTournamentForm from "@/Pages/Tournaments/Partials/DeleteTournamentForm.vue";
+import StatusMessage from "@/Components/StatusMessage.vue";
 
 const tournaments = ref([]);
 const currentPage = ref(1);
@@ -31,8 +33,11 @@ const fetchTournaments = (url) => {
 };
 const handleTournamentCreated = (newTournament) => {
     // Add the newly created tournament at the beginning of the tournaments list and remove last previous
-    tournaments.value.unshift(newTournament);
-    tournaments.value.pop();
+    // tournaments.value.unshift(newTournament);
+    // tournaments.value.pop();
+    // go to first page with newly created on top
+    fetchTournaments(`api/tournaments?page=1`);
+    showAddTournamentMsg();
 };
 
 const handleTournamentUpdate = (updatedTournament) => {
@@ -42,6 +47,13 @@ const handleTournamentUpdate = (updatedTournament) => {
         }
         return item;
     })
+    showEditTournamentMsg();
+};
+
+const handleTournamentDelete = (deletedTournament) => {
+    // tournaments.value = tournaments.value.filter(item => item.id !== deletedTournament);
+    fetchTournaments(`api/tournaments?page=${currentPage.value}`)
+    showDeleteTournamentMsg();
 };
 
 
@@ -51,8 +63,38 @@ onMounted(() => {
     fetchTournaments(`api/tournaments?page=${page}`)
 });
 
+
+const AddTournamentMsg = ref(false);
+const showAddTournamentMsg = () => {
+    AddTournamentMsg.value = true;
+    setTimeout(closeAddTournamentMsg, 5000);
+};
+const closeAddTournamentMsg = () => {
+    AddTournamentMsg.value = false;
+};
+
+const EditTournamentMsg = ref(false);
+const showEditTournamentMsg = () => {
+    EditTournamentMsg.value = true;
+    setTimeout(closeEditTournamentMsg, 5000);
+};
+const closeEditTournamentMsg = () => {
+    EditTournamentMsg.value = false;
+};
+
+const DeleteTournamentMsg = ref(false);
+const showDeleteTournamentMsg = () => {
+    DeleteTournamentMsg.value = true;
+    setTimeout(closeDeleteTournamentMsg, 5000);
+};
+const closeDeleteTournamentMsg = () => {
+    DeleteTournamentMsg.value = false;
+};
 </script>
 <template>
+    <StatusMessage message="Tournament successfully added" color="green" :show="AddTournamentMsg"  @close="closeAddTournamentMsg"/>
+    <StatusMessage message="Tournament name successfully edited" color="green" :show="EditTournamentMsg"  @close="closeEditTournamentMsg"/>
+    <StatusMessage message="Tournament successfully deleted" color="green" :show="DeleteTournamentMsg"  @close="closeDeleteTournamentMsg"/>
     <div class="flex justify-end mb-6">
         <AddTournamentForm @tournamentCreated="handleTournamentCreated"></AddTournamentForm>
     </div>
@@ -86,7 +128,7 @@ onMounted(() => {
                 <td class="py-3 px-4 text-center">{{ tournament.id }}</td>
                 <td class="py-3 px-4 text-center">
                     <edit-tournament-form @tournamentEdited="handleTournamentUpdate" :tournamentId="tournament.id" />
-                    <button class="font-medium text-red-600 dark:text-red-500 hover:underline">Remove</button>
+                    <delete-tournament-form @tournament-deleted="handleTournamentDelete" :tournament-id="tournament.id" />
                 </td>
             </tr>
         </tbody>

@@ -37,4 +37,12 @@ class TournamentController extends Controller
         $tournament->update($tournamentRequest->only('name'));
         return response()->json($tournament);
     }
+
+    public function destroy(Tournament $tournament): JsonResponse
+    {
+        $tournament->delete();
+        return response()->json([
+            'message' => 'Tournament deleted successfully',
+        ], 204);
+    }
 }

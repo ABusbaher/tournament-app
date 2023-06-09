@@ -23,3 +23,4 @@ Route::post('/tournaments', [TournamentController::class, 'store'])->name('tourn
 Route::get('/tournaments', [TournamentController::class, 'getAll'])->name('tournament.getAll');
 Route::get('/tournaments/{tournament}', [TournamentController::class, 'show'])->name('tournament.show');
 Route::patch('/tournaments/{tournament}', [TournamentController::class, 'update'])->name('tournament.update');
+Route::delete('/tournaments/{tournament}', [TournamentController::class, 'destroy'])->name('tournament.destroy');

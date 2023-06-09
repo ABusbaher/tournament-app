@@ -3,11 +3,21 @@
 namespace Tests\Feature\Tournament;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 
 class TournamentTest extends TestCase
 {
     use RefreshDatabase;
+
+    private  function createTournament(): TestResponse
+    {
+        return $this->postWithCsrfToken(route('tournament.store', [
+            'name' => 'PES',
+            'rounds' => 2,
+            'type' => 'league',
+        ]));
+    }
 
     public function test_showing_all_tournaments(): void
     {
@@ -20,15 +30,11 @@ class TournamentTest extends TestCase
     public function test_tournament_can_be_created(): void
     {
 //        $this->withoutMiddleware(VerifyCsrfToken::class);
-        $response = $this->postWithCsrfToken(route('tournament.store', [
-            'name' => 'PES league',
-            'rounds' => 2,
-            'type' => 'league',
-        ]));
+        $response = $this->createTournament();
 
         $response->assertStatus(201);
         $this->assertDatabaseHas('tournaments', [
-            'name' => 'PES league',
+            'name' => 'PES',
             'rounds' => 2,
             'type' => 'league'
         ]);
@@ -83,11 +89,7 @@ class TournamentTest extends TestCase
 
     public function test_single_tournament_can_be_fetched_with_proper_id(): void
     {
-        $this->postWithCsrfToken(route('tournament.store', [
-            'name' => 'PES',
-            'rounds' => 2,
-            'type' => 'league',
-        ]));
+        $this->createTournament();
         $response = $this->get(route('tournament.show', ['tournament' => 1]));
 
         $response->assertStatus(200)->assertJsonFragment([
@@ -106,11 +108,7 @@ class TournamentTest extends TestCase
 
     public function test_tournament_name_can_be_edited_other_properties_stays_unchanged(): void
     {
-        $this->postWithCsrfToken(route('tournament.store', [
-            'name' => 'PES',
-            'rounds' => 2,
-            'type' => 'league',
-        ]));
+        $this->createTournament();
         $response = $this->patch(route('tournament.update', ['tournament' => 1]), [
             'name' => 'PES updated',
             'rounds' => 2343,
@@ -127,11 +125,7 @@ class TournamentTest extends TestCase
 
     public function test_tournament_can_not_be_edited_if_name_is_not_provided(): void
     {
-        $this->postWithCsrfToken(route('tournament.store', [
-            'name' => 'PES',
-            'rounds' => 2,
-            'type' => 'league',
-        ]));
+        $this->createTournament();
         $response = $this->patch(route('tournament.update', ['tournament' => 1]), [
             'rounds' => 2343,
             'type' => 'elimination',
@@ -141,5 +135,19 @@ class TournamentTest extends TestCase
         $response->assertStatus(422);
     }
 
+    public function test_tournament_can_be_deleted_when_valid_id_is_provided() :void
+    {
+        $this->createTournament();
+        $response = $this->delete(route('tournament.destroy', ['tournament' => 1]));
 
+        $response->assertStatus(204);
+    }
+
+    public function test_tournament_cannot_be_deleted_when_invalid_id_is_provided() :void
+    {
+        $this->createTournament();
+        $response = $this->delete(route('tournament.destroy', ['tournament' => 'not-valid-id']));
+
+        $response->assertStatus(404);
+    }
 }
