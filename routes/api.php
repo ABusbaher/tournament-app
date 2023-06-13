@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TournamentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,3 +25,6 @@ Route::get('/tournaments', [TournamentController::class, 'getAll'])->name('tourn
 Route::get('/tournaments/{tournament}', [TournamentController::class, 'show'])->name('tournament.show');
 Route::patch('/tournaments/{tournament}', [TournamentController::class, 'update'])->name('tournament.update');
 Route::delete('/tournaments/{tournament}', [TournamentController::class, 'destroy'])->name('tournament.destroy');
+
+Route::get('/tournaments/{tournament}/teams', [TeamController::class, 'getAllTeams'])->name('team.getAll');
+Route::post('/tournaments/{tournament}/teams', [TeamController::class, 'store'])->name('team.store');

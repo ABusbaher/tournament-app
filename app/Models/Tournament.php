@@ -11,6 +11,18 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Tournament newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Tournament newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Tournament query()
+ * @property int $id
+ * @property string $name
+ * @property string $type
+ * @property int $rounds
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Tournament whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tournament whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tournament whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tournament whereRounds($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tournament whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tournament whereUpdatedAt($value)
  * @mixin \Eloquent
  */
 class Tournament extends Model

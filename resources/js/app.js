@@ -10,6 +10,8 @@ import AllTournaments from "@/Pages/Tournaments/AllTournaments.vue";
 import EditTournamentForm from "@/Pages/Tournaments/Partials/EditTournamentForm.vue";
 import BasePagination from "@/Components/BasePagination.vue";
 import DeleteTournamentForm from "@/Pages/Tournaments/Partials/DeleteTournamentForm.vue";
+import AllTeams from "@/Pages/Teams/AllTeams.vue";
+import AddTeamForm from "@/Pages/Teams/Partials/AddTeamForm.vue";
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
@@ -20,6 +22,8 @@ const app = createApp({
         BasePagination,
         EditTournamentForm,
         DeleteTournamentForm,
+        AllTeams,
+        AddTeamForm,
     }
 });
 app.mount('#app');
