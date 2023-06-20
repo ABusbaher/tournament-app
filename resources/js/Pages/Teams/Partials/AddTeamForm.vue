@@ -2,24 +2,42 @@
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
+import FileInput from "@/Components/FileInput.vue";
 import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { ref, defineEmits, reactive } from 'vue';
 import { useVuelidate } from '@vuelidate/core'
-import { required, minLength, numeric, minValue, maxValue } from '@vuelidate/validators'
+import { required, minLength, helpers } from '@vuelidate/validators'
+import {useTournamentStore} from "@/stores/Tournament.js";
 
 const addTournament = ref(false);
+const tournamentStore = useTournamentStore();
+const tournamentId = tournamentStore.getId;
 
 const state = reactive({
     name: '',
-    rounds: '',
-    type: '',
-})
+    image: null,
+});
+const imageExtensions = ['jpeg', 'png', 'jpg'];
+const fileSizeLimit = 2 * 1024 * 1024;
+const validImg = (value) => {
+    if (!value) return true;
+    const extension = value.name.split('.').pop();
+    return imageExtensions.includes(extension.toLowerCase());
+}
+
+const validImgSize = (value) => {
+    if (!value) return true;
+    return value.size <= fileSizeLimit;
+}
+
 const rules = {
     name: { required, minLength: minLength(3) },
-    rounds: { required, numeric, minValue: minValue(1), maxValue: maxValue(4) },
-    type: { required }
+    image: {
+        validImg: helpers.withMessage('File type not supported', validImg),
+        validImgSize: helpers.withMessage('Image can not bigger than ' + fileSizeLimit + ' bytes', validImgSize)
+    }
 }
 
 const v$ = useVuelidate(rules, state)
@@ -27,19 +45,25 @@ const v$ = useVuelidate(rules, state)
 const openModal = () => {
     addTournament.value = true;
 };
-const emit = defineEmits(['tournamentCreated']);
+const emit = defineEmits(['teamCreated']);
+
+const config = {
+    headers: {
+        'Content-Type': 'multipart/form-data',
+    },
+};
 
 const submitForm = () => {
     v$.value.$touch();
     if (v$.value.$invalid) {
         return;
     }
-    axios.post('api/tournaments', {
+    axios.post(`/api/tournaments/${tournamentId}/teams`, {
         name: state.name,
-        rounds: state.rounds,
-        type: state.type,
-    }).then(response => {
-        emit('tournamentCreated', response.data['tournament']);
+        tournament_id: tournamentId,
+        ...(state.image && { image: state.image }),
+    }, config).then(response => {
+        emit('teamCreated', response.data);
         closeModal();
     })
         .catch(error => {
@@ -51,7 +75,8 @@ const closeModal = () => {
     addTournament.value = false;
     state.rounds = '';
     state.name = '';
-    state.type = ''
+    state.type = '';
+    state.image = null;
 };
 </script>
 
@@ -81,20 +106,13 @@ const closeModal = () => {
                     </div>
                 </div>
 
-                <div :class="['mt-6', { error: v$.rounds.$errors.length }]">
-                    <InputLabel for="rounds" value="Number of rounds" />
-
-                    <TextInput
-                        id="rounds"
-                        ref="nameInput"
-                        v-model="state.rounds"
-                        type="number"
-                        min="1"
-                        max="4"
-                        class="mt-1 block w-3/4"
-                        placeholder="1 - 4"
+                <div :class="['mt-6', { error: v$.image.$errors.length }]">
+                    <FileInput
+                        label-name="Upload team logo"
+                        help-text="Supported formats JPEG, JPG, PNG."
+                        v-model="state.image"
                     />
-                    <div class="input-errors mt-2" v-for="error of v$.rounds.$errors" :key="error.$uid">
+                    <div class="input-errors mt-2" v-for="error of v$.image.$errors" :key="error.$uid">
                         <InputError :message="error.$message" class="mt-2" />
                     </div>
                 </div>

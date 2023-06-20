@@ -43,7 +43,7 @@ const submitForm = () => {
     if (v$.value.$invalid) {
         return;
     }
-    axios.post('api/tournaments', {
+    axios.post('/api/tournaments', {
         name: state.name,
         rounds: state.rounds,
         type: state.type,

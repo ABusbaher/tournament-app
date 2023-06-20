@@ -36,7 +36,7 @@ const handleTournamentCreated = (newTournament) => {
     // tournaments.value.unshift(newTournament);
     // tournaments.value.pop();
     // go to first page with newly created on top
-    fetchTournaments(`api/tournaments?page=1`);
+    fetchTournaments(`/api/tournaments?page=1`);
     showAddTournamentMsg();
 };
 
@@ -52,7 +52,7 @@ const handleTournamentUpdate = (updatedTournament) => {
 
 const handleTournamentDelete = (deletedTournament) => {
     // tournaments.value = tournaments.value.filter(item => item.id !== deletedTournament);
-    fetchTournaments(`api/tournaments?page=${currentPage.value}`)
+    fetchTournaments(`/api/tournaments?page=${currentPage.value}`)
     showDeleteTournamentMsg();
 };
 
@@ -60,7 +60,7 @@ const handleTournamentDelete = (deletedTournament) => {
 // Fetch the tournaments when the component is mounted
 onMounted(() => {
     const page = new URLSearchParams(window.location.search).get('page') || 1;
-    fetchTournaments(`api/tournaments?page=${page}`)
+    fetchTournaments(`/api/tournaments?page=${page}`)
 });
 
 
@@ -125,7 +125,7 @@ const closeDeleteTournamentMsg = () => {
                 <td class="py-3 px-4 text-center">{{ tournament.name }}</td>
                 <td class="py-3 px-4 text-center">{{ tournament.type }}</td>
                 <td class="py-3 px-4 text-center">{{ tournament.rounds }}</td>
-                <td class="py-3 px-4 text-center">{{ tournament.id }}</td>
+                <td class="py-3 px-4 text-center"><a :href="`/tournaments/${tournament.id}/teams`">Visit tournament page</a></td>
                 <td class="py-3 px-4 text-center">
                     <edit-tournament-form @tournamentEdited="handleTournamentUpdate" :tournamentId="tournament.id" />
                     <delete-tournament-form @tournament-deleted="handleTournamentDelete" :tournament-id="tournament.id" />
