@@ -19,7 +19,7 @@ const state = reactive({
     name: '',
     image: null,
 });
-const imageExtensions = ['jpeg', 'png', 'jpg'];
+const imageExtensions = ['jpeg', 'png', 'jpg', 'webp'];
 const fileSizeLimit = 2 * 1024 * 1024;
 const validImg = (value) => {
     if (!value) return true;

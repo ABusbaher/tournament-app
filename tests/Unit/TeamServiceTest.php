@@ -71,6 +71,17 @@ class TeamServiceTest extends TestCase
         Storage::disk('public')->assertExists('team_images/' . $this->testFilename);
     }
 
+    public function test_team_can_be_deleted(): void
+    {
+        $teamData = [
+            'name' => 'Test team',
+            'tournament_id' => Tournament::factory()->create()->id
+        ];
+        $teamService = new TeamService();
+        $team = $teamService->createTeam($teamData);
+        $teamService->deleteTeam($team);
 
+        $this->assertDatabaseMissing('teams', ['id' => $team->id]);
+    }
 
 }

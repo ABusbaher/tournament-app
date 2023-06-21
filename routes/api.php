@@ -28,3 +28,4 @@ Route::delete('/tournaments/{tournament}', [TournamentController::class, 'destro
 
 Route::get('/tournaments/{tournament}/teams', [TeamController::class, 'getAllTeams'])->name('team.getAll');
 Route::post('/tournaments/{tournament}/teams', [TeamController::class, 'store'])->name('team.store');
+Route::delete('/tournaments/{tournament}/teams/{team}', [TeamController::class, 'destroy'])->name('team.destroy');

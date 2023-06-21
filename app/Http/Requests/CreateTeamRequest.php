@@ -27,7 +27,7 @@ class CreateTeamRequest extends FormRequest
         return [
             'name' => 'required|string|min:3|max:255',
             'tournament_id' => 'required|exists:tournaments,id',
-            'image' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
         ];
     }
 

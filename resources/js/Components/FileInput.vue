@@ -16,7 +16,6 @@ const emit = defineEmits(['update:modelValue']);
 
 const fileChangeEmit = (event) => {
     file.value = event.target.files[0];
-    console.log(file)
     emit('update:modelValue', file.value);
 };
 

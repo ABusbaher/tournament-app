@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateTeamRequest;
 use App\Models\Team;
+use App\Models\Tournament;
 use App\Services\TeamService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -35,5 +36,12 @@ class TeamController extends Controller
         $team = $this->teamService->createTeam($validatedData);
 
         return response()->json($team, 201);
+    }
+
+    public function destroy(Tournament $tournament, Team $team): JsonResponse
+    {
+        $this->teamService->deleteTeam($team);
+
+        return response()->json(['message' => 'Team deleted successfully'], 204);
     }
 }

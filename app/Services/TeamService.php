@@ -24,4 +24,9 @@ class TeamService
 
         return $team;
     }
+
+    public function deleteTeam(Team $team): void
+    {
+        $team->delete();
+    }
 }
