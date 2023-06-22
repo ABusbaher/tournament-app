@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Tournament;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Http\UploadedFile;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Team>
@@ -25,4 +26,14 @@ class TeamFactory extends Factory
             'image_path' => null,
         ];
     }
+
+    public function withImage(): TeamFactory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'image_path' => UploadedFile::fake()->image('test-image.jpg')
+            ];
+        });
+    }
+
 }

@@ -5,6 +5,7 @@ import AddTeamForm from "@/Pages/Teams/Partials/AddTeamForm.vue";
 import {useTournamentStore} from "@/stores/Tournament.js";
 import StatusMessage from "@/Components/StatusMessage.vue";
 import DeleteTeamForm from "@/Pages/Teams/Partials/DeleteTeamForm.vue";
+import EditTeamForm from "@/Pages/Teams/Partials/EditTeamForm.vue";
 
 const teams = ref([]);
 const tournamentStore = useTournamentStore();
@@ -30,13 +31,22 @@ const closeAddTeamMsg = () => {
     AddTeamMsg.value = false;
 };
 
-const DeleteTournamentMsg = ref(false);
-const showDeleteTournamentMsg = () => {
-    DeleteTournamentMsg.value = true;
-    setTimeout(closeDeleteTournamentMsg, 5000);
+const EditTeamMsg = ref(false);
+const showEditTeamMsg = () => {
+    EditTeamMsg.value = true;
+    setTimeout(closeEditTeamMsg, 5000);
 };
-const closeDeleteTournamentMsg = () => {
-    DeleteTournamentMsg.value = false;
+const closeEditTeamMsg = () => {
+    EditTeamMsg.value = false;
+};
+
+const DeleteTeamMsg = ref(false);
+const showDeleteTeamMsg = () => {
+    DeleteTeamMsg.value = true;
+    setTimeout(closeDeleteTeamMsg, 5000);
+};
+const closeDeleteTeamMsg = () => {
+    DeleteTeamMsg.value = false;
 };
 
 const handleTeamCreated = () => {
@@ -44,9 +54,19 @@ const handleTeamCreated = () => {
     showAddTeamMsg();
 };
 
-const handleTournamentDelete = () => {
+const handleTeamUpdate = (updatedTournament) => {
+    teams.value = teams.value.map(item => {
+        if (item.id === updatedTournament.id) {
+            Object.assign(item, updatedTournament)
+        }
+        return item;
+    })
+    showEditTeamMsg();
+};
+
+const handleTeamDelete = () => {
     fetchTeams(`/api/tournaments/${tournamentId}/teams`);
-    showDeleteTournamentMsg();
+    showDeleteTeamMsg();
 };
 
 onMounted(() => {
@@ -57,7 +77,8 @@ onMounted(() => {
 </script>
 <template>
     <StatusMessage message="Team successfully added" color="green" :show="AddTeamMsg"  @close="closeAddTeamMsg"/>
-    <StatusMessage message="Team successfully deleted" color="green" :show="DeleteTournamentMsg"  @close="closeDeleteTournamentMsg"/>
+    <StatusMessage message="Tournament name successfully edited" color="green" :show="EditTeamMsg"  @close="closeEditTeamMsg"/>
+    <StatusMessage message="Team successfully deleted" color="green" :show="DeleteTeamMsg"  @close="closeDeleteTeamMsg"/>
     <div class="flex justify-end mb-6">
         <add-team-form @teamCreated="handleTeamCreated"/>
     </div>
@@ -83,8 +104,8 @@ onMounted(() => {
             </td>
             <td class="py-3 px-4 text-center">{{ team.id }}</td>
             <td class="py-3 px-4 text-center">
-<!--                <edit-tournament-form @tournamentEdited="handleTournamentUpdate" :tournamentId="team.id" />-->
-                <delete-team-form @team-deleted="handleTournamentDelete" :team-id="team.id" />
+                <edit-team-form @team-updated="handleTeamUpdate" :team-id="team.id" />
+                <delete-team-form @team-deleted="handleTeamDelete" :team-id="team.id" />
             </td>
         </tr>
         <tr v-else>

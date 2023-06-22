@@ -2,22 +2,29 @@
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import FileInput from "@/Components/FileInput.vue";
 import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { ref, defineEmits, reactive } from 'vue';
 import { useVuelidate } from '@vuelidate/core'
-import { required, minLength, helpers } from '@vuelidate/validators'
+import {required, minLength, helpers} from '@vuelidate/validators'
 import {useTournamentStore} from "@/stores/Tournament.js";
+import FileInput from "@/Components/FileInput.vue";
 
-const addTeam = ref(false);
+const editTeam = ref(false);
+const props = defineProps({
+    teamId: {
+        type: Number,
+        required: true,
+    },
+});
 const tournamentStore = useTournamentStore();
 const tournamentId = tournamentStore.getId;
 
 const state = reactive({
     name: '',
     image: null,
+    previous_image: null,
 });
 const imageExtensions = ['jpeg', 'png', 'jpg', 'webp'];
 const fileSizeLimit = 2 * 1024 * 1024;
@@ -43,13 +50,23 @@ const rules = {
 const v$ = useVuelidate(rules, state)
 
 const openModal = () => {
-    addTeam.value = true;
+    editTeam.value = true;
+    axios.get(`/api/tournaments/${tournamentId}/teams/${props.teamId}`)
+        .then(response => {
+            console.log(response.data);
+            state.name = response.data['name'];
+            state.previous_image = response.data['image_path'];
+        })
+        .catch(error => {
+            console.log(error);
+        });
 };
-const emit = defineEmits(['teamCreated']);
+const emit = defineEmits(['teamUpdated']);
 
 const config = {
     headers: {
         'Content-Type': 'multipart/form-data',
+        'Accept': 'application/json',
     },
 };
 
@@ -58,12 +75,12 @@ const submitForm = () => {
     if (v$.value.$invalid) {
         return;
     }
-    axios.post(`/api/tournaments/${tournamentId}/teams`, {
-        name: state.name,
-        tournament_id: tournamentId,
-        ...(state.image && { image: state.image }),
-    }, config).then(response => {
-        emit('teamCreated', response.data);
+    let data = new FormData();
+    data.append('_method', 'put');
+    data.append('name', state.name);
+    data.append('image', state.image ? state.image : '');
+    axios.post(`/api/tournaments/${tournamentId}/teams/${props.teamId}`, data, config).then(response => {
+        emit('teamUpdated', response.data);
         closeModal();
     })
         .catch(error => {
@@ -72,24 +89,23 @@ const submitForm = () => {
 };
 
 const closeModal = () => {
-    addTeam.value = false;
+    editTeam.value = false;
     state.name = '';
+    state.previous_image = null;
     state.image = null;
-};
-</script>
+};</script>
 
 <template>
     <section class="space-y-6">
-        <PrimaryButton @click="openModal">Add Team</PrimaryButton>
-
-        <Modal :show="addTeam" @close="closeModal">
+        <button @click="openModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
+        <Modal :show="editTeam" @close="closeModal">
             <div class="p-6">
                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                    Add Team
+                    Edit Team
                 </h2>
 
                 <div :class="['mt-6', { error: v$.name.$errors.length }]">
-                    <InputLabel for="name" value="Tournament name" />
+                    <InputLabel for="name" value="Team name" />
 
                     <TextInput
                         id="name"
@@ -97,7 +113,7 @@ const closeModal = () => {
                         v-model="state.name"
                         type="text"
                         class="mt-1 block w-3/4"
-                        placeholder="Tournament name"
+                        placeholder="Team name"
                     />
                     <div class="input-errors mt-2" v-for="error of v$.name.$errors" :key="error.$uid">
                         <InputError :message="error.$message" class="mt-2" />
@@ -105,8 +121,12 @@ const closeModal = () => {
                 </div>
 
                 <div :class="['mt-6', { error: v$.image.$errors.length }]">
+                    <template  v-if="state.previous_image">
+                        <p>Current logo</p>
+                        <img :src="state.previous_image" alt="Team Image" width="100" height="100"/>
+                    </template>
                     <FileInput
-                        label-name="Upload team logo"
+                        label-name="Change team logo"
                         help-text="Supported formats JPEG, JPG, PNG."
                         v-model="state.image"
                     />
@@ -117,13 +137,7 @@ const closeModal = () => {
 
                 <div class="mt-6 flex justify-end">
                     <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
-
-                    <PrimaryButton
-                        class="ml-3"
-                        @click="submitForm"
-                    >
-                        Add Tournament
-                    </PrimaryButton>
+                    <PrimaryButton class="ml-3" @click="submitForm">Edit Team</PrimaryButton>
                 </div>
             </div>
         </Modal>

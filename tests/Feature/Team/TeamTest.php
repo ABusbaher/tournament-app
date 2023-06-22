@@ -55,4 +55,31 @@ class TeamTest extends TestCase
 
         $response->assertStatus(404);
     }
+
+    public function test_team_can_be_edited_without_image(): void
+    {
+        $team = Team::factory()->create();
+        $response = $this->put(route('team.update', ['tournament' => $team->tournament_id, 'team' => $team->id]),
+        ['name' => 'Updated Team']);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('teams', [
+            'name' => 'Updated Team',
+            'tournament_id' => $team->tournament_id
+        ]);
+    }
+
+    public function test_team_can_be_fetched_with_proper_tournament_id_and_team_id(): void
+    {
+        $team = Team::factory()->create();
+        $response = $this->get(route('team.update', ['tournament' => $team->tournament_id, 'team' => $team->id]));
+        $response->assertStatus(200);
+    }
+
+    public function test_team_can_not_be_fetched_with_invalid_team_id(): void
+    {
+        $team = Team::factory()->create();
+        $response = $this->get(route('team.update', ['tournament' => $team->tournament_id, 'team' => 'invalid-id']));
+        $response->assertStatus(404);
+    }
 }

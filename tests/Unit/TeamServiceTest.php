@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\Team;
 use App\Models\Tournament;
 use App\Services\TeamService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -82,6 +83,39 @@ class TeamServiceTest extends TestCase
         $teamService->deleteTeam($team);
 
         $this->assertDatabaseMissing('teams', ['id' => $team->id]);
+    }
+
+    public function test_update_team_with_image(): void
+    {
+        $team = Team::factory()->withImage()->create();
+        $oldImage =  substr($team->image_path, strrpos($team->image_path, '/') + 1);
+
+        $imagePath = UploadedFile::fake()->image($this->testFilename);
+        $data = [
+            'name' => 'Updated Team Name',
+            'image' => $imagePath,
+        ];
+        $teamService = new TeamService();
+        $updatedTeam = $teamService->updateTeam($team, $data);
+        $this->testFilename = substr($updatedTeam->image_path, strrpos($updatedTeam->image_path, '/') + 1);
+
+        $this->assertEquals('Updated Team Name', $updatedTeam->name);
+        $this->assertNotNull($updatedTeam->image_path);
+        Storage::disk('public')->assertExists('team_images/' . $this->testFilename);
+        Storage::disk('public')->assertMissing('team_images/' . $oldImage);
+    }
+
+    public function test_update_team_without_image(): void
+    {
+        $team = Team::factory()->create();
+        $data = [
+            'name' => 'Updated Team Name',
+        ];
+        $teamService = new TeamService();
+        $updatedTeam = $teamService->updateTeam($team, $data);
+
+        $this->assertEquals('Updated Team Name', $updatedTeam->name);
+        $this->assertNull($updatedTeam->image_path);
     }
 
 }
