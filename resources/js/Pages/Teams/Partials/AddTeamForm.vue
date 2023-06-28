@@ -89,7 +89,7 @@ const closeModal = () => {
                 </h2>
 
                 <div :class="['mt-6', { error: v$.name.$errors.length }]">
-                    <InputLabel for="name" value="Tournament name" />
+                    <InputLabel for="name" value="Team name" />
 
                     <TextInput
                         id="name"
@@ -97,7 +97,7 @@ const closeModal = () => {
                         v-model="state.name"
                         type="text"
                         class="mt-1 block w-3/4"
-                        placeholder="Tournament name"
+                        placeholder="Team name"
                     />
                     <div class="input-errors mt-2" v-for="error of v$.name.$errors" :key="error.$uid">
                         <InputError :message="error.$message" class="mt-2" />
@@ -107,7 +107,7 @@ const closeModal = () => {
                 <div :class="['mt-6', { error: v$.image.$errors.length }]">
                     <FileInput
                         label-name="Upload team logo"
-                        help-text="Supported formats JPEG, JPG, PNG."
+                        help-text="Supported formats JPEG, JPG, PNG, WEBP."
                         v-model="state.image"
                     />
                     <div class="input-errors mt-2" v-for="error of v$.image.$errors" :key="error.$uid">

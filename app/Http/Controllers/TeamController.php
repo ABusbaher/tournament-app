@@ -8,7 +8,6 @@ use App\Models\Team;
 use App\Models\Tournament;
 use App\Services\TeamService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class TeamController extends Controller
@@ -20,9 +19,9 @@ class TeamController extends Controller
         $this->teamService = $teamService;
     }
 
-    public function getAllTeams(): JsonResponse
+    public function getAllTeams(Tournament $tournament): JsonResponse
     {
-        $teams = Team::with('tournament')->get();
+        $teams = $this->teamService->getAllTeamsByTournament($tournament);
 
         return response()->json($teams);
     }
@@ -32,6 +31,13 @@ class TeamController extends Controller
         return view('team.all');
     }
 
+    public function show(Tournament $tournament, Team $team): JsonResponse
+    {
+        $team = $this->teamService->getTeam($tournament, $team);
+
+        return response()->json($team);
+    }
+
     public function store(CreateTeamRequest $request): JsonResponse
     {
         $team = $this->teamService->createTeam($request->validated());
@@ -39,21 +45,8 @@ class TeamController extends Controller
         return response()->json($team, 201);
     }
 
-    public function show(Tournament $tournament, Team $team): JsonResponse
-    {
-        return response()->json($team);
-    }
-
     public function update(UpdateTeamRequest $teamRequest, Tournament $tournament, Team $team): JsonResponse
     {
-
-//        $validatedData = $request->validate([
-//            'name' => 'required|string|min:3|max:255',
-//            'image_path' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-//        ]);
-//        dd($request->input());
-//        dd($teamRequest->validated());
-
         $validatedData = $teamRequest->validated();
         $teamData = $this->teamService->updateTeam($team, $validatedData);
 

@@ -1,17 +1,16 @@
 <script setup>
-
-import {computed, onMounted, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import AddTeamForm from "@/Pages/Teams/Partials/AddTeamForm.vue";
 import {useTournamentStore} from "@/stores/Tournament.js";
 import StatusMessage from "@/Components/StatusMessage.vue";
 import DeleteTeamForm from "@/Pages/Teams/Partials/DeleteTeamForm.vue";
 import EditTeamForm from "@/Pages/Teams/Partials/EditTeamForm.vue";
+import EditTournamentForm from "@/Pages/Tournaments/Partials/EditTournamentForm.vue";
 
 const teams = ref([]);
 const tournamentStore = useTournamentStore();
 tournamentStore.setIdFromUrl();
 const tournamentId = tournamentStore.getId;
-
 const fetchTeams = (url) => {
    axios.get(url)
        .then(response => {
@@ -21,64 +20,61 @@ const fetchTeams = (url) => {
            console.log(error);
        });
 };
-const AddTeamMsg = ref(false);
-const showAddTeamMsg = () => {
-    AddTeamMsg.value = true;
-    setTimeout(closeAddTeamMsg, 5000);
-};
+const messages = reactive({
+    addTeam: false,
+    editTeam: false,
+    editTournament: false,
+    deleteTeam: false,
+});
 
-const closeAddTeamMsg = () => {
-    AddTeamMsg.value = false;
-};
-
-const EditTeamMsg = ref(false);
-const showEditTeamMsg = () => {
-    EditTeamMsg.value = true;
-    setTimeout(closeEditTeamMsg, 5000);
-};
-const closeEditTeamMsg = () => {
-    EditTeamMsg.value = false;
-};
-
-const DeleteTeamMsg = ref(false);
-const showDeleteTeamMsg = () => {
-    DeleteTeamMsg.value = true;
-    setTimeout(closeDeleteTeamMsg, 5000);
-};
-const closeDeleteTeamMsg = () => {
-    DeleteTeamMsg.value = false;
+const showMessage = (type) => {
+    messages[type] = true;
+    setTimeout(() => {
+        messages[type] = false;
+    }, 5000);
 };
 
 const handleTeamCreated = () => {
     fetchTeams(`/api/tournaments/${tournamentId}/teams`);
-    showAddTeamMsg();
+    showMessage("addTeam");
 };
 
 const handleTeamUpdate = (updatedTournament) => {
-    teams.value = teams.value.map(item => {
+    teams.value = teams.value.map((item) => {
         if (item.id === updatedTournament.id) {
-            Object.assign(item, updatedTournament)
+            Object.assign(item, updatedTournament);
         }
         return item;
-    })
-    showEditTeamMsg();
+    });
+    showMessage("editTeam");
+};
+
+const handleTournamentUpdate = () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth", // Optional: Smooth scrolling animation
+    });
+    showMessage("editTournament");
 };
 
 const handleTeamDelete = () => {
     fetchTeams(`/api/tournaments/${tournamentId}/teams`);
-    showDeleteTeamMsg();
+    showMessage("deleteTeam");
 };
 
-onMounted(() => {
-    // const tournamentId = new URLSearchParams(window.location.search).get('page') || 1;
-    // const tournamentId = route.path.split('/')[2];
+onMounted(async() => {
     fetchTeams(`/api/tournaments/${tournamentId}/teams`);
 });
 </script>
 <template>
-    <StatusMessage message="Team successfully added" color="green" :show="AddTeamMsg"  @close="closeAddTeamMsg"/>
-    <StatusMessage message="Tournament name successfully edited" color="green" :show="EditTeamMsg"  @close="closeEditTeamMsg"/>
-    <StatusMessage message="Team successfully deleted" color="green" :show="DeleteTeamMsg"  @close="closeDeleteTeamMsg"/>
+    <StatusMessage message="Tournament successfully edited" color="green" :show="messages.editTournament"
+                   @close="messages.editTournament = false"/>
+    <StatusMessage message="Team successfully added" color="green"  :show="messages.addTeam"
+                   @close="messages.addTeam = false"/>
+    <StatusMessage message="Team successfully edited" color="green" :show="messages.editTeam"
+                   @close="messages.editTeam = false"/>
+    <StatusMessage message="Team successfully deleted" color="green" :show="messages.deleteTeam"
+                   @close="messages.deleteTeam = false"/>
     <div class="flex justify-end mb-6">
         <add-team-form @teamCreated="handleTeamCreated"/>
     </div>
@@ -113,5 +109,7 @@ onMounted(() => {
         </tr>
         </tbody>
     </table>
+
+    <edit-tournament-form @tournament-edited="handleTournamentUpdate" :tournament-id="parseInt(tournamentId.value)"/>
 
 </template>

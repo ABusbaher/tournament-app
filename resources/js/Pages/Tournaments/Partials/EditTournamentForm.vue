@@ -2,14 +2,13 @@
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import Modal from '@/Components/Modal.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { ref, defineEmits, reactive } from 'vue';
+import SelectInput from "@/Components/SelectInput.vue";
+import {reactive, onMounted, defineEmits} from 'vue';
 import { useVuelidate } from '@vuelidate/core'
-import { required, minLength } from '@vuelidate/validators'
+import {required, minLength, numeric, minValue, maxValue} from '@vuelidate/validators'
+import {useTournamentStore} from "@/stores/Tournament.js";
 
-const editTournament = ref(false);
 const props = defineProps({
     tournamentId: {
         type: Number,
@@ -17,118 +16,117 @@ const props = defineProps({
     },
 });
 
-const state = reactive({
-    name: '',
-    type: '',
-    rounds: '',
-    id: null,
+const tournamentStore = useTournamentStore();
+tournamentStore.setIdFromUrl();
+const tournamentId = tournamentStore.getId;
+
+const tournamentState = reactive({
+    tournamentName: tournamentStore.getName,
+    tournamentRounds: tournamentStore.getRounds,
+    tournamentType: tournamentStore.getType,
+    tournamentTypes: tournamentStore.types,
 })
-const rules = {
-    name: { required, minLength: minLength(3) },
-}
+const rulesForTournament = () => ( {
+    tournamentName: { required, minLength: minLength(3) },
+    tournamentRounds: { required, numeric, minValue: minValue(1), maxValue: maxValue(4) },
+    tournamentType: { required }
+});
 
-const v$ = useVuelidate(rules, state)
-
-const openModal = () => {
-    editTournament.value = true;
-    axios.get(`/api/tournaments/${props.tournamentId}`)
-        .then(response => {
-            state.name = response.data['name'];
-            state.type = response.data['type'];
-            state.rounds = response.data['rounds'].toString();
-            state.id = response.data['id'];
-        })
-        .catch(error => {
-            console.log(error);
-        });
-};
+const v$ = useVuelidate(rulesForTournament(), tournamentState);
 const emit = defineEmits(['tournamentEdited']);
 
-const submitForm = () => {
+const editTournament = () => {
     v$.value.$touch();
     if (v$.value.$invalid) {
         return;
     }
-    axios.patch(`/api/tournaments/${props.tournamentId}`, {
-        name: state.name,
+    axios.put(`/api/tournaments/${tournamentId}`, {
+        name: tournamentState.tournamentName,
+        rounds: tournamentState.tournamentRounds,
+        type: tournamentState.tournamentType
     }).then(response => {
-        // console.log(response.data);
         const updatedTournament = response.data;
         emit('tournamentEdited', updatedTournament);
-        closeModal();
+        // closeModal();
     })
-   .catch(error => {
-       console.log(error.response);
-   });
-};
+        .catch(error => {
+            console.log(error.response);
+        });
+}
 
-const closeModal = () => {
-    editTournament.value = false;
-};
+
+
+onMounted(async() => {
+    await tournamentStore.setIdFromUrl();
+    tournamentState.tournamentId = tournamentStore.getId;
+    tournamentState.tournamentName = tournamentStore.getName;
+    tournamentState.tournamentRounds = tournamentStore.getRounds.toString();
+    tournamentState.tournamentType = tournamentStore.getType;
+});
 </script>
 
 <template>
-    <section class="space-y-6">
-        <button @click="openModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
-        <Modal :show="editTournament" @close="closeModal">
-            <div class="p-6">
-                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                    Edit Tournament
-                </h2>
+    <div class="w-3/5 mx-auto mt-10">
+        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+            Edit Tournament (you can not change later this settings)
+        </h2>
 
-                <div :class="['mt-6', { error: v$.name.$errors.length }]">
-                    <InputLabel for="name" value="Tournament name" />
+        <div :class="['mt-6', { error: v$.tournamentName.$errors.length }]">
+            <InputLabel for="tournamentName" value="Tournament name" />
 
-                    <TextInput
-                        id="name"
-                        ref="nameInput"
-                        v-model="state.name"
-                        type="text"
-                        class="mt-1 block w-3/4"
-                        placeholder="Tournament name"
-                    />
-                    <div class="input-errors mt-2" v-for="error of v$.name.$errors" :key="error.$uid">
-                        <InputError :message="error.$message" class="mt-2" />
-                    </div>
-                </div>
-
-                <div class="mt-6">
-                    <InputLabel for="rounds" value="Number of rounds" />
-
-                    <TextInput
-                        readonly
-                        id="rounds"
-                        ref="nameInput"
-                        v-model="state.rounds"
-                        type="number"
-                        class="mt-1 block w-3/4"
-                    />
-                </div>
-
-                <div class="mt-6">
-                    <InputLabel for="types" value="Type of tournament"/>
-
-                    <TextInput
-                        readonly
-                        id="types"
-                        ref="nameInput"
-                        v-model="state.type"
-                        type="text"
-                        class="mt-1 block w-3/4"
-                    />
-                </div>
-
-                <div class="mt-6 flex justify-end">
-                    <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
-
-                    <PrimaryButton
-                        class="ml-3"
-                        @click="submitForm"
-                    >
-                        Edit Tournament
-                    </PrimaryButton>
-                </div>
+            <TextInput
+                id="tournamentName"
+                ref="nameInput"
+                v-model="tournamentState.tournamentName"
+                type="text"
+                class="mt-1 block w-full"
+                placeholder="Tournament name"
+            />
+            <div class="input-errors mt-2" v-for="error of v$.tournamentName.$errors" :key="error.$uid">
+                <InputError :message="error.$message" class="mt-2" />
             </div>
-        </Modal>
-    </section>
+        </div>
+
+        <div :class="['mt-6', { error: v$.tournamentRounds.$errors.length }]">
+            <InputLabel for="rounds" value="Number of rounds" />
+
+            <TextInput
+                id="rounds"
+                ref="nameInput"
+                v-model="tournamentState.tournamentRounds"
+                type="number"
+                min="1"
+                max="4"
+                class="mt-1 block w-full"
+                placeholder="1 - 4"
+            />
+            <div class="input-errors mt-2" v-for="error of v$.tournamentRounds.$errors" :key="error.$uid">
+                <InputError :message="error.$message" class="mt-2" />
+            </div>
+        </div>
+
+        <div class="mt-6">
+            <InputLabel for="types" value="Choose type of tournament"/>
+
+            <SelectInput
+                id="types"
+                name="types"
+                v-model="tournamentState.tournamentType"
+                :options="tournamentState.tournamentTypes"
+                class="mt-1 block w-full"
+            />
+            <div class="input-errors mt-2" v-for="error of v$.tournamentType.$errors" :key="error.$uid">
+                <InputError :message="error.$message" class="mt-2" />
+            </div>
+        </div>
+
+        <div class="mt-6 pb-10 flex justify-center">
+            <PrimaryButton
+                class="ml-3"
+                @click="editTournament"
+            >
+                Edit Tournament
+            </PrimaryButton>
+        </div>
+    </div>
 </template>

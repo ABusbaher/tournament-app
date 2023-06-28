@@ -8,7 +8,7 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import { createPinia } from 'pinia'
 import AddTournamentForm from "@/Pages/Tournaments/Partials/AddTournamentForm.vue";
 import AllTournaments from "@/Pages/Tournaments/AllTournaments.vue";
-import EditTournamentForm from "@/Pages/Tournaments/Partials/EditTournamentForm.vue";
+import EditTournamentNameForm from "@/Pages/Tournaments/Partials/EditTournamentNameForm.vue";
 import BasePagination from "@/Components/BasePagination.vue";
 import DeleteTournamentForm from "@/Pages/Tournaments/Partials/DeleteTournamentForm.vue";
 import AllTeams from "@/Pages/Teams/AllTeams.vue";
@@ -24,7 +24,7 @@ const app = createApp({
         AddTournamentForm,
         AllTournaments,
         BasePagination,
-        EditTournamentForm,
+        EditTournamentNameForm,
         DeleteTournamentForm,
         AllTeams,
         AddTeamForm,

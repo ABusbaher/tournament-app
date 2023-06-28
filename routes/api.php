@@ -23,7 +23,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/tournaments', [TournamentController::class, 'store'])->name('tournament.store');
 Route::get('/tournaments', [TournamentController::class, 'getAll'])->name('tournament.getAll');
 Route::get('/tournaments/{tournament}', [TournamentController::class, 'show'])->name('tournament.show');
-Route::patch('/tournaments/{tournament}', [TournamentController::class, 'update'])->name('tournament.update');
+Route::patch('/tournaments/{tournament}', [TournamentController::class, 'updateName'])->name('tournament.updateName');
+Route::put('/tournaments/{tournament}', [TournamentController::class, 'updateAll'])->name('tournament.updateAll');
 Route::delete('/tournaments/{tournament}', [TournamentController::class, 'destroy'])->name('tournament.destroy');
 
 Route::get('/tournaments/{tournament}/teams', [TeamController::class, 'getAllTeams'])->name('team.getAll');

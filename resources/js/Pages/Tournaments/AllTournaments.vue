@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue';
 import AddTournamentForm from "@/Pages/Tournaments/Partials/AddTournamentForm.vue";
 import BasePagination from "@/Components/BasePagination.vue";
-import EditTournamentForm from "@/Pages/Tournaments/Partials/EditTournamentForm.vue";
+import EditTournamentNameForm from "@/Pages/Tournaments/Partials/EditTournamentNameForm.vue";
 import DeleteTournamentForm from "@/Pages/Tournaments/Partials/DeleteTournamentForm.vue";
 import StatusMessage from "@/Components/StatusMessage.vue";
 
@@ -127,7 +127,7 @@ const closeDeleteTournamentMsg = () => {
                 <td class="py-3 px-4 text-center">{{ tournament.rounds }}</td>
                 <td class="py-3 px-4 text-center"><a :href="`/tournaments/${tournament.id}/teams`">Visit tournament page</a></td>
                 <td class="py-3 px-4 text-center">
-                    <edit-tournament-form @tournamentEdited="handleTournamentUpdate" :tournamentId="tournament.id" />
+                    <edit-tournament-name-form @tournamentEdited="handleTournamentUpdate" :tournamentId="tournament.id" />
                     <delete-tournament-form @tournament-deleted="handleTournamentDelete" :tournament-id="tournament.id" />
                 </td>
             </tr>

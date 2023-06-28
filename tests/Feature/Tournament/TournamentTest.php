@@ -109,7 +109,7 @@ class TournamentTest extends TestCase
     public function test_tournament_name_can_be_edited_other_properties_stays_unchanged(): void
     {
         $this->createTournament();
-        $response = $this->patch(route('tournament.update', ['tournament' => 1]), [
+        $response = $this->patch(route('tournament.updateName', ['tournament' => 1]), [
             'name' => 'PES updated',
             'rounds' => 2343,
             'type' => 'elimination',
@@ -126,7 +126,7 @@ class TournamentTest extends TestCase
     public function test_tournament_can_not_be_edited_if_name_is_not_provided(): void
     {
         $this->createTournament();
-        $response = $this->patch(route('tournament.update', ['tournament' => 1]), [
+        $response = $this->patch(route('tournament.updateName', ['tournament' => 1]), [
             'rounds' => 2343,
             'type' => 'elimination',
         ]);

@@ -53,7 +53,6 @@ const openModal = () => {
     editTeam.value = true;
     axios.get(`/api/tournaments/${tournamentId}/teams/${props.teamId}`)
         .then(response => {
-            console.log(response.data);
             state.name = response.data['name'];
             state.previous_image = response.data['image_path'];
         })
@@ -127,7 +126,7 @@ const closeModal = () => {
                     </template>
                     <FileInput
                         label-name="Change team logo"
-                        help-text="Supported formats JPEG, JPG, PNG."
+                        help-text="Supported formats JPEG, JPG, PNG, WEBP."
                         v-model="state.image"
                     />
                     <div class="input-errors mt-2" v-for="error of v$.image.$errors" :key="error.$uid">

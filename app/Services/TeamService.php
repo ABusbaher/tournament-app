@@ -4,11 +4,28 @@ namespace App\Services;
 
 use App\Helpers\ImageManager;
 use App\Models\Team;
+use App\Models\Tournament;
 use File;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 class TeamService
 {
     use ImageManager;
+
+    public function getAllTeamsByTournament(Tournament $tournament): Collection|array
+    {
+        return Team::with('tournament')->where('tournament_id', $tournament->id)->get();
+    }
+
+    public function getTeam(Tournament $tournament,Team $team): Model|Builder|Team
+    {
+        return Team::where('tournament_id', $tournament->id)
+            ->where('id', $team->id)
+            ->firstOrFail();
+    }
+
     public function createTeam(array $data): Team
     {
         $team = new Team();
