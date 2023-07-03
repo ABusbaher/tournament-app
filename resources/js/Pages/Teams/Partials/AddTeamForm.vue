@@ -6,9 +6,9 @@ import FileInput from "@/Components/FileInput.vue";
 import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { ref, defineEmits, reactive } from 'vue';
-import { useVuelidate } from '@vuelidate/core'
-import { required, minLength, helpers } from '@vuelidate/validators'
+import {defineEmits, reactive, ref} from 'vue';
+import {useVuelidate} from '@vuelidate/core'
+import {helpers, minLength, required} from '@vuelidate/validators'
 import {useTournamentStore} from "@/stores/Tournament.js";
 
 const addTeam = ref(false);
@@ -41,7 +41,7 @@ const rules = {
 }
 
 const v$ = useVuelidate(rules, state)
-
+const maxTeamError = ref('');
 const openModal = () => {
     addTeam.value = true;
 };
@@ -67,7 +67,11 @@ const submitForm = () => {
         closeModal();
     })
         .catch(error => {
-            console.log(error.response.data);
+            if (error.response && error.response.status === 422) {
+                maxTeamError.value = error.response.data.errors.tournament_id[0];
+            } else {
+                console.log(error.response.data);
+            }
         });
 };
 
@@ -87,7 +91,6 @@ const closeModal = () => {
                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                     Add Team
                 </h2>
-
                 <div :class="['mt-6', { error: v$.name.$errors.length }]">
                     <InputLabel for="name" value="Team name" />
 
@@ -114,6 +117,11 @@ const closeModal = () => {
                         <InputError :message="error.$message" class="mt-2" />
                     </div>
                 </div>
+                <div v-if="maxTeamError" class="mt-2">
+                    <p class="text-sm text-red-600 dark:text-red-400">
+                        {{ maxTeamError }}
+                    </p>
+                </div>
 
                 <div class="mt-6 flex justify-end">
                     <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
@@ -122,7 +130,7 @@ const closeModal = () => {
                         class="ml-3"
                         @click="submitForm"
                     >
-                        Add Tournament
+                        Add Team
                     </PrimaryButton>
                 </div>
             </div>

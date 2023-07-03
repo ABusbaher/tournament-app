@@ -6,6 +6,7 @@ import StatusMessage from "@/Components/StatusMessage.vue";
 import DeleteTeamForm from "@/Pages/Teams/Partials/DeleteTeamForm.vue";
 import EditTeamForm from "@/Pages/Teams/Partials/EditTeamForm.vue";
 import EditTournamentForm from "@/Pages/Tournaments/Partials/EditTournamentForm.vue";
+import CreateFixtures from "@/Pages/Tournaments/Partials/CreateFixtures.vue";
 
 const teams = ref([]);
 const tournamentStore = useTournamentStore();
@@ -111,5 +112,6 @@ onMounted(async() => {
     </table>
 
     <edit-tournament-form @tournament-edited="handleTournamentUpdate" :tournament-id="parseInt(tournamentId.value)"/>
+    <create-fixtures />
 
 </template>

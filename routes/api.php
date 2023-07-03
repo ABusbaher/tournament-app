@@ -33,3 +33,6 @@ Route::get('/tournaments/{tournament}/teams/{team}', [TeamController::class, 'sh
 Route::delete('/tournaments/{tournament}/teams/{team}', [TeamController::class, 'destroy'])->name('team.destroy');
 Route::put('/tournaments/{tournament}/teams/{team}', [TeamController::class, 'update'])->name('team.update');
 
+Route::post('/tournaments/{tournament}/games', [TeamController::class, 'store'])->name('game.create.all')->middleware('check.duplicate.games');
+
+

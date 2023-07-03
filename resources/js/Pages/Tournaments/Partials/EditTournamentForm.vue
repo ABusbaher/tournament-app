@@ -67,9 +67,9 @@ onMounted(async() => {
 
 <template>
     <div class="w-3/5 mx-auto mt-10">
-        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+        <h4 class="text-lg font-medium text-gray-900 dark:text-gray-100 text-center">
             Edit Tournament (you can not change later this settings)
-        </h2>
+        </h4>
 
         <div :class="['mt-6', { error: v$.tournamentName.$errors.length }]">
             <InputLabel for="tournamentName" value="Tournament name" />

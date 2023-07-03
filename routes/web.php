@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GameController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TournamentController;
@@ -39,5 +40,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/tournaments', [TournamentController::class, 'index'])->name('tournament.all');
 Route::get('/tournaments/{tournament}/teams', [TeamController::class, 'index'])->name('team.all');
+
+Route::get('/test-round-robin', [GameController::class, 'index'])->name('tournament.all');
 
 require __DIR__.'/auth.php';
