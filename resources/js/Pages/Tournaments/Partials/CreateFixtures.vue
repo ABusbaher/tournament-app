@@ -19,14 +19,15 @@ const closeModal = () => {
     modalOpened.value = false;
 };
 
-const emit = defineEmits(['teamDeleted']);
+const emit = defineEmits(['fixturesCreated']);
 
 const createFixtures = () => {
     if (error403.value) return;
     axios.post(`/api/tournaments/${tournamentId}/games`, {
         tournament_id: tournamentId
     }).then(response => {
-        // emit('teamDeleted', props.tournamentId);
+        console.log()
+        emit('fixturesCreated', response.data);
         closeModal();
     })
         .catch(error => {

@@ -8,9 +8,7 @@ use App\Services\TeamService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Inertia\Testing\Assert;
 use Tests\TestCase;
-use Illuminate\Filesystem\Filesystem;
 
 class TeamServiceTest extends TestCase
 {

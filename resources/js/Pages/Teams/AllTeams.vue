@@ -26,6 +26,7 @@ const messages = reactive({
     editTeam: false,
     editTournament: false,
     deleteTeam: false,
+    createFixtures: false,
 });
 
 const showMessage = (type) => {
@@ -63,6 +64,14 @@ const handleTeamDelete = () => {
     showMessage("deleteTeam");
 };
 
+const handleFixturesCreated = () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth", // Optional: Smooth scrolling animation
+    });
+    showMessage("createFixtures");
+}
+
 onMounted(async() => {
     fetchTeams(`/api/tournaments/${tournamentId}/teams`);
 });
@@ -76,6 +85,8 @@ onMounted(async() => {
                    @close="messages.editTeam = false"/>
     <StatusMessage message="Team successfully deleted" color="green" :show="messages.deleteTeam"
                    @close="messages.deleteTeam = false"/>
+    <StatusMessage message="Fixtures successfully created" color="green" :show="messages.createFixtures"
+                   @close="messages.createFixtures = false"/>
     <div class="flex justify-end mb-6">
         <add-team-form @teamCreated="handleTeamCreated"/>
     </div>
@@ -112,6 +123,107 @@ onMounted(async() => {
     </table>
 
     <edit-tournament-form @tournament-edited="handleTournamentUpdate" :tournament-id="parseInt(tournamentId.value)"/>
-    <create-fixtures />
+    <create-fixtures @fixtures-created="handleFixturesCreated"/>
+
+    <div class="container mx-auto">
+        <div class="grid grid-cols-2 md:grid-cols-3 sm:grid-cols-1 gap-3">
+            <!-- Result Set 1 -->
+            <div class="match bg-white rounded-lg shadow-md">
+                <div class="match-content flex flex-col md:flex-row">
+                    <div class="column p-3 flex justify-center items-center">
+                        <div class="team flex flex-col items-center">
+                            <div class="team-logo w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
+                                <img src="https://assets.codepen.io/285131/whufc.svg" alt="Team Logo" class="w-12 h-12">
+                            </div>
+                            <h2 class="team-name mt-4">West Ham</h2>
+                        </div>
+                    </div>
+                    <div class="column p-3 flex justify-center items-center">
+                        <div class="match-details text-center">
+                            <div class="match-score flex items-center justify-center mt-2">
+                                <span class="match-score-number match-score-number--leading text-5xl font-bold text-blue-600">2</span>
+                                <span class="match-score-divider text-gray-400 mx-2">:</span>
+                                <span class="match-score-number text-5xl font-bold">0</span>
+                            </div>
+                            <button class="match-bet-place bg-blue-600 text-white rounded-md font-bold px-4 py-2 mt-4">Edit score</button>
+                        </div>
+                    </div>
+                    <div class="column p-3 flex justify-center items-center">
+                        <div class="team flex flex-col items-center">
+                            <div class="team-logo w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
+                                <img src="https://assets.codepen.io/285131/chelsea.svg" alt="Team Logo" class="w-12 h-12">
+                            </div>
+                            <h2 class="team-name mt-4">Chelsea</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result Set 2 -->
+            <!-- Add more result sets here -->
+            <div class="match bg-white rounded-lg shadow-md">
+                <div class="match-content flex flex-col md:flex-row">
+                    <div class="column p-3 flex justify-center items-center">
+                        <div class="team flex flex-col items-center">
+                            <div class="team-logo w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
+                                <img src="https://assets.codepen.io/285131/whufc.svg" alt="Team Logo" class="w-12 h-12">
+                            </div>
+                            <h2 class="team-name mt-4">West Ham</h2>
+                        </div>
+                    </div>
+                    <div class="column p-3 flex justify-center items-center">
+                        <div class="match-details text-center">
+                            <div class="match-score flex items-center justify-center mt-2">
+                                <span class="match-score-number match-score-number--leading text-5xl font-bold text-blue-600">2</span>
+                                <span class="match-score-divider text-gray-400 mx-2">:</span>
+                                <span class="match-score-number text-5xl font-bold">0</span>
+                            </div>
+                            <button class="match-bet-place bg-blue-600 text-white rounded-md font-bold px-4 py-2 mt-4">Edit score</button>
+                        </div>
+                    </div>
+                    <div class="column p-3 flex justify-center items-center">
+                        <div class="team flex flex-col items-center">
+                            <div class="team-logo w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
+                                <img src="https://assets.codepen.io/285131/chelsea.svg" alt="Team Logo" class="w-12 h-12">
+                            </div>
+                            <h2 class="team-name mt-4">Chelsea</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result Set 3 -->
+            <div class="match bg-white rounded-lg shadow-md">
+                <div class="match-content flex flex-col md:flex-row">
+                    <div class="column p-3 flex justify-center items-center">
+                        <div class="team flex flex-col items-center">
+                            <div class="team-logo w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
+                                <img src="https://assets.codepen.io/285131/whufc.svg" alt="Team Logo" class="w-12 h-12">
+                            </div>
+                            <h2 class="team-name mt-4">West Ham</h2>
+                        </div>
+                    </div>
+                    <div class="column p-3 flex justify-center items-center">
+                        <div class="match-details text-center">
+                            <div class="match-score flex items-center justify-center mt-2">
+                                <span class="match-score-number match-score-number--leading text-5xl font-bold text-blue-600">2</span>
+                                <span class="match-score-divider text-gray-400 mx-2">:</span>
+                                <span class="match-score-number text-5xl font-bold">0</span>
+                            </div>
+                            <button class="match-bet-place bg-blue-600 text-white rounded-md font-bold px-4 py-2 mt-4">Edit score</button>
+                        </div>
+                    </div>
+                    <div class="column p-3 flex justify-center items-center">
+                        <div class="team flex flex-col items-center">
+                            <div class="team-logo w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
+                                <img src="https://assets.codepen.io/285131/chelsea.svg" alt="Team Logo" class="w-12 h-12">
+                            </div>
+                            <h2 class="team-name mt-4">Chelsea</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </template>

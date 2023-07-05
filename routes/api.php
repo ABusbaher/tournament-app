@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GameController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TournamentController;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ Route::post('/tournaments', [TournamentController::class, 'store'])->name('tourn
 Route::get('/tournaments', [TournamentController::class, 'getAll'])->name('tournament.getAll');
 Route::get('/tournaments/{tournament}', [TournamentController::class, 'show'])->name('tournament.show');
 Route::patch('/tournaments/{tournament}', [TournamentController::class, 'updateName'])->name('tournament.updateName');
-Route::put('/tournaments/{tournament}', [TournamentController::class, 'updateAll'])->name('tournament.updateAll');
+Route::put('/tournaments/{tournament}', [TournamentController::class, 'updateAll'])->name('tournament.updateAll')->middleware('check.duplicate.games');
 Route::delete('/tournaments/{tournament}', [TournamentController::class, 'destroy'])->name('tournament.destroy');
 
 Route::get('/tournaments/{tournament}/teams', [TeamController::class, 'getAllTeams'])->name('team.getAll');
@@ -33,6 +34,6 @@ Route::get('/tournaments/{tournament}/teams/{team}', [TeamController::class, 'sh
 Route::delete('/tournaments/{tournament}/teams/{team}', [TeamController::class, 'destroy'])->name('team.destroy');
 Route::put('/tournaments/{tournament}/teams/{team}', [TeamController::class, 'update'])->name('team.update');
 
-Route::post('/tournaments/{tournament}/games', [TeamController::class, 'store'])->name('game.create.all')->middleware('check.duplicate.games');
+Route::post('/tournaments/{tournament}/games', [GameController::class, 'store'])->name('game.create.all')->middleware('check.duplicate.games');
 
 

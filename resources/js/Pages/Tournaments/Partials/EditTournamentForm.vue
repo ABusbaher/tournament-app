@@ -4,7 +4,7 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import SelectInput from "@/Components/SelectInput.vue";
-import {reactive, onMounted, defineEmits} from 'vue';
+import {reactive, onMounted, defineEmits, ref} from 'vue';
 import { useVuelidate } from '@vuelidate/core'
 import {required, minLength, numeric, minValue, maxValue} from '@vuelidate/validators'
 import {useTournamentStore} from "@/stores/Tournament.js";
@@ -34,6 +34,7 @@ const rulesForTournament = () => ( {
 
 const v$ = useVuelidate(rulesForTournament(), tournamentState);
 const emit = defineEmits(['tournamentEdited']);
+const error403 = ref('');
 
 const editTournament = () => {
     v$.value.$touch();
@@ -43,14 +44,22 @@ const editTournament = () => {
     axios.put(`/api/tournaments/${tournamentId}`, {
         name: tournamentState.tournamentName,
         rounds: tournamentState.tournamentRounds,
-        type: tournamentState.tournamentType
+        type: tournamentState.tournamentType,
+        tournament_id: tournamentId
     }).then(response => {
         const updatedTournament = response.data;
         emit('tournamentEdited', updatedTournament);
-        // closeModal();
     })
         .catch(error => {
-            console.log(error.response);
+            if (error.response && error.response.status === 403) {
+                error403.value = 'Tournament information can not be updated, since fixtures has been already created!';
+                setTimeout(() => {error403.value = '';}, 5000);
+                tournamentState.tournamentName = tournamentStore.getName;
+                tournamentState.tournamentRounds = tournamentStore.getRounds.toString();
+                tournamentState.tournamentType = tournamentStore.getType;
+            } else {
+                console.log(error.response.data);
+            }
         });
 }
 
@@ -118,6 +127,11 @@ onMounted(async() => {
             <div class="input-errors mt-2" v-for="error of v$.tournamentType.$errors" :key="error.$uid">
                 <InputError :message="error.$message" class="mt-2" />
             </div>
+        </div>
+        <div v-if="error403" class="mt-2">
+            <p class="text-sm text-red-600 dark:text-red-400">
+                {{ error403 }}
+            </p>
         </div>
 
         <div class="mt-6 pb-10 flex justify-center">
