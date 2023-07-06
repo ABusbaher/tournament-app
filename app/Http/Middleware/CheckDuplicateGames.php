@@ -17,9 +17,6 @@ class CheckDuplicateGames
     public function handle(Request $request, Closure $next): Response
     {
         $tournamentId = $request->input('tournament_id');
-//        $tournamentId = $request->query('tournament');
-//        $tournamentId = $request->route('tournament');
-//        $tournamentId = $request->segment(2); //get tournament id from url
         $existingMatches = Game::where('tournament_id', $tournamentId)->exists();
         if ($existingMatches) {
             return response()->json(['message' => 'Fixtures for this tournament already exist!'], 403);

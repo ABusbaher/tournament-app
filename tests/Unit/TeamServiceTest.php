@@ -43,7 +43,7 @@ class TeamServiceTest extends TestCase
 
         $this->assertDatabaseHas('teams', [
             'name' => 'Test team',
-            'tournament_id' => 1,
+            'tournament_id' => $teamData['tournament_id'],
         ]);
     }
 
@@ -60,7 +60,7 @@ class TeamServiceTest extends TestCase
 
         $this->assertDatabaseHas('teams', [
             'name' => 'Test team',
-            'tournament_id' => 1,
+            'tournament_id' => $teamData['tournament_id'],
         ]);
 
         $this->assertNotNull($team->image_path);

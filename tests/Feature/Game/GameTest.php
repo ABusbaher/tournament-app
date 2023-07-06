@@ -5,6 +5,7 @@ namespace Tests\Feature\Game;
 use App\Models\Game;
 use App\Models\Team;
 use App\Models\Tournament;
+use App\Models\User;
 use DB;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -12,6 +13,13 @@ use Tests\TestCase;
 class GameTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $user = User::factory()->create();
+        $this->actingAs($user);
+    }
 
     public function test_games_by_league_can_be_created(): void
     {
@@ -58,6 +66,17 @@ class GameTest extends TestCase
         $response->assertJsonFragment([
             'message' => 'Fixtures for this tournament already exist!',
         ]);
+    }
+
+    public function test_league_games_can_not_be_created_if_less_than_four_teams_created(): void
+    {
+        $tournament = Tournament::factory()->create(['type' => 'league', 'rounds' => 2]);
+        Team::factory()->count(3)->create(['tournament_id' => $tournament->id]);
+        $response = $this->post(route('game.create.all', ['tournament' => $tournament->id]),
+            ['tournament_id' => $tournament->id]);
+
+        $response->assertStatus(422);
+        $response->assertInvalid(['tournament_id']);
     }
 
 }
