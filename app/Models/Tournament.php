@@ -24,6 +24,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Tournament whereRounds($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Tournament whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Tournament whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Team> $teams
+ * @property-read int|null $teams_count
+ * @method static \Database\Factories\TournamentFactory factory($count = null, $state = [])
  * @mixin \Eloquent
  */
 class Tournament extends Model

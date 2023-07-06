@@ -95,7 +95,6 @@ onMounted(async() => {
         <tr>
             <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Team name</th>
             <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Team image</th>
-            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Link</th>
             <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Action</th>
         </tr>
         </thead>
@@ -110,7 +109,6 @@ onMounted(async() => {
                     No image available
                 </template>
             </td>
-            <td class="py-3 px-4 text-center">{{ team.id }}</td>
             <td class="py-3 px-4 text-center">
                 <edit-team-form @team-updated="handleTeamUpdate" :team-id="team.id" />
                 <delete-team-form @team-deleted="handleTeamDelete" :team-id="team.id" />

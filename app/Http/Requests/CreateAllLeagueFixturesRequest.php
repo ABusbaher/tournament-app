@@ -33,7 +33,7 @@ class CreateAllLeagueFixturesRequest extends FormRequest
                 function ($attribute, $value, $fail) use ($tournamentId, $minTeams) {
                     $teamCount = Team::where('tournament_id', $tournamentId)->count();
                     if ($teamCount < $minTeams) {
-                        $fail("You need to have at least {$minTeams} created in order to run league fixtures creation.");
+                        $fail("You need to have at least {$minTeams} teams created in order to run league fixtures creation!");
                     }
                 }
             ],

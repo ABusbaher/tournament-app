@@ -69,7 +69,11 @@ const submitForm = () => {
         .catch(error => {
             if (error.response && error.response.status === 422) {
                 maxTeamError.value = error.response.data.errors.tournament_id[0];
-            } else {
+            }
+            else if (error.response && error.response.status === 403) {
+                maxTeamError.value = error.response.data.message;
+            }
+            else {
                 console.log(error.response.data);
             }
         });

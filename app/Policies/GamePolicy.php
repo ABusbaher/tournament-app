@@ -13,7 +13,7 @@ class GamePolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the game can be created.
+     * Determine whether the games can be created.
      */
     public function create(User $user, Tournament $tournament): bool
     {

@@ -14,20 +14,13 @@ class GameTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $user = User::factory()->create();
-        $this->actingAs($user);
-    }
-
     public function test_games_by_league_can_be_created(): void
     {
         $tournament = Tournament::factory()->create(['type' => 'league', 'rounds' => 2]);
         Team::factory()->times(6)->create([
             'tournament_id' => $tournament->id,
         ]);
-        $response = $this->post(route('game.create.all', ['tournament' => $tournament->id]),
+        $response = $this->post(route('games.create.all', ['tournament' => $tournament->id]),
             ['tournament_id' => $tournament->id]);
 
         $response->assertStatus(201);
@@ -43,7 +36,7 @@ class GameTest extends TestCase
     {
         $tournament = Tournament::factory()->create(['type' => 'league', 'rounds' => 2]);
         Game::factory()->count(6)->create(['tournament_id' => $tournament->id]);
-        $response = $this->post(route('game.create.all', ['tournament' => $tournament->id]),
+        $response = $this->post(route('games.create.all', ['tournament' => $tournament->id]),
             ['tournament_id' => $tournament->id]);
 
         $response->assertStatus(403);
@@ -72,11 +65,34 @@ class GameTest extends TestCase
     {
         $tournament = Tournament::factory()->create(['type' => 'league', 'rounds' => 2]);
         Team::factory()->count(3)->create(['tournament_id' => $tournament->id]);
-        $response = $this->post(route('game.create.all', ['tournament' => $tournament->id]),
+        $response = $this->post(route('games.create.all', ['tournament' => $tournament->id]),
             ['tournament_id' => $tournament->id]);
 
         $response->assertStatus(422);
         $response->assertInvalid(['tournament_id']);
+    }
+
+    public function test_games_can_be_fetched_by_fixtures(): void
+    {
+        $tournament = Tournament::factory()->create(['type' => 'league', 'rounds' => 2]);
+        Game::factory()->count(4)->create(['tournament_id' => $tournament->id, 'fixture' => 1]);
+        $response = $this->get(route('games.by_fixture', [
+            'tournament' => $tournament->id,
+            'fixture' => 1
+        ]));
+        $response->assertStatus(200);
+        $response->assertJsonCount(4);
+    }
+
+    public function test_games_return_404_if_not_existing_fixture_is_provided()
+    {
+        $tournament = Tournament::factory()->create(['type' => 'league', 'rounds' => 2]);
+        Game::factory()->count(4)->create(['tournament_id' => $tournament->id, 'fixture' => 1]);
+        $response = $this->get(route('games.by_fixture', [
+            'tournament' => $tournament->id,
+            'fixture' => 'non-existing-fixture'
+        ]));
+        $response->assertStatus(404);
     }
 
 }

@@ -31,8 +31,8 @@ const createFixtures = () => {
         closeModal();
     })
         .catch(error => {
-            if (error.response && error.response.status === 403) {
-                error403.value = error.response.data.message;
+            if (error.response && error.response.status === 422) {
+                error403.value = error.response.data.errors.tournament_id[0];
             } else {
                 console.log(error.response.data);
             }

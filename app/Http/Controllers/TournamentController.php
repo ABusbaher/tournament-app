@@ -41,7 +41,9 @@ class TournamentController extends Controller
 
     public function updateAll(UpdateTournamentRequest $tournamentRequest, Tournament $tournament): JsonResponse
     {
-        $tournament->update($tournamentRequest->validated());
+        $data = $tournamentRequest->validated();
+        unset($data['tournament_id']); // Remove the tournament_id field
+        $tournament->update($data);
         return response()->json($tournament);
     }
 

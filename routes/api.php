@@ -34,6 +34,7 @@ Route::get('/tournaments/{tournament}/teams/{team}', [TeamController::class, 'sh
 Route::delete('/tournaments/{tournament}/teams/{team}', [TeamController::class, 'destroy'])->name('team.destroy');
 Route::put('/tournaments/{tournament}/teams/{team}', [TeamController::class, 'update'])->name('team.update');
 
-Route::post('/tournaments/{tournament}/games', [GameController::class, 'store'])->name('game.create.all')->middleware('check.duplicate.games');
+Route::get('/tournaments/{tournament}/fixtures/{fixture}', [GameController::class, 'getByFixtures'])->name('games.by_fixture');
+Route::post('/tournaments/{tournament}/games', [GameController::class, 'store'])->name('games.create.all')->middleware('check.duplicate.games');
 
 
