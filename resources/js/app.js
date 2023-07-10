@@ -16,6 +16,7 @@ import AddTeamForm from "@/Pages/Teams/Partials/AddTeamForm.vue";
 import FileInput from "@/Components/FileInput.vue";
 import DeleteTeamForm from "@/Pages/Teams/Partials/DeleteTeamForm.vue";
 import EditTeamForm from "@/Pages/Teams/Partials/EditTeamForm.vue";
+import AllByFixtures from "@/Pages/Games/AllByFixtures.vue";
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 const pinia = createPinia()
@@ -31,6 +32,7 @@ const app = createApp({
         FileInput,
         DeleteTeamForm,
         EditTeamForm,
+        AllByFixtures
     }
 });
 app.use(pinia)

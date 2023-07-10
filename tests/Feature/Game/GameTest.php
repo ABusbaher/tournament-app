@@ -5,8 +5,6 @@ namespace Tests\Feature\Game;
 use App\Models\Game;
 use App\Models\Team;
 use App\Models\Tournament;
-use App\Models\User;
-use DB;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -29,7 +27,7 @@ class GameTest extends TestCase
             'fixture' => 10 // assert that 10 fixtures is created with 6 teams and 2 rounds of matches.
         ]);
         // assert 30 games is created with 6 teams and 2 rounds of matches.
-        $this->assertEquals(30, DB::table('games')->count());
+        $this->assertEquals(30, \DB::table('games')->count());
     }
 
     public function test_league_games_can_not_be_created_if_already_been_created_before(): void
@@ -78,9 +76,15 @@ class GameTest extends TestCase
         Game::factory()->count(4)->create(['tournament_id' => $tournament->id, 'fixture' => 1]);
         $response = $this->get(route('games.by_fixture', [
             'tournament' => $tournament->id,
-            'fixture' => 1
+            'fixture' => 1,
         ]));
+
         $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'max_fixture' => 1,
+            'prev_fixture' => NULL,
+            'next_fixture' => NULL
+        ]);
         $response->assertJsonCount(4);
     }
 

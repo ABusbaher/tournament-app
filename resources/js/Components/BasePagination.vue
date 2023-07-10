@@ -7,11 +7,9 @@ defineProps({
     },
     from: {
         type: Number,
-        required: true
     },
     to: {
         type: Number,
-        required: true
     },
     total: {
         type: Number,
@@ -34,7 +32,7 @@ const nextPageEmit = (value) => {
         </div>
         <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
             <div>
-                <p class="text-sm text-gray-700">
+                <p v-if="from" class="text-sm text-gray-700">
                     Showing
                     <span class="font-medium">{{ from }}</span>
                     to
@@ -42,6 +40,11 @@ const nextPageEmit = (value) => {
                     of
                     <span class="font-medium">{{ total }}</span>
                     results
+                </p>
+                <p v-else class="text-sm text-gray-700">
+                    Showing
+                    <span class="font-medium">{{ currentPage }}</span> of
+                    <span class="font-medium">{{ total }}</span>
                 </p>
             </div>
             <div>
