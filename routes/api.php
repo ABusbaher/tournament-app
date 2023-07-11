@@ -35,6 +35,8 @@ Route::delete('/tournaments/{tournament}/teams/{team}', [TeamController::class, 
 Route::put('/tournaments/{tournament}/teams/{team}', [TeamController::class, 'update'])->name('team.update');
 
 Route::get('/tournaments/{tournament}/fixtures/{fixture}', [GameController::class, 'getByFixtures'])->name('games.by_fixture');
+Route::get('/tournaments/{tournament}/games/{game}', [GameController::class, 'show'])->name('game.show');
+Route::patch('/tournaments/{tournament}/games/{game}', [GameController::class, 'updateScore'])->name('game.updateScore');
 Route::post('/tournaments/{tournament}/games', [GameController::class, 'store'])->name('games.create.all')->middleware('check.duplicate.games');
 
 

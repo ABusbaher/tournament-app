@@ -99,4 +99,61 @@ class GameTest extends TestCase
         $response->assertStatus(404);
     }
 
+    public function test_game_can_be_fetched_by_tournament_id_and_game_id()
+    {
+        Game::factory()->count(4)->create(['tournament_id' => 1]);
+        $response = $this->get(route('game.show', [
+            'tournament' => 1,
+            'game' => 1,
+        ]));
+        $response->assertStatus(200);
+        $response->assertJson([
+            'id' => 1,
+            'tournament_id' => 1
+        ]);
+    }
+
+    public function test_game_can_not_be_fetched_if_wrong_tournament_id_or_game_id()
+    {
+        Game::factory()->count(4)->create(['tournament_id' => 1]);
+        $response = $this->get(route('game.show', [
+            'tournament' => 1,
+            'game' => 'none-existing-game-id',
+        ]));
+        $response->assertStatus(404);
+    }
+
+    public function test_game_score_can_be_updated()
+    {
+        Game::factory()->count(4)->create(['tournament_id' => 1]);
+        $response = $this->patch(route('game.updateScore', ['tournament' => 1, 'game' => 1]),
+            ['host_goals' => 2, 'guest_goals' => 0]
+        );
+        $response->assertStatus(200);
+        $response->assertJson([
+            'host_goals' => 2,
+            'guest_goals' => 0
+        ]);
+    }
+
+    public function test_game_score_can_not_be_updated_if_scores_are_not_correct_format()
+    {
+        Game::factory()->count(4)->create(['tournament_id' => 1]);
+        $response = $this->patch(route('game.updateScore', ['tournament' => 1, 'game' => 1]),
+            ['host_goals' => -2, 'guest_goals' => 'not-a-goal']
+        );
+        $response->assertStatus(422);
+        $response->assertInvalid(['guest_goals']);
+        $response->assertInvalid(['host_goals']);
+    }
+
+    public function test_game_score_can_not_be_updated_if_wrong_game_id_is_provided()
+    {
+        Game::factory()->count(4)->create(['tournament_id' => 1]);
+        $response = $this->patch(route('game.updateScore', ['tournament' => 1, 'game' => 'not-valid-game-id']),
+            ['host_goals' => 2, 'guest_goals' => 0]
+        );
+        $response->assertStatus(404);
+    }
+
 }

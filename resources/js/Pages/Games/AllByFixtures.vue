@@ -23,7 +23,7 @@ const fetchGames = (url) => {
     if (url !== null) {
         axios.get(url)
             .then(response => {
-                console.log(response.data);
+                // console.log(response.data);
                 games.value = response.data;
                 currentPage.value = response.data[0].fixture;
                 nextPageLink.value = response.data[0].next_fixture ?
@@ -50,7 +50,7 @@ onMounted(async() => {
     <h1 class="mb-4 text-4xl font-extrabold text-center leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
         Games in Fixture {{ currentPage }}
     </h1>
-    <div v-if="games.length" v-for="game in games" :key="game.id">
+    <div v-if="games.length" v-for="game in games" :key="game.id" class="mb-6">
         <div class="match bg-white rounded-lg shadow-md flex items-center justify-center">
             <div class="match-content flex flex-col md:flex-row">
                 <div class="column p-3 flex justify-center items-center">

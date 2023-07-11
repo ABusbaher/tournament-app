@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Models\Game;
 use App\Models\Tournament;;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use ScheduleBuilder;
@@ -80,5 +82,23 @@ class GameService
     private function setLeagueRounds(Tournament $tournament): int
     {
         return (($count = count($tournament->teams)) % 2 === 0 ? $count - 1 : $count) * $tournament->rounds;
+    }
+
+    public function getGame(Tournament $tournament, Game $game): Model|Builder|Game
+    {
+        return Game::where('tournament_id', $tournament->id)
+            ->where('id', $game->id)
+            ->firstOrFail();
+    }
+
+    public function updateGameScore(Tournament $tournament, Game $game, array $data): Model|Builder|Game
+    {
+        $game = Game::where('tournament_id', $tournament->id)
+            ->where('id', $game->id)
+            ->firstOrFail();
+        $game->host_goals = $data['host_goals'];
+        $game->guest_goals = $data['guest_goals'];
+        $game->save();
+        return $game;
     }
 }

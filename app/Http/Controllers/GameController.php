@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateAllLeagueFixturesRequest;
+use App\Http\Requests\UpdateGameScoreRequest;
 use App\Models\Game;
-use App\Models\Team;
 use App\Models\Tournament;
 use App\Services\GameService;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
@@ -49,5 +48,23 @@ class GameController extends Controller
         $request->validated();
         $games = $this->gameService->createAllLeagueGames($tournament);
         return response()->json($games, 201);
+    }
+
+    public function show(Tournament $tournament, Game $game): JsonResponse
+    {
+        $gameByTournamentAndId = $this->gameService->getGame($tournament, $game);
+
+        return response()->json($gameByTournamentAndId);
+    }
+
+    public function updateScore(UpdateGameScoreRequest $request, Tournament $tournament, Game $game): JsonResponse
+    {
+        $validatedData = $request->validated();
+        try {
+            $gameData = $this->gameService->updateGameScore($tournament, $game, $validatedData);
+            return response()->json($gameData);
+        } catch (NotFoundHttpException $exception) {
+            return response()->json(['message' => 'Game not found for the given tournament and fixture.'], 404);
+        }
     }
 }
