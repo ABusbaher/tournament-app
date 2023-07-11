@@ -1,8 +1,9 @@
 <script setup>
-import {onMounted, ref, toRefs} from "vue";
+import {onMounted, reactive, ref, toRefs} from "vue";
 import {useTournamentStore} from "@/stores/Tournament.js";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
 import BasePagination from "@/Components/BasePagination.vue";
+import EditGameScore from "@/Pages/Games/Partials/EditGameScore.vue";
+import StatusMessage from "@/Components/StatusMessage.vue";
 
 const props = defineProps({
     fixtureId: {
@@ -18,6 +19,17 @@ const currentPage = ref(1);
 const nextPageLink = ref('');
 const previousPageLink = ref('');
 const total = ref(1);
+
+const messages = reactive({
+    updateGameScore: false,
+});
+
+const showMessage = (type) => {
+    messages[type] = true;
+    setTimeout(() => {
+        messages[type] = false;
+    }, 5000);
+};
 
 const fetchGames = (url) => {
     if (url !== null) {
@@ -37,8 +49,9 @@ const fetchGames = (url) => {
             });
     }
 };
-const enterScore = () => {
-
+const handleScoreUpdate = () => {
+    fetchGames(`/api/tournaments/${tournamentId}/fixtures/${currentPage.value}`);
+    showMessage("updateGameScore");
 }
 const { fixtureId } = toRefs(props);
 
@@ -50,6 +63,8 @@ onMounted(async() => {
     <h1 class="mb-4 text-4xl font-extrabold text-center leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
         Games in Fixture {{ currentPage }}
     </h1>
+    <StatusMessage message="Game score successfully edited" color="green" :show="messages.updateGameScore"
+                   @close="messages.updateGameScore = false"/>
     <div v-if="games.length" v-for="game in games" :key="game.id" class="mb-6">
         <div class="match bg-white rounded-lg shadow-md flex items-center justify-center">
             <div class="match-content flex flex-col md:flex-row">
@@ -74,9 +89,7 @@ onMounted(async() => {
                                 {{ game.guest_goals !== null ? game.guest_goals : 's' }}
                             </span>
                         </div>
-                        <PrimaryButton class="mt-3" @click="enterScore">
-                            {{ game.host_goals !== null ? 'Edit score' : 'Insert score' }}
-                        </PrimaryButton>
+                        <edit-game-score @score-updated="handleScoreUpdate" :game-id="game.id" :edited-score="game.host_goals !== null" />
                     </div>
                 </div>
                 <div class="column p-3 flex justify-center items-center">

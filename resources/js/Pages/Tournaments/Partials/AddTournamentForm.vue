@@ -8,7 +8,7 @@ import TextInput from '@/Components/TextInput.vue';
 import SelectInput from "@/Components/SelectInput.vue";
 import { ref, defineEmits, reactive } from 'vue';
 import { useVuelidate } from '@vuelidate/core'
-import { required, minLength, helpers, numeric, minValue, maxValue } from '@vuelidate/validators'
+import {required, minLength, minValue, maxValue, integer} from '@vuelidate/validators'
 
 const addTournament = ref(false);
 
@@ -19,7 +19,7 @@ const state = reactive({
 })
 const rules = {
     name: { required, minLength: minLength(3) },
-    rounds: { required, numeric, minValue: minValue(1), maxValue: maxValue(4) },
+    rounds: { required, integer, minValue: minValue(1), maxValue: maxValue(4) },
     type: { required }
 }
 

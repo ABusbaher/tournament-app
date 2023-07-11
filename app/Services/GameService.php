@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Game;
 use App\Models\Tournament;;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -70,6 +71,7 @@ class GameService
                     'host_team_id' => ($hostTeamId !== null) ? $hostTeamId : $guestTeamId,
                     'guest_team_id' => ($hostTeamId !== null) ? $guestTeamId : null,
                     'tournament_id' => $tournament->id,
+                    'created_at' => Carbon::now()
                 ];
                 $games[] = $game;
             }
@@ -86,7 +88,8 @@ class GameService
 
     public function getGame(Tournament $tournament, Game $game): Model|Builder|Game
     {
-        return Game::where('tournament_id', $tournament->id)
+        return Game::with('hostTeam:id,name', 'guestTeam:id,name')
+            ->where('tournament_id', $tournament->id)
             ->where('id', $game->id)
             ->firstOrFail();
     }
