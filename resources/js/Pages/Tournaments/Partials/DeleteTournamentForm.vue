@@ -2,7 +2,7 @@
 import DangerButton from '@/Components/DangerButton.vue';
 import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import {defineEmits, ref} from 'vue';
+import {ref} from 'vue';
 
 const confirmingTournamentDeletion = ref(false);
 const props = defineProps({

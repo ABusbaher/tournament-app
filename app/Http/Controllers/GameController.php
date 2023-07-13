@@ -26,7 +26,7 @@ class GameController extends Controller
         try {
             $games = $this->gameService->getGamesByFixture($tournament, $fixture);
             $fixtures = $games->pluck('fixture')->unique();
-            return view('games.byFixture', compact('fixtures'));
+            return view('games.byFixture', compact('fixtures','tournament', 'fixture', 'games'));
         } catch (NotFoundHttpException $exception) {
             abort(404);
         }

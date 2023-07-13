@@ -6,7 +6,7 @@ import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import SelectInput from "@/Components/SelectInput.vue";
-import { ref, defineEmits, reactive } from 'vue';
+import { ref, reactive } from 'vue';
 import { useVuelidate } from '@vuelidate/core'
 import {required, minLength, minValue, maxValue, integer} from '@vuelidate/validators'
 

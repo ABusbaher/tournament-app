@@ -4,7 +4,7 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import SelectInput from "@/Components/SelectInput.vue";
-import {reactive, onMounted, defineEmits, ref} from 'vue';
+import {reactive, onMounted, ref} from 'vue';
 import { useVuelidate } from '@vuelidate/core'
 import {required, minLength, numeric, minValue, maxValue} from '@vuelidate/validators'
 import {useTournamentStore} from "@/stores/Tournament.js";

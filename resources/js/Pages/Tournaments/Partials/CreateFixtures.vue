@@ -2,7 +2,7 @@
 import BigButton from "@/Components/BigButton.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
-import {defineEmits, ref} from "vue";
+import {ref} from "vue";
 import {useTournamentStore} from "@/stores/Tournament.js";
 import Modal from "@/Components/Modal.vue";
 

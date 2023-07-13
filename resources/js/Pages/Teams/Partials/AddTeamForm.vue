@@ -6,7 +6,7 @@ import FileInput from "@/Components/FileInput.vue";
 import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import {defineEmits, reactive, ref} from 'vue';
+import { reactive, ref } from 'vue';
 import {useVuelidate} from '@vuelidate/core'
 import {helpers, minLength, required} from '@vuelidate/validators'
 import {useTournamentStore} from "@/stores/Tournament.js";

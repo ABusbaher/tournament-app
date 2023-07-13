@@ -5,7 +5,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import {ref, defineEmits, reactive, toRefs} from 'vue';
+import {ref, reactive, toRefs, computed} from 'vue';
 import { useVuelidate } from '@vuelidate/core'
 import {required, minValue, maxValue, integer} from '@vuelidate/validators'
 import {useTournamentStore} from "@/stores/Tournament.js";
@@ -43,7 +43,6 @@ const openModal = () => {
     modalOpened.value = true;
     axios.get(`/api/tournaments/${tournamentId}/games/${props.gameId}`)
         .then(response => {
-            console.log(response.data);
             state.hostTeam = response.data.host_team.name;
             if (response.data.host_goals === 0) {
                 state.hostTeamScore = '0'
@@ -74,9 +73,9 @@ const config = {
 };
 const { editedScore } = toRefs(props);
 
-const editedBefore = () => {
-    editedScore.value ? 'Edit score' : 'Insert score';
-};
+const getScoreButtonText = computed(() => {
+    return editedScore.value ? 'Edit score' : 'Insert score';
+});
 
 const submitForm = () => {
     v$.value.$touch();
@@ -104,12 +103,12 @@ const closeModal = () => {
 <template>
     <section class="space-y-6">
         <PrimaryButton class="mt-3" @click="openModal">
-            {{ props.editedScore ? 'Edit score' : 'Insert score' }}
+            {{ getScoreButtonText }}
         </PrimaryButton>
         <Modal :show="modalOpened" @close="closeModal">
             <div class="p-6">
                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                    {{ props.editedScore ? 'Edit score' : 'Insert score' }}
+                    {{ getScoreButtonText }}
                 </h2>
 
                 <div :class="['mt-6', { error: v$.hostTeamScore.$errors.length }]">
@@ -149,7 +148,7 @@ const closeModal = () => {
                 <div class="mt-6 flex justify-end">
                     <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
                     <PrimaryButton class="ml-3" @click="submitForm">
-                        {{ props.editedScore ? 'Edit score' : 'Insert score' }}
+                        {{ getScoreButtonText }}
                     </PrimaryButton>
                 </div>
             </div>
