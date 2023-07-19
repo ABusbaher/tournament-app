@@ -156,4 +156,29 @@ class GameTest extends TestCase
         $response->assertStatus(404);
     }
 
+    public function test_game_score_table_can_be_fetched()
+    {
+        $tournament = Tournament::factory()->create(['type' => 'league', 'rounds' => 2]);
+        Team::factory()->times(4)->create([
+            'tournament_id' => $tournament->id,
+        ]);
+        $this->post(route('games.create.all', ['tournament' => $tournament->id]),
+            ['tournament_id' => $tournament->id]);
+        $response = $this->get(route('games.table', [
+            'tournament' => $tournament->id,
+        ]));
+
+        $response->assertStatus(200);
+        $response->assertJsonCount(4);
+    }
+
+    public function test_game_score_table_can_not_be_fetched_with_invalid_tournament_id()
+    {
+        Game::factory()->withScore()->count(4)->create(['tournament_id' => 1, 'fixture' => 1]);
+        $response = $this->get(route('games.table', [
+            'tournament' => 'non-valid-tournament-id',
+        ]));
+        $response->assertStatus(404);
+    }
+
 }

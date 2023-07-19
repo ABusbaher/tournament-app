@@ -24,9 +24,10 @@ class GameController extends Controller
     public function index(Tournament $tournament, $fixture): \Illuminate\Contracts\Foundation\Application|Factory|View|Application
     {
         try {
-            $games = $this->gameService->getGamesByFixture($tournament, $fixture);
-            $fixtures = $games->pluck('fixture')->unique();
-            return view('games.byFixture', compact('fixtures','tournament', 'fixture', 'games'));
+            $data = $this->gameService->getGamesByFixture($tournament, $fixture);
+            $games = $data['games'];
+            $fixtures = $data['fixtures'];
+            return view('games.byFixture', compact('fixtures', 'fixture', 'games'));
         } catch (NotFoundHttpException $exception) {
             abort(404);
         }
@@ -65,6 +66,16 @@ class GameController extends Controller
             return response()->json($gameData);
         } catch (NotFoundHttpException $exception) {
             return response()->json(['message' => 'Game not found for the given tournament and fixture.'], 404);
+        }
+    }
+
+    public function showTable(Tournament $tournament): JsonResponse
+    {
+        try {
+            $tableData = $this->gameService->getGameTable($tournament);
+            return response()->json($tableData);
+        } catch (NotFoundHttpException $exception) {
+            return response()->json(['message' => 'Table not found for the given tournament.'], 404);
         }
     }
 }

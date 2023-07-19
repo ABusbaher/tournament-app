@@ -18,17 +18,26 @@ class GameFactory extends Factory
      */
     public function definition(): array
     {
+        $tournament = Tournament::factory()->create(['type' => 'league', 'rounds' => 2]);
         return [
             'fixture' => $this->faker->numberBetween(1, 10),
-            'host_team_id' => function () {
-                return Team::factory()->create()->id;
+            'host_team_id' => function () use ($tournament) {
+                return Team::factory()->create(['tournament_id' => $tournament->id])->id;
             },
-            'guest_team_id' => function () {
-                return Team::factory()->create()->id;
+            'guest_team_id' => function () use ($tournament) {
+                return Team::factory()->create(['tournament_id' => $tournament->id])->id;
             },
-            'tournament_id' => function () {
-                return Tournament::factory()->create()->id;
-            },
+            'tournament_id' => $tournament->id,
         ];
+    }
+
+    public function withScore(): GameFactory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'host_goals' => $this->faker->numberBetween(0, 4),
+                'guest_goals' => $this->faker->numberBetween(0, 4),
+            ];
+        });
     }
 }

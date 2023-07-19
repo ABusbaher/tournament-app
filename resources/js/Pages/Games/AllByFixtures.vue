@@ -5,6 +5,7 @@ import BasePagination from "@/Components/BasePagination.vue";
 import EditGameScore from "@/Pages/Games/Partials/EditGameScore.vue";
 import StatusMessage from "@/Components/StatusMessage.vue";
 import AppTabs from "@/Components/AppTabs.vue";
+import LeagueTable from "@/Components/LeagueTable.vue";
 
 const props = defineProps({
     fixtureId: {
@@ -36,14 +37,13 @@ const fetchGames = (url) => {
     if (url !== null) {
         axios.get(url)
             .then(response => {
-                // console.log(response.data);
-                games.value = response.data;
-                currentPage.value = response.data[0].fixture;
-                nextPageLink.value = response.data[0].next_fixture ?
-                    `/api/tournaments/${tournamentId}/fixtures/${response.data[0].next_fixture}` : null;
-                previousPageLink.value = response.data[0].prev_fixture ?
-                    `/api/tournaments/${tournamentId}/fixtures/${response.data[0].prev_fixture}` : null;
-                total.value = response.data[0].max_fixture
+                games.value = response.data.games;
+                currentPage.value = response.data.fixtures.fixture;
+                nextPageLink.value = response.data.fixtures.next_fixture ?
+                    `/api/tournaments/${tournamentId}/fixtures/${response.data.fixtures.next_fixture}` : null;
+                previousPageLink.value = response.data.fixtures.prev_fixture ?
+                    `/api/tournaments/${tournamentId}/fixtures/${response.data.fixtures.prev_fixture}` : null;
+                total.value = response.data.fixtures.max_fixture;
             })
             .catch(error => {
                 console.log(error);
@@ -63,13 +63,22 @@ onMounted(async() => {
 
 const tabList = ["Fixtures", "Table"];
 
+const teamsRanking = reactive([]);
+const fetchTable = () => {
+    axios.get(`/api/tournaments/${tournamentId}/table`)
+        .then(response => {
+            teamsRanking.value = response.data;
+        })
+        .catch(error => {
+            console.log(error);
+        });
+};
+
 </script>
 <template>
-
-
     <div class="bg-white min-h-screen">
 
-        <app-tabs class="w-11/12 lg:w-10/12 mx-auto mb-16" :tabList="tabList">
+        <app-tabs class="w-11/12 lg:w-10/12 mx-auto mb-16" :tabList="tabList" @handle-click-second-tab="fetchTable">
             <template v-slot:tabPanel-1>
                 <h1 class="mb-4 text-4xl font-extrabold text-center leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
                     Games in Fixture {{ currentPage }}
@@ -89,7 +98,8 @@ const tabList = ["Fixtures", "Table"];
                                     <h2 class="team-name mt-4">{{ game.host_team_name }}</h2>
                                 </div>
                             </div>
-                            <div class="column p-3 flex justify-center items-center">
+
+                            <div v-if="game.guest_team_name" class="column p-3 flex justify-center items-center">
                                 <div class="match-details text-center">
                                     <div class="match-score flex items-center justify-center mt-2">
                                         <span class="match-score-number text-5xl font-bold">
@@ -103,7 +113,12 @@ const tabList = ["Fixtures", "Table"];
                                     <edit-game-score @score-updated="handleScoreUpdate" :game-id="game.id" :edited-score="game.host_goals !== null" />
                                 </div>
                             </div>
-                            <div class="column p-3 flex justify-center items-center">
+                            <div class="column p-3 flex justify-center items-center" v-else>
+                                <span class="match-score-number text-5xl font-bold">
+                                    free team
+                                </span>
+                            </div>
+                            <div v-if="game.guest_team_name" class="column p-3 flex justify-center items-center">
                                 <div class="team flex flex-col items-center">
                                     <div class="team-logo w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
                                         <img v-if="game.guest_team_image" :src="game.guest_team_image" alt="Team Image" />
@@ -122,8 +137,9 @@ const tabList = ["Fixtures", "Table"];
                     :total="total"
                 />
             </template>
-            <template v-slot:tabPanel-2> Content 2 </template>
+            <template v-slot:tabPanel-2>
+                <league-table :teams="teamsRanking.value"></league-table>
+            </template>
         </app-tabs>
     </div>
-
 </template>

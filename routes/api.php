@@ -38,5 +38,5 @@ Route::get('/tournaments/{tournament}/fixtures/{fixture}', [GameController::clas
 Route::get('/tournaments/{tournament}/games/{game}', [GameController::class, 'show'])->name('game.show');
 Route::patch('/tournaments/{tournament}/games/{game}', [GameController::class, 'updateScore'])->name('game.updateScore');
 Route::post('/tournaments/{tournament}/games', [GameController::class, 'store'])->name('games.create.all')->middleware('check.duplicate.games');
-
+Route::get('/tournaments/{tournament}/table', [GameController::class, 'showTable'])->name('games.table');
 

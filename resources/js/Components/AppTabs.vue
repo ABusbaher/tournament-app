@@ -17,6 +17,16 @@ const props = defineProps({
 const instance = getCurrentInstance();
 const uid = ref(instance.uid);
 const activeTab = ref(1);
+
+
+const emit = defineEmits(['handleClickSecondTab']);
+const clickEvent = (value) => {
+    // check second
+    if (value === 1) {
+        emit('handleClickSecondTab', value);
+    }
+};
+
 </script>
 
 <template>
@@ -30,6 +40,7 @@ const activeTab = ref(1);
                 :key="index"
                 class="w-full px-4 py-1.5 rounded-lg"
                 :class="{ 'text-blue-600 bg-white shadow-xl': index + 1 === activeTab, 'text-white': index + 1 !== activeTab }"
+                @click="clickEvent(index)"
             >
                 <label :for="`${uid}${index}`" class="cursor-pointer block">
                     {{ tab }}
@@ -50,7 +61,7 @@ const activeTab = ref(1);
                 v-if="index + 1 === activeTab"
                 class="flex-grow bg-white rounded-lg shadow-xl p-4"
             >
-                <slot :name="`tabPanel-${index + 1}`" />
+                <slot :name="`tabPanel-${index + 1}`"/>
             </div>
         </template>
     </div>
