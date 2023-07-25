@@ -27,6 +27,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Team> $teams
  * @property-read int|null $teams_count
  * @method static \Database\Factories\TournamentFactory factory($count = null, $state = [])
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Team> $teams
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Team> $teams
  * @mixin \Eloquent
  */
 class Tournament extends Model

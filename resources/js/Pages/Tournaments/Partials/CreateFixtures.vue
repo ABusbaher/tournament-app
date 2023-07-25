@@ -2,13 +2,15 @@
 import BigButton from "@/Components/BigButton.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import {useTournamentStore} from "@/stores/Tournament.js";
 import Modal from "@/Components/Modal.vue";
 
 const modalOpened = ref(false);
 const tournamentStore = useTournamentStore();
 const tournamentId = tournamentStore.getId;
+tournamentStore.getByTournamentById(tournamentId);
+const tournamentType = ref(tournamentStore.getType);
 const error403 = ref('');
 
 const openModal = () => {
@@ -18,12 +20,18 @@ const openModal = () => {
 const closeModal = () => {
     modalOpened.value = false;
 };
+let url =  ref('');
 
 const emit = defineEmits(['fixturesCreated']);
 
 const createFixtures = () => {
     if (error403.value) return;
-    axios.post(`/api/tournaments/${tournamentId}/games`, {
+    if (tournamentType.value === 'league') {
+        url.value = `/api/tournaments/${tournamentId}/games`;
+    }else if (tournamentType.value === 'elimination') {
+        url.value = `/api/tournaments/${tournamentId}/elimination-games`;
+    }
+    axios.post(url.value, {
         tournament_id: tournamentId
     }).then(response => {
         console.log()
@@ -31,13 +39,22 @@ const createFixtures = () => {
         closeModal();
     })
         .catch(error => {
-            if (error.response && error.response.status === 422) {
-                error403.value = error.response.data.errors.tournament_id[0];
+            if (error.response && error.response.status === 403) {
+                error403.value = error.response.data.message;
             } else {
                 console.log(error.response.data);
             }
         });
 };
+
+onMounted(async () => {
+    try {
+        await tournamentStore.getByTournamentById(tournamentId);
+        tournamentType.value = tournamentStore.getType;
+    } catch (error) {
+        console.log(error);
+    }
+});
 
 </script>
 <template>

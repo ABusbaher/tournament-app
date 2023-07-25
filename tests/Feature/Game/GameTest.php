@@ -78,14 +78,14 @@ class GameTest extends TestCase
             'tournament' => $tournament->id,
             'fixture' => 1,
         ]));
-
         $response->assertStatus(200);
         $response->assertJsonFragment([
             'max_fixture' => 1,
+            'fixture' => 1,
             'prev_fixture' => NULL,
             'next_fixture' => NULL
         ]);
-        $response->assertJsonCount(4);
+        $response->assertJsonCount(4, $key = 'games');
     }
 
     public function test_games_return_404_if_not_existing_fixture_is_provided()

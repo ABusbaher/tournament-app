@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EliminationGameController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TournamentController;
@@ -40,3 +41,4 @@ Route::patch('/tournaments/{tournament}/games/{game}', [GameController::class, '
 Route::post('/tournaments/{tournament}/games', [GameController::class, 'store'])->name('games.create.all')->middleware('check.duplicate.games');
 Route::get('/tournaments/{tournament}/table', [GameController::class, 'showTable'])->name('games.table');
 
+Route::post('/tournaments/{tournament}/elimination-games', [EliminationGameController::class, 'store'])->name('elimination-games.create.all')->middleware('check.duplicate.games');;

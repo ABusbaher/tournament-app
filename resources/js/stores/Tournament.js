@@ -30,6 +30,16 @@ export const useTournamentStore = defineStore('tournament', {
                 console.log(error);
             }
         },
+        async getByTournamentById(id) {
+            try {
+                const response = await axios.get(`/api/tournaments/${id}`);
+                this.name = response.data.name;
+                this.rounds = response.data.rounds;
+                this.type = response.data.type;
+            } catch (error) {
+                console.log(error);
+            }
+        }
     },
 })
 

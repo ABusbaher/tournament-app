@@ -21,7 +21,6 @@ class GameService
         if (!is_numeric($fixture)) {
             throw new NotFoundHttpException('Fixture must be a number');
         }
-
 //        $games = Game::join('teams as host_team', 'games.host_team_id', '=', 'host_team.id')
 //            ->join('teams as guest_team', 'games.guest_team_id', '=', 'guest_team.id')
 //            ->where('games.tournament_id', $tournament->id)
@@ -38,7 +37,7 @@ class GameService
             ->join('teams as host_team', 'games.host_team_id', '=', 'host_team.id')
             ->where('games.tournament_id', $tournamentId)
             ->where('games.fixture', $fixture)
-            ->orderByRaw('ISNULL(guest_team.id), guest_team.id ASC')
+            ->orderByRaw('CASE WHEN guest_team.id IS NULL THEN 0 ELSE 1 END, guest_team.id ASC')
             ->get();
 
         $fixtures = DB::table('games as g')
