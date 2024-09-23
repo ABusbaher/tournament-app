@@ -37,7 +37,7 @@ class GameService
             ->join('teams as host_team', 'games.host_team_id', '=', 'host_team.id')
             ->where('games.tournament_id', $tournamentId)
             ->where('games.fixture', $fixture)
-            ->orderByRaw('CASE WHEN guest_team.id IS NULL THEN 0 ELSE 1 END, guest_team.id ASC')
+            ->orderByRaw('CASE WHEN guest_team.id IS NULL THEN 1 ELSE 0 END, guest_team.id ASC')
             ->get();
 
         $fixtures = DB::table('games as g')

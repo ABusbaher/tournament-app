@@ -64,30 +64,6 @@ class EliminationGameService
         }
         EliminationGame::insert($games);
         return $games;
-
-
-//        for ($round = 1; $round <= $rounds; $round++) {
-//            $nextRound = $round + 1;
-//            if ($round === 1) {
-//                foreach (array_chunk($round1Teams, 2) as $key => [$teamA, $teamB]) {
-//                    $games[] = $this->createSingleEliminationGame($round, $teamA, $teamB, null, null, $tournament->id, "{$nextRound}-" . ceil(($key + 1) / 2));
-//                    if ($tournament->rounds === 2) {
-//                        $games[] = $this->createSingleEliminationGame($round, $teamB, $teamA, null, null, $tournament->id, "{$nextRound}-" . ceil(($key + 1) / 2));
-//                    }
-//                }
-//            } else {
-//                $advancingTeams = ${"round{$round}Teams"};
-//                foreach (array_chunk($advancingTeams, 2) as $key => [$teamA, $teamB]) {
-//                    $games[] = $this->createSingleEliminationGame($round, str_contains($teamA, '-') ? null : $teamA, str_contains($teamB, '-') ? null : $teamB, $teamA, $teamB, $tournament->id, $round === $rounds ? null : "{$nextRound}-" . ceil(($key + 1) / 2));
-//                    if ($tournament->rounds === 2) {
-//                        $games[] = $this->createSingleEliminationGame($round, str_contains($teamB, '-') ? null : $teamB, str_contains($teamA, '-') ? null : $teamA, $teamB, $teamA, $tournament->id, $round === $rounds ? null : "{$nextRound}-" . ceil(($key + 1) / 2));
-//                    }
-//                }
-//            }
-//        }
-//
-//        EliminationGame::insert($games);
-//        return $games;
     }
 
     private function createSingleEliminationGame($round, $teamA, $teamB, $tournamentId, $nextMatch): array
