@@ -62,7 +62,7 @@ const getRowClasses = (index) => {
                                 <td class="pl-4">
                                     {{ team.Ranking }}
                                 </td>
-                                <td class="flex justify-center items-center h-full px-6 py-4 ">
+                                <td class="flex justify-left items-center h-full px-6 py-4 ">
                                     <img v-if=" team.image_path" :src=" team.image_path" alt="Team Image" class="w-10" />
                                     <img v-else src="https://placehold.co/40x40?text=No+team+logo+set" alt="Team Logo">
                                     <span class="ml-2 font-medium text-center">{{ team.team }}</span>

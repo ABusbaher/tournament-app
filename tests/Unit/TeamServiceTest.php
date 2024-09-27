@@ -19,7 +19,7 @@ class TeamServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testFilename = "test_image.jpg";
+        $this->testFilename = "test_image.png";
     }
 
     protected function tearDown(): void

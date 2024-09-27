@@ -26,11 +26,11 @@ class EliminationGameServiceTest extends TestCase
         // assert 7 games is created with 8 teams.
         $this->assertCount(7, $games);
         // assert 4 games are created in round 1.
-        $this->assertCount(4, array_filter($games, fn($item) => $item['round'] === 1));
+        $this->assertCount(4, array_filter($games, fn($item) => $item['round'] === 3));
         // assert 2 games are created in round 2.
         $this->assertCount(2, array_filter($games, fn($item) => $item['round'] === 2));
         // assert 1 game are created in round 3.
-        $this->assertCount(1, array_filter($games, fn($item) => $item['round'] === 3));
+        $this->assertCount(1, array_filter($games, fn($item) => $item['round'] === 1));
         // assert that 3 rounds is created with 8 teams.
         $this->assertDatabaseHas('elimination_games', [
             'tournament_id' => $tournament->id,
@@ -53,11 +53,11 @@ class EliminationGameServiceTest extends TestCase
         // assert 14 games is created with 8 teams.
         $this->assertCount(14, $games);
         // assert 8 games are created in round 1.
-        $this->assertCount(8, array_filter($games, fn($item) => $item['round'] === 1));
+        $this->assertCount(8, array_filter($games, fn($item) => $item['round'] === 3));
         // assert 4 games are created in round 2.
         $this->assertCount(4, array_filter($games, fn($item) => $item['round'] === 2));
         // assert 2 game are created in round 3.
-        $this->assertCount(2, array_filter($games, fn($item) => $item['round'] === 3));
+        $this->assertCount(2, array_filter($games, fn($item) => $item['round'] === 1));
         // assert that 3 rounds is created with 8 teams.
         $this->assertDatabaseHas('elimination_games', [
             'tournament_id' => $tournament->id,
@@ -78,11 +78,11 @@ class EliminationGameServiceTest extends TestCase
         // assert 4 games is created with 5 teams.
         $this->assertCount(4, $games);
         // assert 1 game are created in round 1.
-        $this->assertCount(1, array_filter($games, fn($item) => $item['round'] === 1));
+        $this->assertCount(1, array_filter($games, fn($item) => $item['round'] === 3));
         // assert 2 games are created in round 2.
         $this->assertCount(2, array_filter($games, fn($item) => $item['round'] === 2));
         // assert 1 game are created in round 3.
-        $this->assertCount(1, array_filter($games, fn($item) => $item['round'] === 3));
+        $this->assertCount(1, array_filter($games, fn($item) => $item['round'] === 1));
         // assert that 3 rounds is created with 8 teams.
         $this->assertDatabaseHas('elimination_games', [
             'tournament_id' => $tournament->id,

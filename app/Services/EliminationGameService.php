@@ -5,6 +5,10 @@ namespace App\Services;
 use App\Models\EliminationGame;
 use App\Models\Tournament;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 class EliminationGameService
 {
     public function createAllEliminationGames(Tournament $tournament): array
@@ -20,9 +24,10 @@ class EliminationGameService
         $round2Teams = array_slice($teams, $teamsCount - $teamsToAdvance);
         $games = [];
 
-        for ($round = 1; $round <= $rounds; $round++) {
-            $nextRound = $round + 1;
-            if ($round === 1) {
+        $nextRound = 1;
+        for ($round = $rounds; $round > 0; $round--) {
+            $nextRound++;
+            if ($round === $rounds) {
                 for ($i = 0; $i < count($round1Teams); $i += 2) {
                     $teamA = $round1Teams[$i];
                     $teamB = $round1Teams[$i + 1];
@@ -42,12 +47,13 @@ class EliminationGameService
                     }
                 }
             } else {
-                $advancingTeams = ${"round{$round}Teams"};
+                $currentRoundTeams = $nextRound - 1;
+                $advancingTeams = ${"round{$currentRoundTeams}Teams"};
 
                 for ($i = 0; $i < count($advancingTeams); $i += 2) {
                     $teamA = $advancingTeams[$i];
                     $teamB = $advancingTeams[$i + 1];
-                    $nextMatch =  $round === $rounds ? null : "{$nextRound}-" . ceil(($i + 1) / 2);
+                    $nextMatch =  $currentRoundTeams === $rounds ? null : "{$nextRound}-" . ceil(($i + 1) / 2);
                     $game = $this->createSingleEliminationGame(
                         $round, $teamA, $teamB, $tournament->id, $nextMatch
                     );
@@ -62,6 +68,7 @@ class EliminationGameService
                 }
             }
         }
+
         EliminationGame::insert($games);
         return $games;
     }
@@ -77,6 +84,46 @@ class EliminationGameService
             'tournament_id' => $tournamentId,
             'created_at' => Carbon::now(),
             'next_match' => $nextMatch
+        ];
+    }
+
+    public function getEliminationGames(Tournament $tournament): array
+    {
+        $tournamentId = $tournament->id;
+        $games =  EliminationGame::select(
+            'elimination_games.*',
+            'team1.name as team1_name',
+            'team1.image_path as team1_image',
+            'team2.name as team2_name',
+            'team2.image_path as team2_image',
+            DB::raw('MAX(elimination_games.round) OVER (PARTITION BY elimination_games.tournament_id) as max_round')
+        )
+            ->leftJoin('teams as team1', 'elimination_games.team1_id', '=', 'team1.id')
+            ->leftJoin('teams as team2', 'elimination_games.team2_id', '=', 'team2.id')
+            ->where('elimination_games.tournament_id', $tournamentId)
+            ->orderBy('elimination_games.round', 'desc')
+            ->orderBy('elimination_games.next_match')
+            ->get();
+
+        if ($games->isEmpty()) {
+            throw new NotFoundHttpException('No eliminataion games found for the given tournament.');
+        }
+
+        $maxRound = $games->max('round');
+        $countOfMaxRoundGames = $games->where('round', $maxRound)->count();
+        $expectedNumberOfGames = match($maxRound) {
+            2 => 2,
+            3 => 4,
+            4 => 8,
+            5 => 16,
+            default => 0
+        };
+        $nonPlayedGames = $expectedNumberOfGames - $countOfMaxRoundGames;
+
+        return [
+            'games' => $games,
+            'max_round' => $maxRound,
+            'non_played_games' => $nonPlayedGames
         ];
     }
 }

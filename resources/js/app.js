@@ -5,7 +5,10 @@ import { createApp, h } from 'vue/dist/vue.esm-bundler';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
-import { createPinia } from 'pinia'
+import { createPinia } from 'pinia';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import AddTournamentForm from "@/Pages/Tournaments/Partials/AddTournamentForm.vue";
 import AllTournaments from "@/Pages/Tournaments/AllTournaments.vue";
 import EditTournamentNameForm from "@/Pages/Tournaments/Partials/EditTournamentNameForm.vue";
@@ -18,8 +21,11 @@ import DeleteTeamForm from "@/Pages/Teams/Partials/DeleteTeamForm.vue";
 import EditTeamForm from "@/Pages/Teams/Partials/EditTeamForm.vue";
 import AllByFixtures from "@/Pages/Games/AllByFixtures.vue";
 import EditGameScore from "@/Pages/Games/Partials/EditGameScore.vue";
+import EliminationGames from "@/Pages/Games/EliminationGames.vue";
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
+library.add(fas);
+
 const pinia = createPinia()
 const app = createApp({
     components: {
@@ -35,6 +41,8 @@ const app = createApp({
         EditTeamForm,
         AllByFixtures,
         EditGameScore,
+        EliminationGames,
+        FontAwesomeIcon,
     }
 });
 app.use(pinia)

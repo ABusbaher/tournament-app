@@ -41,4 +41,5 @@ Route::patch('/tournaments/{tournament}/games/{game}', [GameController::class, '
 Route::post('/tournaments/{tournament}/games', [GameController::class, 'store'])->name('games.create.all')->middleware('check.duplicate.games');
 Route::get('/tournaments/{tournament}/table', [GameController::class, 'showTable'])->name('games.table');
 
-Route::post('/tournaments/{tournament}/elimination-games', [EliminationGameController::class, 'store'])->name('elimination-games.create.all')->middleware('check.duplicate.games');;
+Route::post('/tournaments/{tournament}/elimination-games', [EliminationGameController::class, 'store'])->name('elimination-games.create.all')->middleware('check.duplicate.games');
+Route::get('/tournaments/{tournament}/elimination', [EliminationGameController::class, 'getByTournament'])->name('elimination-games.by_tournament');
