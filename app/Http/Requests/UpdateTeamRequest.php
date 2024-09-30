@@ -25,6 +25,7 @@ class UpdateTeamRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:3|max:255',
+            'shorten_name' => 'required|string|min:2|max:4',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ];
     }

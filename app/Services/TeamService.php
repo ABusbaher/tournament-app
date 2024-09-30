@@ -30,6 +30,7 @@ class TeamService
     {
         $team = new Team();
         $team->name = $data['name'];
+        $team->shorten_name = $data['shorten_name'];
         $team->tournament_id = $data['tournament_id'];
 
         if (isset($data['image'])) {
@@ -46,6 +47,7 @@ class TeamService
     {
         $old_image = $team->image_path;
         $team->name = $data['name'];
+        $team->shorten_name = $data['shorten_name'];
         if (isset($data['image'])) {
             $imagePath = $this->uploads($data['image'], 'team_images');
             $team->image_path = $imagePath;

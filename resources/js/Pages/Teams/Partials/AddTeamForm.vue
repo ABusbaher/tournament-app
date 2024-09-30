@@ -8,7 +8,7 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { reactive, ref } from 'vue';
 import {useVuelidate} from '@vuelidate/core'
-import {helpers, minLength, required} from '@vuelidate/validators'
+import {helpers, maxLength, minLength, required} from '@vuelidate/validators'
 import {useTournamentStore} from "@/stores/Tournament.js";
 
 const addTeam = ref(false);
@@ -17,6 +17,7 @@ const tournamentId = tournamentStore.getId;
 
 const state = reactive({
     name: '',
+    shorten_name: '',
     image: null,
 });
 const imageExtensions = ['jpeg', 'png', 'jpg', 'webp'];
@@ -34,6 +35,7 @@ const validImgSize = (value) => {
 
 const rules = {
     name: { required, minLength: minLength(3) },
+    shorten_name: { required, minLength: minLength(2), maxLength: maxLength(4) },
     image: {
         validImg: helpers.withMessage('File type not supported', validImg),
         validImgSize: helpers.withMessage('Image can not bigger than ' + fileSizeLimit + ' bytes', validImgSize)
@@ -60,6 +62,7 @@ const submitForm = () => {
     }
     axios.post(`/api/tournaments/${tournamentId}/teams`, {
         name: state.name,
+        shorten_name: state.shorten_name,
         tournament_id: tournamentId,
         ...(state.image && { image: state.image }),
     }, config).then(response => {
@@ -82,6 +85,7 @@ const submitForm = () => {
 const closeModal = () => {
     addTeam.value = false;
     state.name = '';
+    state.shorten_name = '';
     state.image = null;
 };
 </script>
@@ -107,6 +111,21 @@ const closeModal = () => {
                         placeholder="Team name"
                     />
                     <div class="input-errors mt-2" v-for="error of v$.name.$errors" :key="error.$uid">
+                        <InputError :message="error.$message" class="mt-2" />
+                    </div>
+                </div>
+
+                <div :class="['mt-6', { error: v$.shorten_name.$errors.length }]">
+                    <InputLabel for="shorten_name" value="Shorten team name" />
+                    <TextInput
+                        id="shorten_name"
+                        ref="nameInput"
+                        v-model="state.shorten_name"
+                        type="text"
+                        class="mt-1 block w-3/4"
+                        placeholder="Short team name (2 to 4 letters)"
+                    />
+                    <div class="input-errors mt-2" v-for="error of v$.shorten_name.$errors" :key="error.$uid">
                         <InputError :message="error.$message" class="mt-2" />
                     </div>
                 </div>

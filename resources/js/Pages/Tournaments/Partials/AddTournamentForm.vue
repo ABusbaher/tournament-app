@@ -29,7 +29,11 @@ const data = {
     types: [
         { value: 'league', label: 'League' },
         { value: 'elimination', label: 'Elimination (Cup)' },
-        { value: 'group+elimination', label: 'Group+Elimination' }
+        // { value: 'group+elimination', label: 'Group+Elimination' }
+    ],
+    roundOptions: [
+        { value: '1', label: '1' },
+        { value: '2', label: '2' },
     ],
 };
 
@@ -93,15 +97,12 @@ const closeModal = () => {
                 <div :class="['mt-6', { error: v$.rounds.$errors.length }]">
                     <InputLabel for="rounds" value="Number of rounds" />
 
-                    <TextInput
+                    <SelectInput
                         id="rounds"
-                        ref="nameInput"
+                        name="rounds"
                         v-model="state.rounds"
-                        type="number"
-                        min="1"
-                        max="4"
+                        :options="data.roundOptions"
                         class="mt-1 block w-3/4"
-                        placeholder="1 - 4"
                     />
                     <div class="input-errors mt-2" v-for="error of v$.rounds.$errors" :key="error.$uid">
                         <InputError :message="error.$message" class="mt-2" />

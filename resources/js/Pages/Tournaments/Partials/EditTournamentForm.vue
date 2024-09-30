@@ -22,6 +22,7 @@ const tournamentId = tournamentStore.getId;
 
 const tournamentState = reactive({
     tournamentName: tournamentStore.getName,
+    tournamentRoundOptions: tournamentStore.roundOptions,
     tournamentRounds: tournamentStore.getRounds,
     tournamentType: tournamentStore.getType,
     tournamentTypes: tournamentStore.types,
@@ -99,15 +100,12 @@ onMounted(async() => {
         <div :class="['mt-6', { error: v$.tournamentRounds.$errors.length }]">
             <InputLabel for="rounds" value="Number of rounds" />
 
-            <TextInput
+            <SelectInput
                 id="rounds"
-                ref="nameInput"
+                name="rounds"
                 v-model="tournamentState.tournamentRounds"
-                type="number"
-                min="1"
-                max="4"
+                :options="tournamentState.tournamentRoundOptions"
                 class="mt-1 block w-full"
-                placeholder="1 - 4"
             />
             <div class="input-errors mt-2" v-for="error of v$.tournamentRounds.$errors" :key="error.$uid">
                 <InputError :message="error.$message" class="mt-2" />

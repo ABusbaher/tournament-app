@@ -20,6 +20,7 @@ class TeamFactory extends Factory
     {
         return [
             'name' => fake()->name,
+            'shorten_name' => fake()->regexify('[a-zA-Z]{2,4}'),
             'tournament_id' => function () {
                     return Tournament::factory()->create()->id;
                 },

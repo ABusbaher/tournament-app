@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     libpng-dev \
     libjpeg-dev \
+    libfreetype6-dev \
     libonig-dev \
     libxml2-dev \
     zip \
@@ -17,8 +18,10 @@ RUN apt-get update && apt-get install -y \
     nginx
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd \
+RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath \
     && docker-php-ext-enable pdo_mysql
+
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg && docker-php-ext-install gd
 
 # Install Composer
 COPY --from=composer:2.2 /usr/bin/composer /usr/bin/composer

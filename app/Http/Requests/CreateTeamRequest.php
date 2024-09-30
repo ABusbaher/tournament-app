@@ -29,6 +29,7 @@ class CreateTeamRequest extends FormRequest
         $maxTeams = 32;
         return [
             'name' => 'required|string|min:3|max:255',
+            'shorten_name' => 'required|string|min:2|max:4',
             'tournament_id' => [
                 'required',
                 'exists:tournaments,id',

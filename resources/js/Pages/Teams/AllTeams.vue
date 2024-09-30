@@ -93,14 +93,16 @@ onMounted(async() => {
     <table class="min-w-full divide-y divide-gray-200">
         <thead>
         <tr>
-            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Team name</th>
-            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Team image</th>
+            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Name</th>
+            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Short name</th>
+            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Image</th>
             <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Action</th>
         </tr>
         </thead>
         <tbody>
         <tr v-if="teams.length" v-for="team in teams" :key="team.id">
             <td class="py-3 px-4 text-center">{{ team.name }}</td>
+            <td class="py-3 px-4 text-center">{{ team.shorten_name }}</td>
             <td class="py-3 px-4 text-center flex justify-center">
                 <template  v-if="team.image_path">
                     <img :src="team.image_path" alt="Team Image" width="100" height="100"/>

@@ -16,6 +16,7 @@ class TeamTest extends TestCase
     {
         return $this->postWithCsrfToken(route('team.store', ['tournament' => 1]),[
             'name' => 'Team 1',
+            'shorten_name' => 'Voša',
             'tournament_id' => Tournament::factory()->create()->id,
         ]);
     }
@@ -28,6 +29,7 @@ class TeamTest extends TestCase
         $this->assertDatabaseHas('teams', [
             'name' => 'Team 1',
             'tournament_id' => 1,
+            'shorten_name' => 'Voša',
         ]);
     }
 
@@ -60,11 +62,12 @@ class TeamTest extends TestCase
     {
         $team = Team::factory()->create();
         $response = $this->put(route('team.update', ['tournament' => $team->tournament_id, 'team' => $team->id]),
-        ['name' => 'Updated Team']);
+        ['name' => 'Updated Team', 'shorten_name' => 'Voša']);
 
         $response->assertStatus(200);
         $this->assertDatabaseHas('teams', [
             'name' => 'Updated Team',
+            'shorten_name' => 'Voša',
             'tournament_id' => $team->tournament_id
         ]);
     }

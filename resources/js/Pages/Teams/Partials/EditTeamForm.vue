@@ -7,7 +7,7 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { ref, reactive } from 'vue';
 import { useVuelidate } from '@vuelidate/core'
-import {required, minLength, helpers} from '@vuelidate/validators'
+import {required, minLength, helpers, maxLength} from '@vuelidate/validators'
 import {useTournamentStore} from "@/stores/Tournament.js";
 import FileInput from "@/Components/FileInput.vue";
 
@@ -23,6 +23,7 @@ const tournamentId = tournamentStore.getId;
 
 const state = reactive({
     name: '',
+    shorten_name: '',
     image: null,
     previous_image: null,
 });
@@ -41,6 +42,7 @@ const validImgSize = (value) => {
 
 const rules = {
     name: { required, minLength: minLength(3) },
+    shorten_name: { required, minLength: minLength(2), maxLength: maxLength(4) },
     image: {
         validImg: helpers.withMessage('File type not supported', validImg),
         validImgSize: helpers.withMessage('Image can not bigger than ' + fileSizeLimit + ' bytes', validImgSize)
@@ -54,6 +56,7 @@ const openModal = () => {
     axios.get(`/api/tournaments/${tournamentId}/teams/${props.teamId}`)
         .then(response => {
             state.name = response.data['name'];
+            state.shorten_name = response.data['shorten_name'];
             state.previous_image = response.data['image_path'];
         })
         .catch(error => {
@@ -77,6 +80,7 @@ const submitForm = () => {
     let data = new FormData();
     data.append('_method', 'put');
     data.append('name', state.name);
+    data.append('shorten_name', state.shorten_name);
     data.append('image', state.image ? state.image : '');
     axios.post(`/api/tournaments/${tournamentId}/teams/${props.teamId}`, data, config).then(response => {
         emit('teamUpdated', response.data);
@@ -90,6 +94,7 @@ const submitForm = () => {
 const closeModal = () => {
     editTeam.value = false;
     state.name = '';
+    state.shorten_name = '';
     state.previous_image = null;
     state.image = null;
 };</script>
@@ -115,6 +120,21 @@ const closeModal = () => {
                         placeholder="Team name"
                     />
                     <div class="input-errors mt-2" v-for="error of v$.name.$errors" :key="error.$uid">
+                        <InputError :message="error.$message" class="mt-2" />
+                    </div>
+                </div>
+
+                <div :class="['mt-6', { error: v$.shorten_name.$errors.length }]">
+                    <InputLabel for="shorten_name" value="Shorten team name" />
+                    <TextInput
+                        id="shorten_name"
+                        ref="nameInput"
+                        v-model="state.shorten_name"
+                        type="text"
+                        class="mt-1 block w-3/4"
+                        placeholder="Short team name (2 to 4 letters)"
+                    />
+                    <div class="input-errors mt-2" v-for="error of v$.shorten_name.$errors" :key="error.$uid">
                         <InputError :message="error.$message" class="mt-2" />
                     </div>
                 </div>

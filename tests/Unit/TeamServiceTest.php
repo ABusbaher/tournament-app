@@ -36,6 +36,7 @@ class TeamServiceTest extends TestCase
     {
         $teamData = [
             'name' => 'Test team',
+            'shorten_name' => 'Voša',
             'tournament_id' => Tournament::factory()->create()->id
         ];
         $teamService = new TeamService();
@@ -44,6 +45,7 @@ class TeamServiceTest extends TestCase
         $this->assertDatabaseHas('teams', [
             'name' => 'Test team',
             'tournament_id' => $teamData['tournament_id'],
+            'shorten_name' => 'Voša',
         ]);
     }
 
@@ -52,6 +54,7 @@ class TeamServiceTest extends TestCase
         $file = UploadedFile::fake()->image($this->testFilename);
         $teamData = [
             'name' => 'Test team',
+            'shorten_name' => 'Voša',
             'tournament_id' => Tournament::factory()->create()->id,
             'image' => $file
         ];
@@ -60,6 +63,7 @@ class TeamServiceTest extends TestCase
 
         $this->assertDatabaseHas('teams', [
             'name' => 'Test team',
+            'shorten_name' => 'Voša',
             'tournament_id' => $teamData['tournament_id'],
         ]);
 
@@ -74,6 +78,7 @@ class TeamServiceTest extends TestCase
     {
         $teamData = [
             'name' => 'Test team',
+            'shorten_name' => 'Voša',
             'tournament_id' => Tournament::factory()->create()->id
         ];
         $teamService = new TeamService();
@@ -91,6 +96,7 @@ class TeamServiceTest extends TestCase
         $imagePath = UploadedFile::fake()->image($this->testFilename);
         $data = [
             'name' => 'Updated Team Name',
+            'shorten_name' => 'Voša',
             'image' => $imagePath,
         ];
         $teamService = new TeamService();
@@ -108,11 +114,13 @@ class TeamServiceTest extends TestCase
         $team = Team::factory()->create();
         $data = [
             'name' => 'Updated Team Name',
+            'shorten_name' => 'Voša',
         ];
         $teamService = new TeamService();
         $updatedTeam = $teamService->updateTeam($team, $data);
 
         $this->assertEquals('Updated Team Name', $updatedTeam->name);
+        $this->assertEquals('Voša', $updatedTeam->shorten_name);
         $this->assertNull($updatedTeam->image_path);
     }
 
