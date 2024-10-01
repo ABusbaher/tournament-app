@@ -5,6 +5,7 @@ namespace Tests\Feature\Game;
 use App\Models\Game;
 use App\Models\Team;
 use App\Models\Tournament;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -123,16 +124,19 @@ class GameTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_game_score_can_be_updated()
+    public function test_game_score_and_time_can_be_updated()
     {
         Game::factory()->count(4)->create(['tournament_id' => 1]);
+        $gameTime = new Carbon('2024-05-26');
+        $gameTime->setTimeFromTimeString('16:00:00');
         $response = $this->patch(route('game.updateScore', ['tournament' => 1, 'game' => 1]),
-            ['host_goals' => 2, 'guest_goals' => 0]
+            ['host_goals' => 2, 'guest_goals' => 0, 'game_time' => $gameTime]
         );
         $response->assertStatus(200);
         $response->assertJson([
             'host_goals' => 2,
-            'guest_goals' => 0
+            'guest_goals' => 0,
+            'game_time' => $gameTime->toISOString(),
         ]);
     }
 
@@ -145,6 +149,16 @@ class GameTest extends TestCase
         $response->assertStatus(422);
         $response->assertInvalid(['guest_goals']);
         $response->assertInvalid(['host_goals']);
+    }
+
+    public function test_game_score_can_not_be_updated_if_game_time_is_not_provided()
+    {
+        Game::factory()->count(4)->create(['tournament_id' => 1]);
+        $response = $this->patch(route('game.updateScore', ['tournament' => 1, 'game' => 1]),
+            ['host_goals' => 2, 'guest_goals' => 0]
+        );
+        $response->assertStatus(422);
+        $response->assertInvalid(['game_time']);
     }
 
     public function test_game_score_can_not_be_updated_if_wrong_game_id_is_provided()

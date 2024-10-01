@@ -32,6 +32,7 @@ class GameService
         $tournamentId = $tournament->id;
 
         $games = Game::select('games.*', 'host_team.name as host_team_name', 'guest_team.name as guest_team_name',
+            'host_team.shorten_name as host_team_shortname', 'guest_team.shorten_name as guest_team_shortname',
             'host_team.image_path as host_team_image', 'guest_team.image_path as guest_team_image')
             ->leftJoin('teams as guest_team', 'games.guest_team_id', '=', 'guest_team.id')
             ->join('teams as host_team', 'games.host_team_id', '=', 'host_team.id')
@@ -118,6 +119,7 @@ class GameService
             ->firstOrFail();
         $game->host_goals = $data['host_goals'];
         $game->guest_goals = $data['guest_goals'];
+        $game->game_time = $data['game_time'];
         $game->save();
         return $game;
     }

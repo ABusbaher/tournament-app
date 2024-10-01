@@ -22,6 +22,8 @@ import EditTeamForm from "@/Pages/Teams/Partials/EditTeamForm.vue";
 import AllByFixtures from "@/Pages/Games/AllByFixtures.vue";
 import EditGameScore from "@/Pages/Games/Partials/EditGameScore.vue";
 import EliminationGames from "@/Pages/Games/EliminationGames.vue";
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 library.add(fas);
@@ -43,6 +45,7 @@ const app = createApp({
         EditGameScore,
         EliminationGames,
         FontAwesomeIcon,
+        VueDatePicker
     }
 });
 app.use(pinia)

@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $tournament_id
  * @property int|null $host_goals
  * @property int|null $guest_goals
+ * @property \Illuminate\Support\Carbon|null $game_time
  * @property int $fixture
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -39,6 +40,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Game extends Model
 {
     use HasFactory;
+
+    protected $casts = [
+        'game_time' => 'datetime',
+    ];
 
     protected $guarded = [];
 

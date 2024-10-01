@@ -6,6 +6,7 @@ import EditGameScore from "@/Pages/Games/Partials/EditGameScore.vue";
 import StatusMessage from "@/Components/StatusMessage.vue";
 import AppTabs from "@/Components/AppTabs.vue";
 import LeagueTable from "@/Components/LeagueTable.vue";
+import {useDateTimeFormatter} from "@/composables/useDateTimeFormatter.js";
 
 const props = defineProps({
     fixtureId: {
@@ -21,6 +22,7 @@ const currentPage = ref(1);
 const nextPageLink = ref('');
 const previousPageLink = ref('');
 const total = ref(1);
+const { formatDate } = useDateTimeFormatter();
 
 const messages = reactive({
     updateGameScore: false,
@@ -88,19 +90,23 @@ const fetchTable = () => {
                 <div v-if="games.length" v-for="game in games" :key="game.id" class="mb-6">
                     <div class="match bg-white rounded-lg shadow-md flex items-center justify-center">
                         <div class="match-content flex flex-col md:flex-row">
-                            <div class="column p-3 flex justify-center items-center">
+                            <div class="column p-3 flex justify-center items-center" :title="game.host_team_name">
                                 <div class="team flex flex-col items-center">
                                     <div class="team-logo w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
                                         <img v-if="game.host_team_image" :src="game.host_team_image" alt="Team Image" />
-                <!--                        <img v-else src="https://placehold.co/96x96?text=No+team+logo+set" alt="Team Logo">-->
                                         <p v-else class="text-center p-3">Team has no logo sett</p>
                                     </div>
-                                    <h2 class="team-name mt-4">{{ game.host_team_name }}</h2>
+                                    <h2 class="team-name mt-4">{{ game.host_team_shortname }}</h2>
                                 </div>
                             </div>
 
-                            <div v-if="game.guest_team_name" class="column p-3 flex justify-center items-center">
+                            <div v-if="game.guest_team_name" class="column p-3 flex justify-center">
                                 <div class="match-details text-center">
+                                    <div>
+                                        <p class="date-caption">
+                                            {{ game.game_time !== null ? formatDate(new Date(game.game_time)) : 'Game time not set yet' }}
+                                        </p>
+                                    </div>
                                     <div class="match-score flex items-center justify-center mt-2">
                                         <span class="match-score-number text-5xl font-bold">
                                             {{ game.host_goals !== null ? game.host_goals : 'v' }}
@@ -118,13 +124,13 @@ const fetchTable = () => {
                                     free team
                                 </span>
                             </div>
-                            <div v-if="game.guest_team_name" class="column p-3 flex justify-center items-center">
+                            <div v-if="game.guest_team_name" class="column p-3 flex justify-center items-center" :title="game.guest_team_name">
                                 <div class="team flex flex-col items-center">
                                     <div class="team-logo w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
                                         <img v-if="game.guest_team_image" :src="game.guest_team_image" alt="Team Image" />
                                         <p v-else class="text-center p-3">Team has no logo sett</p>
                                     </div>
-                                    <h2 class="team-name mt-4">{{ game.guest_team_name }}</h2>
+                                    <h2 class="team-name mt-4">{{ game.guest_team_shortname }}</h2>
                                 </div>
                             </div>
                         </div>
@@ -143,3 +149,16 @@ const fetchTable = () => {
         </app-tabs>
     </div>
 </template>
+<style scoped>
+.date-caption {
+    font-size: 1.1rem;
+    color: #313131;
+    font-weight: 650;
+}
+
+@media (max-width: 40em) {
+    h2 {
+        margin-bottom: 0;
+    }
+}
+</style>

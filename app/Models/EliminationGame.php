@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $tournament_id
  * @property int|null $team1_goals
  * @property int|null $team2_goals
+ * @property \Illuminate\Support\Carbon|null $game_time
  * @property int $round
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at

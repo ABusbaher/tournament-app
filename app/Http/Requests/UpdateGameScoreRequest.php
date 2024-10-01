@@ -19,6 +19,7 @@ class UpdateGameScoreRequest extends FormRequest
         return [
             'host_goals' => ['required', 'integer', 'min:0', 'max:100'],
             'guest_goals' => ['required', 'integer', 'min:0', 'max:100'],
+            'game_time' => ['required', 'date'],
         ];
     }
 

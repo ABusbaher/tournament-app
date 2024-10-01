@@ -9,6 +9,9 @@ import {ref, reactive, toRefs, computed} from 'vue';
 import { useVuelidate } from '@vuelidate/core'
 import {required, minValue, maxValue, integer} from '@vuelidate/validators'
 import {useTournamentStore} from "@/stores/Tournament.js";
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+import {useDateTimeFormatter} from "@/composables/useDateTimeFormatter.js";
 
 const modalOpened = ref(false);
 const props = defineProps({
@@ -30,13 +33,18 @@ const state = reactive({
     hostTeamScore: '',
     guestTeam: '',
     guestTeamScore: '',
+    gameTime: null,
 });
 
 const rules = {
     hostTeamScore: { required, integer, minValue: minValue(0), maxValue: maxValue(100) },
     guestTeamScore: { required, integer, minValue: minValue(0), maxValue: maxValue(100) },
+    gameTime: { required },
 }
+const date = ref(new Date());
+const { formatDate } = useDateTimeFormatter();
 
+// const game_time = ref();
 const v$ = useVuelidate(rules, state)
 
 const openModal = () => {
@@ -44,6 +52,7 @@ const openModal = () => {
     axios.get(`/api/tournaments/${tournamentId}/games/${props.gameId}`)
         .then(response => {
             state.hostTeam = response.data.host_team.name;
+            state.gameTime = response.data.game_time?.toString();
             if (response.data.host_goals === 0) {
                 state.hostTeamScore = '0'
             }else if (response.data.host_goals) {
@@ -86,6 +95,7 @@ const submitForm = () => {
     data.append('_method', 'patch');
     data.append('host_goals', state.hostTeamScore);
     data.append('guest_goals', state.guestTeamScore);
+    data.append('game_time', new Date(state.gameTime).toISOString());
     axios.post(`/api/tournaments/${tournamentId}/games/${props.gameId}`, data, config).then(response => {
         emit('scoreUpdated', response.data);
         closeModal();
@@ -110,6 +120,19 @@ const closeModal = () => {
                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                     {{ getScoreButtonText }}
                 </h2>
+
+                <div :class="['mt-6', { error: v$.gameTime.$errors.length }]">
+                    <InputLabel for="gameTime" value="Game time" />
+                    <VueDatePicker
+                        id="gameTime"
+                        v-model="state.gameTime"
+                        time-picker-inline
+                        :format="formatDate"
+                    />
+                    <div class="input-errors mt-2" v-for="error of v$.gameTime.$errors" :key="error.$uid">
+                        <InputError :message="error.$message" class="mt-2" />
+                    </div>
+                </div>
 
                 <div :class="['mt-6', { error: v$.hostTeamScore.$errors.length }]">
                     <InputLabel for="hostTeamScore" :value="state.hostTeam + ' score'" />
@@ -144,7 +167,6 @@ const closeModal = () => {
                         <InputError :message="error.$message" class="mt-2" />
                     </div>
                 </div>
-
                 <div class="mt-6 flex justify-end">
                     <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
                     <PrimaryButton class="ml-3" @click="submitForm">
@@ -155,3 +177,15 @@ const closeModal = () => {
         </Modal>
     </section>
 </template>
+<style scoped>
+/deep/ .dp--menu-wrapper {
+    position: relative;
+    top: 20px !important;
+    z-index: 99999;
+    left: 0 !important;
+}
+
+/deep/ .dp--tp-wrap {
+    max-width: 100%;
+}
+</style>
