@@ -52,7 +52,6 @@ const submitForm = () => {
     axios.patch(`/api/tournaments/${props.tournamentId}`, {
         name: state.name,
     }).then(response => {
-        // console.log(response.data);
         const updatedTournament = response.data;
         emit('tournamentEdited', updatedTournament);
         closeModal();

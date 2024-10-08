@@ -30,6 +30,11 @@ class EliminationGameController extends Controller
     {
         try {
             $games = $this->gameService->getEliminationGames($tournament);
+
+            if (request()->routeIs('admin.elimination.games')) {
+                // Admin view
+                return view('games.adminByElimination', compact('games'));
+            }
             return view('games.byElimination', compact( 'games'));
         } catch (NotFoundHttpException $exception) {
             abort(404);

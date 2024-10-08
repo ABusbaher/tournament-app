@@ -22,6 +22,7 @@ import EditTeamForm from "@/Pages/Teams/Partials/EditTeamForm.vue";
 import AllByFixtures from "@/Pages/Games/AllByFixtures.vue";
 import EditGameScore from "@/Pages/Games/Partials/EditGameScore.vue";
 import EliminationGames from "@/Pages/Games/EliminationGames.vue";
+import AdminAllByEliminationCup from "@/Pages/Games/AdminAllByEliminationCup.vue";
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 
@@ -44,6 +45,7 @@ const app = createApp({
         AllByFixtures,
         EditGameScore,
         EliminationGames,
+        AdminAllByEliminationCup,
         FontAwesomeIcon,
         VueDatePicker
     }

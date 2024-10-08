@@ -3,7 +3,9 @@
         <div class="tournament-bracket__match" tabindex="0">
             <table class="tournament-bracket__table">
                 <caption class="tournament-bracket__caption">
-                    <time :datetime="gameTime">{{ formattedTime }}</time>
+                    <time :datetime="gameTime">
+                        {{ game.game_time !== null ? formatDate(new Date(game.game_time)) : 'Game time not set yet' }}
+                    </time>
                 </caption>
                 <thead class="sr-only">
                 <tr>
@@ -14,7 +16,7 @@
                 <tbody class="tournament-bracket__content">
                 <tr class="tournament-bracket__team" :class="{ 'tournament-bracket__team--winner': isWinnerTeam1 }">
                     <td class="tournament-bracket__country">
-                        <abbr class="tournament-bracket__code" :title="game.team1_name">HOME</abbr>
+                        <abbr class="tournament-bracket__code" :title="game.team1_name">{{ game.team1_shorten_name }}</abbr>
                         <span class="tournament-bracket__flag" aria-label="Flag">
                             <img v-if="game.team1_image" :src="game.team1_image" alt="Team 1 Image" />
                         </span>
@@ -28,7 +30,7 @@
                 </tr>
                 <tr class="tournament-bracket__team" :class="{ 'tournament-bracket__team--winner': isWinnerTeam2 }">
                     <td class="tournament-bracket__country">
-                        <abbr class="tournament-bracket__code" :title="game.team2_name">Guest</abbr>
+                        <abbr class="tournament-bracket__code" :title="game.team2_name">{{ game.team2_shorten_name }}</abbr>
                         <span class="tournament-bracket__flag" aria-label="Flag">
                             <img v-if="game.team2_image" :src="game.team2_image" alt="Team 2 Image" />
                         </span>
@@ -50,6 +52,7 @@
 import { computed } from 'vue';
 import '@/../css/elemination-braket.css';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import {useDateTimeFormatter} from "@/composables/useDateTimeFormatter.js";
 
 // Props
 const props = defineProps({
@@ -80,10 +83,7 @@ const props = defineProps({
     }
 });
 
-// Computed Properties
-const formattedTime = computed(() => {
-    return 'testgametime';
-});
+const { formatDate } = useDateTimeFormatter();
 </script>
 
 <style scoped>

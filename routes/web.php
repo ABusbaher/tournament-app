@@ -44,4 +44,6 @@ Route::get('/tournaments/{tournament}/teams', [TeamController::class, 'index'])-
 Route::get('/tournaments/{tournament}/fixtures/{fixture}', [GameController::class, 'index'])->name('fixture.games');
 Route::get('/tournaments/{tournament}/elimination', [EliminationGameController::class, 'index'])->name('elimination.games');
 
+Route::get('/admin/tournaments/{tournament}/elimination', [EliminationGameController::class, 'index'])->name('admin.elimination.games');
+
 require __DIR__.'/auth.php';

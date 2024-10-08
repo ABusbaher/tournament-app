@@ -93,8 +93,10 @@ class EliminationGameService
         $games =  EliminationGame::select(
             'elimination_games.*',
             'team1.name as team1_name',
+            'team1.shorten_name as team1_shorten_name',
             'team1.image_path as team1_image',
             'team2.name as team2_name',
+            'team2.shorten_name as team2_shorten_name',
             'team2.image_path as team2_image',
             DB::raw('MAX(elimination_games.round) OVER (PARTITION BY elimination_games.tournament_id) as max_round')
         )
@@ -106,7 +108,7 @@ class EliminationGameService
             ->get();
 
         if ($games->isEmpty()) {
-            throw new NotFoundHttpException('No eliminataion games found for the given tournament.');
+            throw new NotFoundHttpException('No elimination games found for the given tournament.');
         }
 
         $maxRound = $games->max('round');

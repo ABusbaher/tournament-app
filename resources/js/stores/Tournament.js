@@ -24,7 +24,9 @@ export const useTournamentStore = defineStore('tournament', {
     },
     actions: {
         async setIdFromUrl() {
-            this.id = window.location.href.split('/')[4];
+            this.id = window.location.href.split('/')[3] === 'admin' ?
+                window.location.href.split('/')[5] :
+                window.location.href.split('/')[4];
             try {
                 const response = await axios.get(`/api/tournaments/${this.id}`);
                 this.name = response.data.name;

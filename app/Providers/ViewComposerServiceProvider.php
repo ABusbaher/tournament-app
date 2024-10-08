@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\EliminationGame;
 use App\Models\Game;
 use App\Models\Tournament;
 use Illuminate\Support\Facades;
@@ -28,10 +29,15 @@ class ViewComposerServiceProvider extends ServiceProvider
                 ->pluck('tournaments.name', 'games.tournament_id')
                 ->unique()
                 ->toArray();
+            $tournamentsWithEliminations = EliminationGame::join('tournaments', 'elimination_games.tournament_id', '=', 'tournaments.id')
+                ->pluck('tournaments.name', 'elimination_games.tournament_id')
+                ->unique()
+                ->toArray();
             $tournaments = Tournament::all();
 
             $view->with([
                 'tournamentsWithFixtures' => $tournamentsWithFixtures,
+                'tournamentsWithEliminations' => $tournamentsWithEliminations,
                 'tournaments' => $tournaments
             ]);
         });

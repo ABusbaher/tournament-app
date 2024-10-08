@@ -64,7 +64,6 @@
 import {computed, onMounted, ref} from "vue";
 import {useTournamentStore} from "@/stores/Tournament.js";
 import BracketMatch from "@/Pages/Games/Partials/BracketMatch.vue";
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import '@/../css/elemination-braket.css';
 
 const games = ref([]);
@@ -109,7 +108,6 @@ const rounds = computed(() => {
         { number: 1, title: 'Bronze medal game', class: 'tournament-bracket__round tournament-bracket__round--bronze', isFinal: true, medalType: 'Bronze medal', medalColor: '#CD7F32' },
         { number: 1, title: 'Gold medal game', class: 'tournament-bracket__round tournament-bracket__round--gold', isFinal: true, medalType: 'Gold medal', medalColor: '#FFD700' },
     ];
-    console.log(allRounds.filter(round => round.number <= maxRound.value));
     return allRounds.filter(round => round.number <= maxRound.value);
 });
 const filterGamesByRound = (round) => {

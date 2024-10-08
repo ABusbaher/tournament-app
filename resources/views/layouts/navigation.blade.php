@@ -50,6 +50,11 @@
                                     <a href="{{ route('fixture.games', ['tournament' => $id, 'fixture' => 1]) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white">{{ $name }} fixtures</a>
                                 </div>
                             @endforeach
+                            @foreach($tournamentsWithEliminations as $id => $name)
+                                <div class="py-1">
+                                    <a href="{{ route('elimination.games', ['tournament' => $id]) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white">{{ $name }} cup</a>
+                                </div>
+                            @endforeach
                     </div>
                 </li>
             </ul>
