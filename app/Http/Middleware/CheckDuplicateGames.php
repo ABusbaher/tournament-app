@@ -26,7 +26,7 @@ class CheckDuplicateGames
             }
         } else if ($tournament?->type === 'elimination') {
             if (EliminationGame::where('tournament_id', $tournamentId)->exists()) {
-                return response()->json(['message' => 'Fixtures for this tournament already exist!'], 403);
+                return response()->json(['message' => 'Elimination cup for this tournament already exist!'], 403);
             }
         }
         return $next($request);

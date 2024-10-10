@@ -20,7 +20,7 @@ import FileInput from "@/Components/FileInput.vue";
 import DeleteTeamForm from "@/Pages/Teams/Partials/DeleteTeamForm.vue";
 import EditTeamForm from "@/Pages/Teams/Partials/EditTeamForm.vue";
 import AllByFixtures from "@/Pages/Games/AllByFixtures.vue";
-import EditGameScore from "@/Pages/Games/Partials/EditGameScore.vue";
+import EditGameScore from "@/Pages/Games/Partials/EditFixtureGameScore.vue";
 import EliminationGames from "@/Pages/Games/EliminationGames.vue";
 import AdminAllByEliminationCup from "@/Pages/Games/AdminAllByEliminationCup.vue";
 import VueDatePicker from '@vuepic/vue-datepicker';

@@ -2,14 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateAllLeagueFixturesRequest;
+use App\Http\Requests\CreateAllGamesRequest;
+use App\Http\Requests\UpdateEliminationGameScoreRequest;
+use App\Models\EliminationGame;
 use App\Models\Tournament;
 use App\Services\EliminationGameService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use InvalidArgumentException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
+use Throwable;
 
 class EliminationGameController extends Controller
 {
@@ -19,11 +25,26 @@ class EliminationGameController extends Controller
         $this->gameService = $gameService;
     }
 
-    public function store(CreateAllLeagueFixturesRequest $request, Tournament $tournament): JsonResponse
+    /**
+     * @throws Throwable
+     */
+    public function store(CreateAllGamesRequest $request, Tournament $tournament): JsonResponse
     {
+        DB::beginTransaction();
         $request->validated();
-        $games = $this->gameService->createAllEliminationGames($tournament);
-        return response()->json($games, 201);
+        try {
+            $games = $this->gameService->createAllEliminationGames($tournament);
+            DB::commit();
+            return response()->json($games, 201);
+         } catch (InvalidArgumentException $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return response()->json(['message' => 'Not valid tournament type.'], 422);
+        } catch (Throwable $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return response()->json(['message' => 'An error occurred while creating cup games.'], 500);
+        }
     }
 
     public function index(Tournament $tournament): \Illuminate\Contracts\Foundation\Application|Factory|View|Application
@@ -48,6 +69,35 @@ class EliminationGameController extends Controller
             return response()->json($games);
         } catch (NotFoundHttpException $exception) {
             return response()->json(['message' => 'No elimination games found for the given tournament.'], 404);
+        }
+    }
+
+    public function show(Tournament $tournament, EliminationGame $game): JsonResponse
+    {
+        $gameByTournamentAndId = $this->gameService->getGame($tournament, $game);
+
+        return response()->json($gameByTournamentAndId);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function updateScore(UpdateEliminationGameScoreRequest $request, Tournament $tournament, EliminationGame $game): JsonResponse
+    {
+        DB::beginTransaction();
+        $validatedData = $request->validated();
+        try {
+            $gameData = $this->gameService->updateGameScore($tournament, $game, $validatedData);
+            DB::commit();
+            return response()->json($gameData);
+        } catch (NotFoundHttpException $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return response()->json(['message' => 'Game not found for the given tournament and fixture.'], 404);
+        } catch (Throwable $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return response()->json(['message' => 'An error occurred while updating the game score.'], 500);
         }
     }
 }

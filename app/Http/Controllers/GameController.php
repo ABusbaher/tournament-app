@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateAllLeagueFixturesRequest;
+use App\Http\Requests\CreateAllGamesRequest;
 use App\Http\Requests\UpdateGameScoreRequest;
 use App\Models\Game;
 use App\Models\Tournament;
@@ -43,7 +43,7 @@ class GameController extends Controller
         }
     }
 
-    public function store(CreateAllLeagueFixturesRequest $request, Tournament $tournament): JsonResponse
+    public function store(CreateAllGamesRequest $request, Tournament $tournament): JsonResponse
     {
 //        $this->authorize('create', $tournament);
         $request->validated();

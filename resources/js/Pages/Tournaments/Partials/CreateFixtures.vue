@@ -28,7 +28,7 @@ const createFixtures = () => {
     if (error403.value) return;
     if (tournamentType.value === 'league') {
         url.value = `/api/tournaments/${tournamentId}/games`;
-    }else if (tournamentType.value === 'elimination') {
+    } else if (tournamentType.value === 'elimination') {
         url.value = `/api/tournaments/${tournamentId}/elimination-games`;
     }
     axios.post(url.value, {

@@ -11,7 +11,7 @@ class GameServiceTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_correct_fixtures_by_league_rounds_has_been_set(): void
+    public function test_correct_fixtures_by_league_rounds_can_been_set(): void
     {
         $tournament = Tournament::factory()->create(['type' => 'league', 'rounds' => 2]);
         Team::factory()->times(6)->create([

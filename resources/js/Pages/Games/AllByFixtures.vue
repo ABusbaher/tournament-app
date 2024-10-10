@@ -2,7 +2,7 @@
 import {onMounted, reactive, ref, toRefs} from "vue";
 import {useTournamentStore} from "@/stores/Tournament.js";
 import BasePagination from "@/Components/BasePagination.vue";
-import EditGameScore from "@/Pages/Games/Partials/EditGameScore.vue";
+import EditGameScore from "@/Pages/Games/Partials/EditFixtureGameScore.vue";
 import StatusMessage from "@/Components/StatusMessage.vue";
 import AppTabs from "@/Components/AppTabs.vue";
 import LeagueTable from "@/Components/LeagueTable.vue";

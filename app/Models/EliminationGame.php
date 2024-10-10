@@ -48,6 +48,10 @@ class EliminationGame extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'game_time' => 'datetime',
+    ];
+
     public function firstTeam(): BelongsTo
     {
         return $this->belongsTo(Team::class, 'team1_id');

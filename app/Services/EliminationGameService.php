@@ -5,14 +5,19 @@ namespace App\Services;
 use App\Models\EliminationGame;
 use App\Models\Tournament;
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class EliminationGameService
 {
     public function createAllEliminationGames(Tournament $tournament): array
     {
+        if ($tournament->type !== 'elimination') {
+            throw new InvalidArgumentException('Not valid tournament type', 422);
+        }
         $teams = $tournament->teams->pluck('id')->toArray();
         $teamsCount = count($teams);
         shuffle($teams); // Randomize the team order
@@ -127,5 +132,73 @@ class EliminationGameService
             'max_round' => $maxRound,
             'non_played_games' => $nonPlayedGames
         ];
+    }
+
+    public function getGame(Tournament $tournament, EliminationGame $game): Model|Builder|EliminationGame
+    {
+        return EliminationGame::with('firstTeam:id,name', 'secondTeam:id,name')
+            ->where('tournament_id', $tournament->id)
+            ->where('id', $game->id)
+            ->firstOrFail();
+    }
+
+    public function updateGameScore(Tournament $tournament, EliminationGame $game, array $data): Model|Builder|EliminationGame
+    {
+        $game = EliminationGame::where('tournament_id', $tournament->id)
+            ->where('id', $game->id)
+            ->firstOrFail();
+
+        $game->team1_goals = $data['team1_goals'];
+        $game->team2_goals = $data['team2_goals'];
+        $game->game_time = $data['game_time'];
+        $game->save();
+
+        // Finale game do not have next match.
+        if (!$game->next_match) {
+            return $game;
+        }
+
+        if ($data['team1_goals'] === $data['team2_goals']) {
+            throw new InvalidArgumentException("Teams can not have same score", 422);
+        }
+
+        $this->updateNextMatch($tournament, $game);
+
+        return $game;
+    }
+
+    private function updateNextMatch(Tournament $tournament, EliminationGame $game): void
+    {
+        $nextGame = EliminationGame::where('tournament_id', $tournament->id)
+            ->where(function ($query) use ($game) {
+                $query->where('team1_prev', $game->next_match)
+                    ->orWhere('team2_prev', $game->next_match);
+            })
+            ->first();
+
+        if ($game->team1_goals !== null && $game->team2_goals !== null) {
+            $winner = $game->team1_goals > $game->team2_goals ? $game->team1_id : $game->team2_id;
+        } else {
+            $winner = null;
+        }
+
+        // update next match team by winner and reset goals to null
+        if ($nextGame->team1_prev === $game->next_match) {
+            $nextGame->team1_id = $winner;
+        } elseif ($nextGame->team2_prev === $game->next_match) {
+            $nextGame->team2_id = $winner;
+        }
+
+        $nextGame->team1_goals = null;
+        $nextGame->team2_goals = null;
+
+        $nextGame->save();
+
+        // go out of recursive function when reach last round
+        if (!$nextGame->next_match) {
+            return;
+        }
+
+        $this->updateNextMatch($tournament, $nextGame);
     }
 }
