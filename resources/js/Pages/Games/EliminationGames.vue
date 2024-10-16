@@ -105,7 +105,7 @@ const rounds = computed(() => {
         { number: 4, title: 'Round of 16', class: 'tournament-bracket__round tournament-bracket__round--round-of-16' },
         { number: 3, title: 'Quarterfinals', class: 'tournament-bracket__round tournament-bracket__round--quarterfinals' },
         { number: 2, title: 'Semifinals', class: 'tournament-bracket__round tournament-bracket__round--semifinals' },
-        // { number: 1, title: 'Bronze medal game', class: 'tournament-bracket__round tournament-bracket__round--bronze', isFinal: true, medalType: 'Bronze medal', medalColor: '#CD7F32' },
+        { number: 1, title: 'Bronze medal game', class: 'tournament-bracket__round tournament-bracket__round--bronze', isFinal: true, medalType: 'Bronze medal', medalColor: '#CD7F32' },
         { number: 1, title: 'Gold medal game', class: 'tournament-bracket__round tournament-bracket__round--gold', isFinal: true, medalType: 'Gold medal', medalColor: '#FFD700' },
     ];
     return allRounds.filter(round => round.number <= maxRound.value);

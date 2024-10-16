@@ -13,8 +13,9 @@ class EliminationGameTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_elimination_games_by_cup_can_be_created()
+    public function test_elimination_games_by_cup_can_be_created_by_admin(): void
     {
+        $this->signInAdmin();
         $tournament = Tournament::factory()->create(['type' => 'elimination', 'rounds' => 1]);
         Team::factory()->times(6)->create([
             'tournament_id' => $tournament->id,
@@ -61,6 +62,7 @@ class EliminationGameTest extends TestCase
 
     public function test_cup_games_can_not_be_created_if_already_been_created_before(): void
     {
+        $this->signInAdmin();
         $tournament = Tournament::factory()->create(['type' => 'elimination', 'rounds' => 2]);
         EliminationGame::factory()->count(6)->create(['tournament_id' => $tournament->id]);
 
@@ -75,6 +77,7 @@ class EliminationGameTest extends TestCase
 
     public function test_cup_games_can_not_be_created_with_wrong_tournament_type(): void
     {
+        $this->signInAdmin();
         $tournament = Tournament::factory()->create(['type' => 'league']);
         Team::factory()->times(6)->create([
             'tournament_id' => $tournament->id,
@@ -91,6 +94,7 @@ class EliminationGameTest extends TestCase
 
     public function test_tournament_can_not_be_updated_if_cup_games_are_already_created(): void
     {
+        $this->signInAdmin();
         $tournament = Tournament::factory()->create(['type' => 'elimination']);
         EliminationGame::factory()->count(6)->create(['tournament_id' => $tournament->id]);
         $response = $this->put(route('tournament.updateAll', ['tournament' => $tournament->id]), [
@@ -107,6 +111,7 @@ class EliminationGameTest extends TestCase
 
     public function test_cup_games_can_not_be_created_if_less_than_four_teams_created(): void
     {
+        $this->signInAdmin();
         $tournament = Tournament::factory()->create(['type' => 'elimination']);
         Team::factory()->count(3)->create(['tournament_id' => $tournament->id]);
         $response = $this->post(route('elimination-games.create.all', ['tournament' => $tournament->id]),
@@ -118,6 +123,7 @@ class EliminationGameTest extends TestCase
 
     public function test_elimination_games_can_be_fetched_by_tournament(): void
     {
+        $this->signInAdmin();
         $tournament = Tournament::factory()->create(['type' => 'elimination', 'rounds' => 1]);
         Team::factory()->count(4)->create(['tournament_id' => $tournament->id]);
         $this->post(route('elimination-games.create.all', ['tournament' => $tournament->id]),
@@ -163,6 +169,7 @@ class EliminationGameTest extends TestCase
 
     public function test_correct_max_round_and_non_played_games_when_fetching_cup_games(): void
     {
+        $this->signInAdmin();
         $tournament = Tournament::factory()->create(['type' => 'elimination', 'rounds' => 1]);
         Team::factory()->count(6)->create(['tournament_id' => $tournament->id]);
         $this->post(route('elimination-games.create.all', ['tournament' => $tournament->id]),
@@ -203,8 +210,9 @@ class EliminationGameTest extends TestCase
         ]);
     }
 
-    public function test_cup_game_can_be_fetched_by_tournament_id_and_game_id()
+    public function test_cup_game_can_be_fetched_by_tournament_id_and_game_id(): void
     {
+        $this->signInAdmin();
         EliminationGame::factory()->count(4)->create(['tournament_id' => 1]);
         $response = $this->get(route('elimination-game.show', [
             'tournament' => 1,
@@ -217,8 +225,9 @@ class EliminationGameTest extends TestCase
         ]);
     }
 
-    public function test_cup_game_can_not_be_fetched_if_wrong_tournament_id_or_game_id()
+    public function test_cup_game_can_not_be_fetched_if_wrong_tournament_id_or_game_id(): void
     {
+        $this->signInAdmin();
         EliminationGame::factory()->count(4)->create(['tournament_id' => 1]);
         $response = $this->get(route('elimination-game.show', [
             'tournament' => 1,
@@ -227,8 +236,9 @@ class EliminationGameTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_elimination_game_score_and_time_can_be_updated()
+    public function test_elimination_game_score_and_time_can_be_updated_by_admin(): void
     {
+        $this->signInAdmin();
         EliminationGame::factory()->count(4)->create(['tournament_id' => 1]);
         $gameTime = new Carbon('2024-05-26');
         $gameTime->setTimeFromTimeString('16:00:00');
@@ -243,8 +253,9 @@ class EliminationGameTest extends TestCase
         ]);
     }
 
-    public function test_elimination_game_score_can_not_be_updated_if_scores_are_equal()
+    public function test_elimination_game_score_can_not_be_updated_if_scores_are_equal(): void
     {
+        $this->signInAdmin();
         EliminationGame::factory()->count(4)->create(['tournament_id' => 1]);
         $gameTime = new Carbon('2024-05-26');
         $gameTime->setTimeFromTimeString('16:00:00');
@@ -258,8 +269,9 @@ class EliminationGameTest extends TestCase
         ]);
     }
 
-    public function test_when_update_elimination_game_score_their_next_games_also_updates()
+    public function test_when_update_elimination_game_score_with_admin_user_their_next_games_also_updates(): void
     {
+        $this->signInAdmin();
         $tournament = Tournament::factory()->create(['type' => 'elimination', 'rounds' => 1]);
         Team::factory()->count(6)->create(['tournament_id' => $tournament->id]);
         $this->post(route('elimination-games.create.all', ['tournament' => $tournament->id]),
@@ -305,5 +317,72 @@ class EliminationGameTest extends TestCase
             'team2_goals' => null,
             'round' => 1
         ]);
+    }
+
+    public function test_admin_can_access_elimination_games_edit_page(): void
+    {
+        $this->signInAdmin();
+        $tournament = Tournament::factory()->create(['type' => 'elimination', 'rounds' => 1]);
+        Team::factory()->count(6)->create(['tournament_id' => $tournament->id]);
+        $this->post(route('elimination-games.create.all', ['tournament' => $tournament->id]),
+            ['tournament_id' => $tournament->id]);
+        $response = $this->get(route('admin.elimination.games', ['tournament' => $tournament->id]));
+        $response->assertStatus(200);
+    }
+
+    public function test_guest_can_not_access_elimination_games_edit_page(): void
+    {
+        $tournament = Tournament::factory()->create(['type' => 'elimination', 'rounds' => 1]);
+        Team::factory()->count(6)->create(['tournament_id' => $tournament->id]);
+        $this->post(route('elimination-games.create.all', ['tournament' => $tournament->id]),
+            ['tournament_id' => $tournament->id]);
+        $response = $this->get(route('admin.elimination.games', ['tournament' => $tournament->id]));
+        $response->assertStatus(403);
+    }
+
+    public function test_regular_user_can_not_access_elimination_games_edit_page(): void
+    {
+        $this->signInUser();
+        $tournament = Tournament::factory()->create(['type' => 'elimination', 'rounds' => 1]);
+        Team::factory()->count(6)->create(['tournament_id' => $tournament->id]);
+        $this->post(route('elimination-games.create.all', ['tournament' => $tournament->id]),
+            ['tournament_id' => $tournament->id]);
+        $response = $this->get(route('admin.elimination.games', ['tournament' => $tournament->id]));
+        $response->assertStatus(403);
+    }
+
+    public function test_guest_can_not_create_or_edit_elimination_games(): void
+    {
+        $tournament = Tournament::factory()->create(['type' => 'elimination', 'rounds' => 1]);
+        Team::factory()->count(6)->create(['tournament_id' => $tournament->id]);
+        $createResponse = $this->post(route('elimination-games.create.all', ['tournament' => $tournament->id]),
+            ['tournament_id' => $tournament->id]);
+        $createResponse->assertStatus(403);
+
+        EliminationGame::factory()->count(4)->create(['tournament_id' => $tournament->id]);
+        $gameTime = new Carbon('2024-05-26');
+        $gameTime->setTimeFromTimeString('16:00:00');
+        $updateResponse = $this->patch(route('elimination-game.updateScore', ['tournament' => $tournament->id, 'game' => 1]),
+            ['team1_goals' => 2, 'team2_goals' => 0, 'game_time' => $gameTime]
+        );
+        $updateResponse->assertStatus(403);
+    }
+
+    public function test_regular_user_can_not_create_or_edit_elimination_games(): void
+    {
+        $this->signInUser();
+        $tournament = Tournament::factory()->create(['type' => 'elimination', 'rounds' => 1]);
+        Team::factory()->count(6)->create(['tournament_id' => $tournament->id]);
+        $createResponse = $this->post(route('elimination-games.create.all', ['tournament' => $tournament->id]),
+            ['tournament_id' => $tournament->id]);
+        $createResponse->assertStatus(403);
+
+        EliminationGame::factory()->count(4)->create(['tournament_id' => $tournament->id]);
+        $gameTime = new Carbon('2024-05-26');
+        $gameTime->setTimeFromTimeString('16:00:00');
+        $updateResponse = $this->patch(route('elimination-game.updateScore', ['tournament' => $tournament->id, 'game' => 1]),
+            ['team1_goals' => 2, 'team2_goals' => 0, 'game_time' => $gameTime]
+        );
+        $updateResponse->assertStatus(403);
     }
 }

@@ -57,6 +57,10 @@ const handleTournamentDelete = (deletedTournament) => {
 };
 
 
+const gameLink = (tournamentType, tournamentId) => {
+    return tournamentType === 'league' ? `/tournaments/${tournamentId}/fixtures/1` : `/tournaments/${tournamentId}/elimination`;
+};
+
 // Fetch the tournaments when the component is mounted
 onMounted(() => {
     const page = new URLSearchParams(window.location.search).get('page') || 1;
@@ -110,7 +114,8 @@ const closeDeleteTournamentMsg = () => {
             <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Tournament name</th>
             <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Tournament type</th>
             <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Number of rounds</th>
-            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Link</th>
+            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Games link</th>
+            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Create/Update teams</th>
             <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Action</th>
         </tr>
         </thead>
@@ -125,7 +130,8 @@ const closeDeleteTournamentMsg = () => {
                 <td class="py-3 px-4 text-center">{{ tournament.name }}</td>
                 <td class="py-3 px-4 text-center">{{ tournament.type }}</td>
                 <td class="py-3 px-4 text-center">{{ tournament.rounds }}</td>
-                <td class="py-3 px-4 text-center"><a :href="`/tournaments/${tournament.id}/teams`">Visit tournament page</a></td>
+                <td class="py-3 px-4 text-center"><a :href="gameLink(tournament.type, tournament.id)">Visit games page</a></td>
+                <td class="py-3 px-4 text-center"><a :href="`/tournaments/${tournament.id}/teams`">Visit teams page</a></td>
                 <td class="py-3 px-4 text-center">
                     <edit-tournament-name-form @tournamentEdited="handleTournamentUpdate" :tournamentId="tournament.id" />
                     <delete-tournament-form @tournament-deleted="handleTournamentDelete" :tournament-id="tournament.id" />

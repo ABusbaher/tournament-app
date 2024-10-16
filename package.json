@@ -26,6 +26,7 @@
         "@vuepic/vue-datepicker": "^9.0.3",
         "flowbite": "^1.7.0",
         "pinia": "^2.1.4",
-        "vue-router": "^4.2.2"
+        "vue-router": "^4.2.2",
+        "ziggy-js": "^2.3.0"
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateGameScoreRequest;
 use App\Models\Game;
 use App\Models\Tournament;
 use App\Services\GameService;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
@@ -43,9 +44,12 @@ class GameController extends Controller
         }
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function store(CreateAllGamesRequest $request, Tournament $tournament): JsonResponse
     {
-//        $this->authorize('create', $tournament);
+        $this->authorize('adminAccess', $request->user());
         $request->validated();
         $games = $this->gameService->createAllLeagueGames($tournament);
         return response()->json($games, 201);
@@ -58,8 +62,12 @@ class GameController extends Controller
         return response()->json($gameByTournamentAndId);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function updateScore(UpdateGameScoreRequest $request, Tournament $tournament, Game $game): JsonResponse
     {
+        $this->authorize('adminAccess', $request->user());
         $validatedData = $request->validated();
         try {
             $gameData = $this->gameService->updateGameScore($tournament, $game, $validatedData);

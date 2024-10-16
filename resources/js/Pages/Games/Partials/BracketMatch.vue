@@ -18,7 +18,7 @@
                     <td class="tournament-bracket__country">
                         <abbr class="tournament-bracket__code" :title="game.team1_name">{{ game.team1_shorten_name }}</abbr>
                         <span class="tournament-bracket__flag" aria-label="Flag">
-                            <img v-if="game.team1_image" :src="game.team1_image" alt="Team 1 Image" />
+                            <img v-if="game.team1_image" class="object-scale-down w-8 h-8" :src="game.team1_image" alt="Team 1 Image" />
                         </span>
                     </td>
                     <td class="tournament-bracket__score">
@@ -32,7 +32,7 @@
                     <td class="tournament-bracket__country">
                         <abbr class="tournament-bracket__code" :title="game.team2_name">{{ game.team2_shorten_name }}</abbr>
                         <span class="tournament-bracket__flag" aria-label="Flag">
-                            <img v-if="game.team2_image" :src="game.team2_image" alt="Team 2 Image" />
+                            <img v-if="game.team2_image"  class="object-scale-down w-8 h-8" :src="game.team2_image" alt="Team 2 Image" />
                         </span>
                     </td>
                     <td class="tournament-bracket__score">

@@ -93,7 +93,7 @@ const fetchTable = () => {
                             <div class="column p-3 flex justify-center items-center" :title="game.host_team_name">
                                 <div class="team flex flex-col items-center">
                                     <div class="team-logo w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
-                                        <img v-if="game.host_team_image" :src="game.host_team_image" alt="Team Image" />
+                                        <img v-if="game.host_team_image" class="object-scale-down w-24 h-24" :src="game.host_team_image" alt="Team Image" />
                                         <p v-else class="text-center p-3">Team has no logo sett</p>
                                     </div>
                                     <h2 class="team-name mt-4">{{ game.host_team_shortname }}</h2>
@@ -127,7 +127,7 @@ const fetchTable = () => {
                             <div v-if="game.guest_team_name" class="column p-3 flex justify-center items-center" :title="game.guest_team_name">
                                 <div class="team flex flex-col items-center">
                                     <div class="team-logo w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
-                                        <img v-if="game.guest_team_image" :src="game.guest_team_image" alt="Team Image" />
+                                        <img v-if="game.guest_team_image" class="object-scale-down w-24 h-24" :src="game.guest_team_image" alt="Team Image" />
                                         <p v-else class="text-center p-3">Team has no logo sett</p>
                                     </div>
                                     <h2 class="team-name mt-4">{{ game.guest_team_shortname }}</h2>

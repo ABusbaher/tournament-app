@@ -31,6 +31,7 @@ class EliminationGameController extends Controller
     public function store(CreateAllGamesRequest $request, Tournament $tournament): JsonResponse
     {
         DB::beginTransaction();
+        $this->authorize('adminAccess', $request->user());
         $request->validated();
         try {
             $games = $this->gameService->createAllEliminationGames($tournament);
@@ -85,6 +86,7 @@ class EliminationGameController extends Controller
     public function updateScore(UpdateEliminationGameScoreRequest $request, Tournament $tournament, EliminationGame $game): JsonResponse
     {
         DB::beginTransaction();
+        $this->authorize('adminAccess', $request->user());
         $validatedData = $request->validated();
         try {
             $gameData = $this->gameService->updateGameScore($tournament, $game, $validatedData);

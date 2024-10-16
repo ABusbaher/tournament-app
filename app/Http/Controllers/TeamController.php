@@ -7,7 +7,9 @@ use App\Http\Requests\UpdateTeamRequest;
 use App\Models\Team;
 use App\Models\Tournament;
 use App\Services\TeamService;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class TeamController extends Controller
@@ -38,23 +40,35 @@ class TeamController extends Controller
         return response()->json($team);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function store(CreateTeamRequest $request): JsonResponse
     {
+        $this->authorize('adminAccess', $request->user());
         $team = $this->teamService->createTeam($request->validated());
 
         return response()->json($team, 201);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function update(UpdateTeamRequest $teamRequest, Tournament $tournament, Team $team): JsonResponse
     {
+        $this->authorize('adminAccess', $teamRequest->user());
         $validatedData = $teamRequest->validated();
         $teamData = $this->teamService->updateTeam($team, $validatedData);
 
         return response()->json($teamData);
     }
 
-    public function destroy(Tournament $tournament, Team $team): JsonResponse
+    /**
+     * @throws AuthorizationException
+     */
+    public function destroy(Request $request, Tournament $tournament, Team $team): JsonResponse
     {
+        $this->authorize('adminAccess', $request->user());
         $this->teamService->deleteTeam($team);
 
         return response()->json(['message' => 'Team deleted successfully'], 204);

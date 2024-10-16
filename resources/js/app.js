@@ -4,7 +4,7 @@ import '../css/app.css';
 import { createApp, h } from 'vue/dist/vue.esm-bundler';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
-import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
+import { ZiggyVue } from 'ziggy-js';
 import { createPinia } from 'pinia';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -23,7 +23,11 @@ import AllByFixtures from "@/Pages/Games/AllByFixtures.vue";
 import EditGameScore from "@/Pages/Games/Partials/EditFixtureGameScore.vue";
 import EliminationGames from "@/Pages/Games/EliminationGames.vue";
 import AdminAllByEliminationCup from "@/Pages/Games/AdminAllByEliminationCup.vue";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import Navigation from "@/Layouts/Navigation.vue";
 import VueDatePicker from '@vuepic/vue-datepicker';
+// import { ZiggyVue } from 'ziggy-js';
+import { Ziggy } from './ziggy.js';
 import '@vuepic/vue-datepicker/dist/main.css'
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
@@ -46,8 +50,11 @@ const app = createApp({
         EditGameScore,
         EliminationGames,
         AdminAllByEliminationCup,
+        AuthenticatedLayout,
+        Navigation,
         FontAwesomeIcon,
-        VueDatePicker
+        VueDatePicker,
+        ZiggyVue
     }
 });
 app.use(pinia)

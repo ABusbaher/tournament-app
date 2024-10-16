@@ -11,10 +11,17 @@
 </head>
 
 <body>
-    @include('layouts.navigation')
-    <div class="container mx-auto">
-        @yield('content')
+    @routes
+    <div id="app">
+        <navigation></navigation>
+        <div class="container mx-auto">
+            @yield('content')
+        </div>
     </div>
 </body>
-
+<script>
+    window.Laravel = {
+        user: @json(auth()->user())
+    };
+</script>
 </html>
