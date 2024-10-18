@@ -56,7 +56,7 @@ onMounted(async() => {
                     <div class="flex">
                         <!-- Logo -->
                         <div class="shrink-0 flex items-center">
-                            <Link :href="route('dashboard')">
+                            <Link :href="route('tournament.all')">
                                 <ApplicationLogo
                                     class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200"
                                 />
@@ -65,9 +65,6 @@ onMounted(async() => {
 
                         <!-- Navigation Links -->
                         <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                            <NavLink v-if="user || inertiaUser" :href="route('dashboard')" :active="route().current('dashboard')">
-                                Dashboard
-                            </NavLink>
                             <a class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700 transition duration-150 ease-in-out"
                                :href="route('tournament.all')">
                                 Tournaments
@@ -246,16 +243,6 @@ onMounted(async() => {
                 <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
                     <div class="mt-3 space-y-1">
                         <ul class="space-y-2 font-medium">
-                            <li>
-                                <a class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                                   :href="route('dashboard')">
-                                    <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
-                                        <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
-                                        <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
-                                    </svg>
-                                    <span class="ms-3">Dashboard</span>
-                                </a>
-                            </li>
                             <li>
                                 <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="elimination-games" data-collapse-toggle="elimination-games">
                                     <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
