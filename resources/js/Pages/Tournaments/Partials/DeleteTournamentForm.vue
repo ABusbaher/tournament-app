@@ -3,6 +3,7 @@ import DangerButton from '@/Components/DangerButton.vue';
 import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import {ref} from 'vue';
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 const confirmingTournamentDeletion = ref(false);
 const props = defineProps({
@@ -36,7 +37,9 @@ const deleteTournament = () => {
 
 <template>
     <section>
-        <button @click="openModal" class="font-medium text-red-600 dark:text-red-500 hover:underline">Remove</button>
+        <button @click="openModal" class="font-medium text-red-600 dark:text-red-500 hover:underline">
+            <font-awesome-icon :icon="['fas', 'trash-can']" />
+        </button>
 
         <Modal :show="confirmingTournamentDeletion" @close="closeModal">
             <div class="p-6">

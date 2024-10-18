@@ -23,10 +23,9 @@ import AllByFixtures from "@/Pages/Games/AllByFixtures.vue";
 import EditGameScore from "@/Pages/Games/Partials/EditFixtureGameScore.vue";
 import EliminationGames from "@/Pages/Games/EliminationGames.vue";
 import AdminAllByEliminationCup from "@/Pages/Games/AdminAllByEliminationCup.vue";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import Navigation from "@/Layouts/Navigation.vue";
+import AdminNavigation from "@/Layouts/AdminNavigation.vue";
 import VueDatePicker from '@vuepic/vue-datepicker';
-// import { ZiggyVue } from 'ziggy-js';
 import { Ziggy } from './ziggy.js';
 import '@vuepic/vue-datepicker/dist/main.css'
 
@@ -50,8 +49,8 @@ const app = createApp({
         EditGameScore,
         EliminationGames,
         AdminAllByEliminationCup,
-        AuthenticatedLayout,
         Navigation,
+        AdminNavigation,
         FontAwesomeIcon,
         VueDatePicker,
         ZiggyVue

@@ -13,6 +13,7 @@ const previousPageLink = ref('');
 const from = ref(1);
 const to = ref(1);
 const total = ref(1);
+const user = window.Laravel?.user;
 
 const fetchTournaments = (url) => {
     if (url !== null) {
@@ -99,7 +100,7 @@ const closeDeleteTournamentMsg = () => {
     <StatusMessage message="Tournament successfully added" color="green" :show="AddTournamentMsg"  @close="closeAddTournamentMsg"/>
     <StatusMessage message="Tournament name successfully edited" color="green" :show="EditTournamentMsg"  @close="closeEditTournamentMsg"/>
     <StatusMessage message="Tournament successfully deleted" color="green" :show="DeleteTournamentMsg"  @close="closeDeleteTournamentMsg"/>
-    <div class="flex justify-end mb-6">
+    <div v-if="user && user.role === 'admin'" class="flex justify-end mb-6">
         <AddTournamentForm @tournamentCreated="handleTournamentCreated"></AddTournamentForm>
     </div>
     <table class="min-w-full divide-y divide-gray-200">
@@ -115,8 +116,8 @@ const closeDeleteTournamentMsg = () => {
             <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Tournament type</th>
             <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Number of rounds</th>
             <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Games link</th>
-            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Create/Update teams</th>
-            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Action</th>
+            <th v-if="user && user.role === 'admin'" class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Create/Update teams</th>
+            <th v-if="user && user.role === 'admin'" class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Action</th>
         </tr>
         </thead>
         <tbody>
@@ -131,8 +132,8 @@ const closeDeleteTournamentMsg = () => {
                 <td class="py-3 px-4 text-center">{{ tournament.type }}</td>
                 <td class="py-3 px-4 text-center">{{ tournament.rounds }}</td>
                 <td class="py-3 px-4 text-center"><a :href="gameLink(tournament.type, tournament.id)">Visit games page</a></td>
-                <td class="py-3 px-4 text-center"><a :href="`/tournaments/${tournament.id}/teams`">Visit teams page</a></td>
-                <td class="py-3 px-4 text-center">
+                <td v-if="user && user.role === 'admin'" class="py-3 px-4 text-center"><a :href="`/tournaments/${tournament.id}/teams`">Visit teams page</a></td>
+                <td v-if="user && user.role === 'admin'" class="py-3 px-4 text-center">
                     <edit-tournament-name-form @tournamentEdited="handleTournamentUpdate" :tournamentId="tournament.id" />
                     <delete-tournament-form @tournament-deleted="handleTournamentDelete" :tournament-id="tournament.id" />
                 </td>

@@ -163,7 +163,7 @@ h2 {
     .tournament-bracket__item:nth-child(even)::after {
         bottom: 50%;
         border-bottom: 2px solid #9e9e9e;
-        transform: translateY(1px);
+        transform: translateY(17px);
     }
     .tournament-bracket--rounded .tournament-bracket__item:nth-child(even)::after {
         border-bottom-right-radius: 0.6em;
@@ -174,10 +174,12 @@ h2 {
     .tournament-bracket__round:last-child .tournament-bracket__item::after {
         display: none;
     }
-    .tournament-bracket__round:nth-last-child(2) .tournament-bracket__item::after {
-        border-radius: 0;
-        border-right: 0;
-    }
+
+    /* bronze medal game style */
+    /*.tournament-bracket__round:nth-last-child(2) .tournament-bracket__item::after {*/
+    /*    border-radius: 0;*/
+    /*    border-right: 0;*/
+    /*}*/
 }
 @media (min-width: 72em) {
     .tournament-bracket__item {
@@ -249,15 +251,18 @@ h2 {
         transform: translate(0,-1px);
     }
 }
-.tournament-bracket__round:last-child .tournament-bracket__match::before, .tournament-bracket__round:last-child .tournament-bracket__match::after {
-    border-left: 0;
-}
-.tournament-bracket__round:last-child .tournament-bracket__match::before {
-    border-bottom-left-radius: 0;
-}
-.tournament-bracket__round:last-child .tournament-bracket__match::after {
-    display: none;
-}
+
+/* bronze medal game style */
+/*.tournament-bracket__round:last-child .tournament-bracket__match::before, .tournament-bracket__round:last-child .tournament-bracket__match::after {*/
+/*    border-left: 0;*/
+/*}*/
+/*.tournament-bracket__round:last-child .tournament-bracket__match::before {*/
+/*    border-bottom-left-radius: 0;*/
+/*}*/
+/*.tournament-bracket__round:last-child .tournament-bracket__match::after {*/
+/*    display: none;*/
+/*}*/
+
 .tournament-bracket__round:first-child .tournament-bracket__match::before, .tournament-bracket__round:first-child .tournament-bracket__match::after {
     display: none;
 }

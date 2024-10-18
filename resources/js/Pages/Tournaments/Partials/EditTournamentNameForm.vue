@@ -6,8 +6,9 @@ import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { ref, reactive } from 'vue';
-import { useVuelidate } from '@vuelidate/core'
-import { required, minLength } from '@vuelidate/validators'
+import { useVuelidate } from '@vuelidate/core';
+import { required, minLength } from '@vuelidate/validators';
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 const editTournament = ref(false);
 const props = defineProps({
@@ -68,7 +69,9 @@ const closeModal = () => {
 
 <template>
     <section class="space-y-6">
-        <button @click="openModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
+        <button @click="openModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+            <font-awesome-icon :icon="['fas', 'pen-to-square']" />
+        </button>
         <Modal :show="editTournament" @close="closeModal">
             <div class="p-6">
                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
