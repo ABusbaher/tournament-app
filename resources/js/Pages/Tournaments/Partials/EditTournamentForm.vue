@@ -97,21 +97,6 @@ onMounted(async() => {
             </div>
         </div>
 
-        <div :class="['mt-6', { error: v$.tournamentRounds.$errors.length }]">
-            <InputLabel for="rounds" value="Number of rounds" />
-
-            <SelectInput
-                id="rounds"
-                name="rounds"
-                v-model="tournamentState.tournamentRounds"
-                :options="tournamentState.tournamentRoundOptions"
-                class="mt-1 block w-full"
-            />
-            <div class="input-errors mt-2" v-for="error of v$.tournamentRounds.$errors" :key="error.$uid">
-                <InputError :message="error.$message" class="mt-2" />
-            </div>
-        </div>
-
         <div class="mt-6">
             <InputLabel for="types" value="Choose type of tournament"/>
 
@@ -126,6 +111,22 @@ onMounted(async() => {
                 <InputError :message="error.$message" class="mt-2" />
             </div>
         </div>
+
+        <div v-if="tournamentState.tournamentType === 'league'" :class="['mt-6', { error: v$.tournamentRounds.$errors.length }]">
+            <InputLabel for="rounds" value="Number of rounds" />
+
+            <SelectInput
+                id="rounds"
+                name="rounds"
+                v-model="tournamentState.tournamentRounds"
+                :options="tournamentState.tournamentRoundOptions"
+                class="mt-1 block w-full"
+            />
+            <div class="input-errors mt-2" v-for="error of v$.tournamentRounds.$errors" :key="error.$uid">
+                <InputError :message="error.$message" class="mt-2" />
+            </div>
+        </div>
+
         <div v-if="error403" class="mt-2">
             <p class="text-sm text-red-600 dark:text-red-400">
                 {{ error403 }}

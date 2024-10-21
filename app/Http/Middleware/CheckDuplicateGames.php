@@ -20,6 +20,7 @@ class CheckDuplicateGames
     {
         $tournamentId = $request->input('tournament_id');
         $tournament = Tournament::find($tournamentId);
+
         if ($tournament?->type === 'league') {
             if (Game::where('tournament_id', $tournamentId)->exists()) {
                 return response()->json(['message' => 'Fixtures for this tournament already exist!'], 403);

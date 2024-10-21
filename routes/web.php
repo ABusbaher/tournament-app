@@ -36,7 +36,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/tournaments', [TournamentController::class, 'index'])->name('tournament.all');
-Route::get('/tournaments/{tournament}/teams', [TeamController::class, 'index'])->name('team.all');
+Route::get('/tournaments/{tournament}/teams', [TeamController::class, 'index'])
+    ->name('team.all')
+    ->middleware('can:admin-access');;
 Route::get('/tournaments/{tournament}/fixtures/{fixture}', [GameController::class, 'index'])->name('fixture.games');
 Route::get('/tournaments/{tournament}/elimination', [EliminationGameController::class, 'index'])->name('elimination.games');
 

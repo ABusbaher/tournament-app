@@ -9,6 +9,7 @@ import EditTournamentForm from "@/Pages/Tournaments/Partials/EditTournamentForm.
 import CreateFixtures from "@/Pages/Tournaments/Partials/CreateFixtures.vue";
 
 const teams = ref([]);
+const user = window.Laravel?.user;
 const tournamentStore = useTournamentStore();
 tournamentStore.setIdFromUrl();
 const tournamentId = tournamentStore.getId;
@@ -88,7 +89,7 @@ onMounted(async() => {
     <StatusMessage message="Fixtures successfully created" color="green" :show="messages.createFixtures"
                    @close="messages.createFixtures = false"/>
     <div class="flex justify-end mb-6">
-        <add-team-form @teamCreated="handleTeamCreated"/>
+        <add-team-form class="mr-5" @teamCreated="handleTeamCreated"/>
     </div>
     <table class="min-w-full divide-y divide-gray-200">
         <thead>

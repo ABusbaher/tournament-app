@@ -10,6 +10,7 @@ import { useVuelidate } from '@vuelidate/core'
 import {required, minLength, helpers, maxLength} from '@vuelidate/validators'
 import {useTournamentStore} from "@/stores/Tournament.js";
 import FileInput from "@/Components/FileInput.vue";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 const editTeam = ref(false);
 const props = defineProps({
@@ -49,6 +50,8 @@ const rules = {
     }
 }
 
+const errorMsg = ref('');
+
 const v$ = useVuelidate(rules, state)
 
 const openModal = () => {
@@ -87,6 +90,7 @@ const submitForm = () => {
         closeModal();
     })
         .catch(error => {
+            errorMsg.value = error.response.data.message;
             console.log(error.response.data);
         });
 };
@@ -100,8 +104,10 @@ const closeModal = () => {
 };</script>
 
 <template>
-    <section class="space-y-6">
-        <button @click="openModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
+    <section class="inline-flex space-x-2 mr-3">
+        <button @click="openModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+            <font-awesome-icon class="h-5" :icon="['fas', 'pen-to-square']" />
+        </button>
         <Modal :show="editTeam" @close="closeModal">
             <div class="p-6">
                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
@@ -116,7 +122,7 @@ const closeModal = () => {
                         ref="nameInput"
                         v-model="state.name"
                         type="text"
-                        class="mt-1 block w-3/4"
+                        class="mt-1 block w-full"
                         placeholder="Team name"
                     />
                     <div class="input-errors mt-2" v-for="error of v$.name.$errors" :key="error.$uid">
@@ -131,7 +137,7 @@ const closeModal = () => {
                         ref="nameInput"
                         v-model="state.shorten_name"
                         type="text"
-                        class="mt-1 block w-3/4"
+                        class="mt-1 block w-full"
                         placeholder="Short team name (2 to 4 letters)"
                     />
                     <div class="input-errors mt-2" v-for="error of v$.shorten_name.$errors" :key="error.$uid">
@@ -152,6 +158,12 @@ const closeModal = () => {
                     <div class="input-errors mt-2" v-for="error of v$.image.$errors" :key="error.$uid">
                         <InputError :message="error.$message" class="mt-2" />
                     </div>
+                </div>
+
+                <div v-if="errorMsg" class="mt-2">
+                    <p class="text-sm text-red-600 dark:text-red-400">
+                        {{ errorMsg }}
+                    </p>
                 </div>
 
                 <div class="mt-6 flex justify-end">

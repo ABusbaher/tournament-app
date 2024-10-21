@@ -36,15 +36,16 @@ const deleteTournament = () => {
 </script>
 
 <template>
-    <section>
+    <section class="inline-flex space-x-2">
         <button @click="openModal" class="font-medium text-red-600 dark:text-red-500 hover:underline">
-            <font-awesome-icon :icon="['fas', 'trash-can']" />
+            <font-awesome-icon class="h-5" :icon="['fas', 'trash-can']" />
         </button>
 
         <Modal :show="confirmingTournamentDeletion" @close="closeModal">
             <div class="p-6">
                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                     Are you sure you want to delete your tournament?
+                    All teams and games connected to this tournament will be deleted also.
                 </h2>
 
                 <div class="mt-6 flex justify-end">

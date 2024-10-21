@@ -15,6 +15,7 @@ const props = defineProps({
     },
 });
 const games = ref([]);
+const user = window.Laravel?.user;
 const tournamentStore = useTournamentStore();
 tournamentStore.setIdFromUrl();
 const tournamentId = tournamentStore.getId;
@@ -116,7 +117,7 @@ const fetchTable = () => {
                                             {{ game.guest_goals !== null ? game.guest_goals : 's' }}
                                         </span>
                                     </div>
-                                    <edit-game-score @score-updated="handleScoreUpdate" :game-id="game.id" :edited-score="game.host_goals !== null" />
+                                    <edit-game-score v-if="user && user.role === 'admin'" @score-updated="handleScoreUpdate" :game-id="game.id" :edited-score="game.host_goals !== null" />
                                 </div>
                             </div>
                             <div class="column p-3 flex justify-center items-center" v-else>

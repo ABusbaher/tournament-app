@@ -52,7 +52,11 @@ class GameController extends Controller
         $this->authorize('adminAccess', $request->user());
         $request->validated();
         $games = $this->gameService->createAllLeagueGames($tournament);
-        return response()->json($games, 201);
+        return response()->json([
+            'games' => $games,
+            'redirect_url' => route('fixture.games',
+                ['tournament' => $tournament->id, 'fixture' => 1])
+        ], 201);
     }
 
     public function show(Tournament $tournament, Game $game): JsonResponse

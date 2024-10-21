@@ -59,6 +59,7 @@ const date = ref(new Date());
 const { formatDate } = useDateTimeFormatter();
 
 const v$ = useVuelidate(rules, state);
+const errorMsg = ref('');
 
 const openModal = () => {
     modalOpened.value = true;
@@ -114,6 +115,7 @@ const submitForm = () => {
         closeModal();
     })
         .catch(error => {
+            errorMsg.value = error.response.data.message;
             console.log(error.response.data);
         });
 };
@@ -146,40 +148,46 @@ const closeModal = () => {
                         <InputError :message="error.$message" class="mt-2" />
                     </div>
                 </div>
+                <div class="flex space-x-4 mt-6">
+                    <div :class="['w-1/2', { error: v$.hostTeamScore.$errors.length }]">
+                        <InputLabel for="hostTeamScore" :value="state.hostTeam + ' score'" />
+                        <TextInput
+                            id="hostTeamScore"
+                            ref="nameInput"
+                            v-model="state.hostTeamScore"
+                            type="number"
+                            min="0"
+                            max="100"
+                            class="mt-1 block w-full"
+                            placeholder="Home team score"
+                        />
+                        <div class="input-errors mt-2" v-for="error of v$.hostTeamScore.$errors" :key="error.$uid">
+                            <InputError :message="error.$message" class="mt-2" />
+                        </div>
+                    </div>
 
-                <div :class="['mt-6', { error: v$.hostTeamScore.$errors.length }]">
-                    <InputLabel for="hostTeamScore" :value="state.hostTeam + ' score'" />
-                    <TextInput
-                        id="hostTeamScore"
-                        ref="nameInput"
-                        v-model="state.hostTeamScore"
-                        type="number"
-                        min="0"
-                        max="100"
-                        class="mt-1 block w-3/4"
-                        placeholder="Home team score"
-                    />
-                    <div class="input-errors mt-2" v-for="error of v$.hostTeamScore.$errors" :key="error.$uid">
-                        <InputError :message="error.$message" class="mt-2" />
+                    <div :class="['w-1/2', { error: v$.guestTeamScore.$errors.length }]">
+                        <InputLabel for="guestTeamScore" :value="state.guestTeam + ' score'" />
+                        <TextInput
+                            id="guestTeamScore"
+                            ref="nameInput"
+                            v-model="state.guestTeamScore"
+                            type="number"
+                            min="0"
+                            max="100"
+                            class="mt-1 block w-full"
+                            placeholder="Guest team score"
+                        />
+                        <div class="input-errors mt-2" v-for="error of v$.guestTeamScore.$errors" :key="error.$uid">
+                            <InputError :message="error.$message === 'The value does not match the provided validator' ?
+                            'Home and guest goals cannot be the same.' : error.$message" class="mt-2" />
+                        </div>
                     </div>
                 </div>
-
-                <div :class="['mt-6', { error: v$.guestTeamScore.$errors.length }]">
-                    <InputLabel for="guestTeamScore" :value="state.guestTeam + ' score'" />
-                    <TextInput
-                        id="guestTeamScore"
-                        ref="nameInput"
-                        v-model="state.guestTeamScore"
-                        type="number"
-                        min="0"
-                        max="100"
-                        class="mt-1 block w-3/4"
-                        placeholder="Guest team score"
-                    />
-                    <div class="input-errors mt-2" v-for="error of v$.guestTeamScore.$errors" :key="error.$uid">
-                        <InputError :message="error.$message === 'The value does not match the provided validator' ?
-                        'Home and guest goals cannot be the same.' : error.$message" class="mt-2" />
-                    </div>
+                <div v-if="errorMsg" class="mt-2">
+                    <p class="text-sm text-red-600 dark:text-red-400">
+                        {{ errorMsg }}
+                    </p>
                 </div>
                 <div class="mt-6 flex justify-end">
                     <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>

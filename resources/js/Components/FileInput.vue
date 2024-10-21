@@ -35,7 +35,7 @@ const fileChangeEmit = (event) => {
 </script>
 
 <template>
-    <div class="relative w-3/4">
+    <div class="relative w-full">
         <p v-if="helpText" class="mt-1 text-center text-sm text-gray-500 dark:text-gray-300" id="file_input_help">{{ helpText }}</p>
         <input type="file" class="hidden" id="fileInput" ref="fileInput" @change="fileChangeEmit">
         <label

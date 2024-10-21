@@ -34,9 +34,9 @@ const createFixtures = () => {
     axios.post(url.value, {
         tournament_id: tournamentId
     }).then(response => {
-        console.log()
         emit('fixturesCreated', response.data);
         closeModal();
+        window.location.href = response.data.redirect_url;
     })
         .catch(error => {
             if (error.response && error.response.status === 403) {

@@ -86,25 +86,10 @@ const closeModal = () => {
                         ref="nameInput"
                         v-model="state.name"
                         type="text"
-                        class="mt-1 block w-3/4"
+                        class="mt-1 block w-full"
                         placeholder="Tournament name"
                     />
                     <div class="input-errors mt-2" v-for="error of v$.name.$errors" :key="error.$uid">
-                        <InputError :message="error.$message" class="mt-2" />
-                    </div>
-                </div>
-
-                <div :class="['mt-6', { error: v$.rounds.$errors.length }]">
-                    <InputLabel for="rounds" value="Number of rounds" />
-
-                    <SelectInput
-                        id="rounds"
-                        name="rounds"
-                        v-model="state.rounds"
-                        :options="data.roundOptions"
-                        class="mt-1 block w-3/4"
-                    />
-                    <div class="input-errors mt-2" v-for="error of v$.rounds.$errors" :key="error.$uid">
                         <InputError :message="error.$message" class="mt-2" />
                     </div>
                 </div>
@@ -117,9 +102,24 @@ const closeModal = () => {
                         name="types"
                         v-model="state.type"
                         :options="data.types"
-                        class="mt-1 block w-3/4"
+                        class="mt-1 block w-full"
                     />
                     <div class="input-errors mt-2" v-for="error of v$.type.$errors" :key="error.$uid">
+                        <InputError :message="error.$message" class="mt-2" />
+                    </div>
+                </div>
+
+                <div v-if="state.type === 'league'" :class="['mt-6', { error: v$.rounds.$errors.length }]">
+                    <InputLabel for="rounds" value="Number of rounds" />
+
+                    <SelectInput
+                        id="rounds"
+                        name="rounds"
+                        v-model="state.rounds"
+                        :options="data.roundOptions"
+                        class="mt-1 block w-full"
+                    />
+                    <div class="input-errors mt-2" v-for="error of v$.rounds.$errors" :key="error.$uid">
                         <InputError :message="error.$message" class="mt-2" />
                     </div>
                 </div>

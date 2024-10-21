@@ -106,12 +106,6 @@ const closeDeleteTournamentMsg = () => {
     <table class="min-w-full divide-y divide-gray-200">
         <thead>
         <tr>
-            <th scope="col" class="py-3 px-4 bg-gray-100 font-medium text-gray-700">
-                <div class="flex items-center">
-                    <input id="checkbox-all-search" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    <label for="checkbox-all-search" class="sr-only">checkbox</label>
-                </div>
-            </th>
             <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Tournament name</th>
             <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Tournament type</th>
             <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Number of rounds</th>
@@ -122,17 +116,14 @@ const closeDeleteTournamentMsg = () => {
         </thead>
         <tbody>
             <tr v-for="tournament in tournaments" :key="tournament.id">
-                <td class="w-4 p-4">
-                    <div class="flex items-center">
-                        <input :id="'checkbox-table-search-' + tournament.id" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                        <label :for="'checkbox-table-search-' + tournament.id" class="sr-only">checkbox</label>
-                    </div>
-                </td>
                 <td class="py-3 px-4 text-center">{{ tournament.name }}</td>
                 <td class="py-3 px-4 text-center">{{ tournament.type }}</td>
                 <td class="py-3 px-4 text-center">{{ tournament.rounds }}</td>
-                <td class="py-3 px-4 text-center"><a :href="gameLink(tournament.type, tournament.id)">Visit games page</a></td>
-                <td v-if="user && user.role === 'admin'" class="py-3 px-4 text-center"><a :href="`/tournaments/${tournament.id}/teams`">Visit teams page</a></td>
+                <td class="py-3 px-4 text-center">
+                    <a :href="gameLink(tournament.type, tournament.id)" class="hover:underline hover:font-bold">Visit games page</a>
+                </td>
+                <td v-if="user && user.role === 'admin'" class="py-3 px-4 text-center">
+                    <a :href="`/tournaments/${tournament.id}/teams`" class="hover:underline hover:font-bold">Visit teams page</a></td>
                 <td v-if="user && user.role === 'admin'" class="py-3 px-4 text-center">
                     <edit-tournament-name-form @tournamentEdited="handleTournamentUpdate" :tournamentId="tournament.id" />
                     <delete-tournament-form @tournament-deleted="handleTournamentDelete" :tournament-id="tournament.id" />

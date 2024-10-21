@@ -2,13 +2,17 @@
 
 namespace App\Services;
 
+use App\Exceptions\TournamentExistsException;
 use App\Helpers\ImageManager;
+use App\Models\EliminationGame;
+use App\Models\Game;
 use App\Models\Team;
 use App\Models\Tournament;
 use File;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Symfony\Component\HttpFoundation\Response;
 
 class TeamService
 {
@@ -26,8 +30,14 @@ class TeamService
             ->firstOrFail();
     }
 
-    public function createTeam(array $data): Team
+    /**
+     * @throws TournamentExistsException
+     */
+    public function createTeam(array $data, Tournament $tournament): Team
     {
+        if ($this->gamesAlreadyCreated($tournament)) {
+            throw new TournamentExistsException("Cannot add a team because an active tournament games already exists.", Response::HTTP_CONFLICT);
+        }
         $team = new Team();
         $team->name = $data['name'];
         $team->shorten_name = $data['shorten_name'];
@@ -61,8 +71,26 @@ class TeamService
         return $team;
     }
 
-    public function deleteTeam(Team $team): void
+    /**
+     * @throws TournamentExistsException
+     */
+    public function deleteTeam(Team $team, Tournament $tournament): void
     {
+        if ($this->gamesAlreadyCreated($tournament)) {
+            throw new TournamentExistsException("Cannot delete a team because an active tournament games already exists.", Response::HTTP_CONFLICT);
+        }
         $team->delete();
+    }
+
+
+    private function gamesAlreadyCreated(Tournament $tournament): bool
+    {
+        $model = $tournament->type === 'league' ? Game::class : ($tournament->type === 'elimination' ? EliminationGame::class : null);
+
+        if ($model) {
+            return $model::where('tournament_id', $tournament->id)->exists();
+        }
+
+        return false;
     }
 }

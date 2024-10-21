@@ -68,9 +68,9 @@ const closeModal = () => {
 </script>
 
 <template>
-    <section class="space-y-6">
+    <section class="inline-flex space-x-2 mr-3">
         <button @click="openModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-            <font-awesome-icon :icon="['fas', 'pen-to-square']" />
+            <font-awesome-icon class="h-5" :icon="['fas', 'pen-to-square']" />
         </button>
         <Modal :show="editTournament" @close="closeModal">
             <div class="p-6">
@@ -86,25 +86,12 @@ const closeModal = () => {
                         ref="nameInput"
                         v-model="state.name"
                         type="text"
-                        class="mt-1 block w-3/4"
+                        class="mt-1 block w-full"
                         placeholder="Tournament name"
                     />
                     <div class="input-errors mt-2" v-for="error of v$.name.$errors" :key="error.$uid">
                         <InputError :message="error.$message" class="mt-2" />
                     </div>
-                </div>
-
-                <div class="mt-6">
-                    <InputLabel for="rounds" value="Number of rounds" />
-
-                    <TextInput
-                        readonly
-                        id="rounds"
-                        ref="nameInput"
-                        v-model="state.rounds"
-                        type="number"
-                        class="mt-1 block w-3/4"
-                    />
                 </div>
 
                 <div class="mt-6">
@@ -116,7 +103,20 @@ const closeModal = () => {
                         ref="nameInput"
                         v-model="state.type"
                         type="text"
-                        class="mt-1 block w-3/4"
+                        class="mt-1 block w-full"
+                    />
+                </div>
+
+                <div class="mt-6">
+                    <InputLabel for="rounds" value="Number of rounds" />
+
+                    <TextInput
+                        readonly
+                        id="rounds"
+                        ref="nameInput"
+                        v-model="state.rounds"
+                        type="number"
+                        class="mt-1 block w-full"
                     />
                 </div>
 

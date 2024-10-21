@@ -34,13 +34,14 @@ class TeamServiceTest extends TestCase
 
     public function test_team_can_be_created_without_image(): void
     {
+        $tournament = Tournament::factory()->create();
         $teamData = [
             'name' => 'Test team',
             'shorten_name' => 'Voša',
-            'tournament_id' => Tournament::factory()->create()->id
+            'tournament_id' => $tournament->id
         ];
         $teamService = new TeamService();
-        $teamService->createTeam($teamData);
+        $teamService->createTeam($teamData, $tournament);
 
         $this->assertDatabaseHas('teams', [
             'name' => 'Test team',
@@ -52,14 +53,15 @@ class TeamServiceTest extends TestCase
     public function test_team_can_be_created_with_image(): void
     {
         $file = UploadedFile::fake()->image($this->testFilename);
+        $tournament = Tournament::factory()->create();
         $teamData = [
             'name' => 'Test team',
             'shorten_name' => 'Voša',
-            'tournament_id' => Tournament::factory()->create()->id,
+            'tournament_id' => $tournament->id,
             'image' => $file
         ];
         $teamService = new TeamService();
-        $team = $teamService->createTeam($teamData);
+        $team = $teamService->createTeam($teamData, $tournament);
 
         $this->assertDatabaseHas('teams', [
             'name' => 'Test team',
@@ -76,14 +78,15 @@ class TeamServiceTest extends TestCase
 
     public function test_team_can_be_deleted(): void
     {
+        $tournament = Tournament::factory()->create();
         $teamData = [
             'name' => 'Test team',
             'shorten_name' => 'Voša',
-            'tournament_id' => Tournament::factory()->create()->id
+            'tournament_id' => $tournament->id
         ];
         $teamService = new TeamService();
-        $team = $teamService->createTeam($teamData);
-        $teamService->deleteTeam($team);
+        $team = $teamService->createTeam($teamData, $tournament);
+        $teamService->deleteTeam($team, $tournament);
 
         $this->assertDatabaseMissing('teams', ['id' => $team->id]);
     }

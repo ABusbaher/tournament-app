@@ -36,7 +36,10 @@ class EliminationGameController extends Controller
         try {
             $games = $this->gameService->createAllEliminationGames($tournament);
             DB::commit();
-            return response()->json($games, 201);
+            return response()->json([
+                'games' => $games,
+                'redirect_url' => route('admin.elimination.games', ['tournament' => $tournament->id])
+            ], 201);
          } catch (InvalidArgumentException $e) {
             DB::rollBack();
             Log::error($e->getMessage());

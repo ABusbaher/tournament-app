@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Team;
 
+use App\Models\EliminationGame;
+use App\Models\Game;
 use App\Models\Team;
 use App\Models\Tournament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -90,6 +92,70 @@ class TeamTest extends TestCase
         $response = $this->delete(route('team.destroy', ['tournament' => 'not-valid-tournament-id', 'team' => $team->id]));
 
         $response->assertStatus(404);
+    }
+
+    public function test_team_can_not_be_added_if_fixture_games_already_created(): void
+    {
+        $this->signInAdmin();
+        $tournament = Tournament::factory()->create(['type' => 'league']);
+        $team = Team::factory()->create(['tournament_id' => $tournament->id]);
+        Game::factory()->create(['tournament_id' => $tournament->id, 'host_team_id' => $team->id]);
+        $response = $this->post(route('team.store', ['tournament' => $tournament->id]), [
+            'name' => 'Team 1',
+            'shorten_name' => 'Voša',
+            'tournament_id' => $tournament->id,
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonFragment([
+            'message' => 'Cannot add a team because an active tournament games already exists.',
+        ]);
+    }
+
+    public function test_team_can_not_be_added_if_cup_games_already_created(): void
+    {
+        $this->signInAdmin();
+        $tournament = Tournament::factory()->create(['type' => 'elimination']);
+        $team = Team::factory()->create(['tournament_id' => $tournament->id]);
+        EliminationGame::factory()->create(['tournament_id' => $tournament->id, 'team1_id' => $team->id]);
+        $response = $this->post(route('team.store', ['tournament' => $tournament->id]), [
+            'name' => 'Team 1',
+            'shorten_name' => 'Voša',
+            'tournament_id' => $tournament->id,
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonFragment([
+            'message' => 'Cannot add a team because an active tournament games already exists.',
+        ]);
+    }
+
+    public function test_team_can_not_be_deleted_if_fixture_games_already_created(): void
+    {
+        $this->signInAdmin();
+        $tournament = Tournament::factory()->create(['type' => 'league']);
+        $team = Team::factory()->create(['tournament_id' => $tournament->id]);
+        Game::factory()->create(['tournament_id' => $tournament->id, 'host_team_id' => $team->id]);
+        $response = $this->delete(route('team.destroy', ['tournament' => $tournament->id, 'team' => $team->id]));
+
+        $response->assertStatus(422);
+        $response->assertJsonFragment([
+            'message' => 'Cannot delete a team because an active tournament games already exists.',
+        ]);
+    }
+
+    public function test_team_can_not_be_deleted_if_cup_games_already_created(): void
+    {
+        $this->signInAdmin();
+        $tournament = Tournament::factory()->create(['type' => 'elimination']);
+        $team = Team::factory()->create(['tournament_id' => $tournament->id]);
+        EliminationGame::factory()->create(['tournament_id' => $tournament->id, 'team1_id' => $team->id]);
+        $response = $this->delete(route('team.destroy', ['tournament' => $tournament->id, 'team' => $team->id]));
+
+        $response->assertStatus(422);
+        $response->assertJsonFragment([
+            'message' => 'Cannot delete a team because an active tournament games already exists.',
+        ]);
     }
 
     public function test_team_can_be_edited_without_image(): void

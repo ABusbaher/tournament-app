@@ -70,15 +70,8 @@ const submitForm = () => {
         closeModal();
     })
         .catch(error => {
-            if (error.response && error.response.status === 422) {
-                maxTeamError.value = error.response.data.errors.tournament_id[0];
-            }
-            else if (error.response && error.response.status === 403) {
                 maxTeamError.value = error.response.data.message;
-            }
-            else {
                 console.log(error.response.data);
-            }
         });
 };
 
@@ -107,7 +100,7 @@ const closeModal = () => {
                         ref="nameInput"
                         v-model="state.name"
                         type="text"
-                        class="mt-1 block w-3/4"
+                        class="mt-1 block w-full"
                         placeholder="Team name"
                     />
                     <div class="input-errors mt-2" v-for="error of v$.name.$errors" :key="error.$uid">
@@ -122,7 +115,7 @@ const closeModal = () => {
                         ref="nameInput"
                         v-model="state.shorten_name"
                         type="text"
-                        class="mt-1 block w-3/4"
+                        class="mt-1 block w-full"
                         placeholder="Short team name (2 to 4 letters)"
                     />
                     <div class="input-errors mt-2" v-for="error of v$.shorten_name.$errors" :key="error.$uid">

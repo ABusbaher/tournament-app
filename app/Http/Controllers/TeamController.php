@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\TournamentExistsException;
 use App\Http\Requests\CreateTeamRequest;
 use App\Http\Requests\UpdateTeamRequest;
 use App\Models\Team;
@@ -10,7 +11,9 @@ use App\Services\TeamService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
+use Throwable;
 
 class TeamController extends Controller
 {
@@ -43,12 +46,20 @@ class TeamController extends Controller
     /**
      * @throws AuthorizationException
      */
-    public function store(CreateTeamRequest $request): JsonResponse
+    public function store(CreateTeamRequest $request, Tournament $tournament): JsonResponse
     {
         $this->authorize('adminAccess', $request->user());
-        $team = $this->teamService->createTeam($request->validated());
-
-        return response()->json($team, 201);
+        try {
+            $team = $this->teamService->createTeam($request->validated(), $tournament);
+//            dd($team);
+            return response()->json($team, 201);
+        } catch (TournamentExistsException $e) {
+            Log::error($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 422);
+        } catch (Throwable $e) {
+            Log::error($e->getMessage());
+            return response()->json(['message' => 'An error occurred while creating a team.'], 500);
+        }
     }
 
     /**
@@ -69,8 +80,16 @@ class TeamController extends Controller
     public function destroy(Request $request, Tournament $tournament, Team $team): JsonResponse
     {
         $this->authorize('adminAccess', $request->user());
-        $this->teamService->deleteTeam($team);
+        try {
+            $this->teamService->deleteTeam($team, $tournament);
+            return response()->json(['message' => 'Team deleted successfully'], 204);
+        } catch (TournamentExistsException $e) {
+            Log::error($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 422);
+        } catch (Throwable $e) {
+            Log::error($e->getMessage());
+            return response()->json(['message' => 'An error occurred while deleting a team.'], 500);
+        }
 
-        return response()->json(['message' => 'Team deleted successfully'], 204);
     }
 }
