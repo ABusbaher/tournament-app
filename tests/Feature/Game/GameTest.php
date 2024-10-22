@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Game;
 
+use App\Enums\TournamentTypeEnum;
 use App\Models\Game;
 use App\Models\Team;
 use App\Models\Tournament;
@@ -15,7 +16,7 @@ class GameTest extends TestCase
 
     public function test_guest_can_not_create_a_games_by_league(): void
     {
-        $tournament = Tournament::factory()->create(['type' => 'league', 'rounds' => 2]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::LEAGUE->value, 'rounds' => 2]);
         Team::factory()->times(6)->create([
             'tournament_id' => $tournament->id,
         ]);
@@ -28,7 +29,7 @@ class GameTest extends TestCase
 
     public function test_regular_user_can_not_create_a_games_by_league(): void
     {
-        $tournament = Tournament::factory()->create(['type' => 'league', 'rounds' => 2]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::LEAGUE->value, 'rounds' => 2]);
         $this->signInUser();
         Team::factory()->times(6)->create([
             'tournament_id' => $tournament->id,
@@ -43,7 +44,7 @@ class GameTest extends TestCase
     public function test_games_by_league_can_be_created_by_admin(): void
     {
         $this->signInAdmin();
-        $tournament = Tournament::factory()->create(['type' => 'league', 'rounds' => 2]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::LEAGUE->value, 'rounds' => 2]);
         Team::factory()->times(6)->create([
             'tournament_id' => $tournament->id,
         ]);
@@ -62,7 +63,7 @@ class GameTest extends TestCase
     public function test_league_games_can_not_be_created_if_already_been_created_before(): void
     {
         $this->signInAdmin();
-        $tournament = Tournament::factory()->create(['type' => 'league', 'rounds' => 2]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::LEAGUE->value, 'rounds' => 2]);
         Game::factory()->count(6)->create(['tournament_id' => $tournament->id]);
         $response = $this->post(route('games.create.all', ['tournament' => $tournament->id]),
             ['tournament_id' => $tournament->id]);
@@ -76,12 +77,12 @@ class GameTest extends TestCase
     public function test_tournament_can_not_be_updated_if_league_games_are_already_created(): void
     {
         $this->signInAdmin();
-        $tournament = Tournament::factory()->create(['type' => 'league', 'rounds' => 2]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::LEAGUE->value, 'rounds' => 2]);
         Game::factory()->count(6)->create(['tournament_id' => $tournament->id]);
         $response = $this->put(route('tournament.updateAll', ['tournament' => $tournament->id]), [
             'name' => 'PES updated',
             'rounds' => 3,
-            'type' => 'elimination',
+            'type' => TournamentTypeEnum::ELIMINATION->value,
             'tournament_id' => $tournament->id
         ]);
         $response->assertStatus(403);
@@ -93,7 +94,7 @@ class GameTest extends TestCase
     public function test_league_games_can_not_be_created_if_less_than_four_teams_created(): void
     {
         $this->signInAdmin();
-        $tournament = Tournament::factory()->create(['type' => 'league', 'rounds' => 2]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::LEAGUE->value, 'rounds' => 2]);
         Team::factory()->count(3)->create(['tournament_id' => $tournament->id]);
         $response = $this->post(route('games.create.all', ['tournament' => $tournament->id]),
             ['tournament_id' => $tournament->id]);
@@ -104,7 +105,7 @@ class GameTest extends TestCase
 
     public function test_games_can_be_fetched_by_fixtures(): void
     {
-        $tournament = Tournament::factory()->create(['type' => 'league', 'rounds' => 2]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::LEAGUE->value, 'rounds' => 2]);
         Game::factory()->count(4)->create(['tournament_id' => $tournament->id, 'fixture' => 1]);
         $response = $this->get(route('games.by_fixture', [
             'tournament' => $tournament->id,
@@ -122,7 +123,7 @@ class GameTest extends TestCase
 
     public function test_games_return_404_if_not_existing_fixture_is_provided(): void
     {
-        $tournament = Tournament::factory()->create(['type' => 'league', 'rounds' => 2]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::LEAGUE->value, 'rounds' => 2]);
         Game::factory()->count(4)->create(['tournament_id' => $tournament->id, 'fixture' => 1]);
         $response = $this->get(route('games.by_fixture', [
             'tournament' => $tournament->id,
@@ -231,7 +232,7 @@ class GameTest extends TestCase
 
     public function test_game_score_table_can_be_fetched(): void
     {
-        $tournament = Tournament::factory()->create(['type' => 'league', 'rounds' => 2]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::LEAGUE->value, 'rounds' => 2]);
         Team::factory()->times(4)->create([
             'tournament_id' => $tournament->id,
         ]);

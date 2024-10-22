@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Unit;
 
+use App\Enums\TournamentTypeEnum;
 use App\Models\Team;
 use App\Models\Tournament;
 use App\Services\EliminationGameService;
@@ -13,7 +14,7 @@ class EliminationGameServiceTest extends TestCase
 
     public function test_games_by_elimination_can_be_created(): void
     {
-        $tournament = Tournament::factory()->create(['type' => 'elimination', 'rounds' => 1]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::ELIMINATION->value, 'rounds' => 1]);
         Team::factory()->times(8)->create([
             'tournament_id' => $tournament->id,
         ]);
@@ -40,7 +41,7 @@ class EliminationGameServiceTest extends TestCase
 
     public function test_games_by_elimination_can_be_created_with_home_away_games(): void
     {
-        $tournament = Tournament::factory()->create(['type' => 'elimination', 'rounds' => 2]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::ELIMINATION->value, 'rounds' => 2]);
         Team::factory()->times(8)->create([
             'tournament_id' => $tournament->id,
         ]);
@@ -68,7 +69,7 @@ class EliminationGameServiceTest extends TestCase
 
     public function test_games_by_league_can_be_created_with_non_elimination_number_of_teams_different_than_4_8_16_or_32(): void
     {
-        $tournament = Tournament::factory()->create(['type' => 'elimination', 'rounds' => 1]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::ELIMINATION->value, 'rounds' => 1]);
         Team::factory()->times(5)->create([
             'tournament_id' => $tournament->id,
         ]);

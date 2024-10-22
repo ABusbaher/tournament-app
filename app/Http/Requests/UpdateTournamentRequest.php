@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\TournamentTypeEnum;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -27,7 +28,7 @@ class UpdateTournamentRequest extends FormRequest
     {
         return [
             'name' => ['required', 'min:3', 'max:255'],
-            'type' => ['required', 'string', Rule::in(['league', 'elimination', 'group+elimination'])],
+            'type' => ['required', 'string', Rule::enum(TournamentTypeEnum::class)],
             'rounds' => ['required', 'integer','between:1,4'],
             'tournament_id' => ['required', 'exists:tournaments,id']
         ];

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Team;
 
+use App\Enums\TournamentTypeEnum;
 use App\Models\EliminationGame;
 use App\Models\Game;
 use App\Models\Team;
@@ -97,7 +98,7 @@ class TeamTest extends TestCase
     public function test_team_can_not_be_added_if_fixture_games_already_created(): void
     {
         $this->signInAdmin();
-        $tournament = Tournament::factory()->create(['type' => 'league']);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::LEAGUE]);
         $team = Team::factory()->create(['tournament_id' => $tournament->id]);
         Game::factory()->create(['tournament_id' => $tournament->id, 'host_team_id' => $team->id]);
         $response = $this->post(route('team.store', ['tournament' => $tournament->id]), [
@@ -115,7 +116,7 @@ class TeamTest extends TestCase
     public function test_team_can_not_be_added_if_cup_games_already_created(): void
     {
         $this->signInAdmin();
-        $tournament = Tournament::factory()->create(['type' => 'elimination']);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::ELIMINATION]);
         $team = Team::factory()->create(['tournament_id' => $tournament->id]);
         EliminationGame::factory()->create(['tournament_id' => $tournament->id, 'team1_id' => $team->id]);
         $response = $this->post(route('team.store', ['tournament' => $tournament->id]), [
@@ -133,7 +134,7 @@ class TeamTest extends TestCase
     public function test_team_can_not_be_deleted_if_fixture_games_already_created(): void
     {
         $this->signInAdmin();
-        $tournament = Tournament::factory()->create(['type' => 'league']);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::LEAGUE]);
         $team = Team::factory()->create(['tournament_id' => $tournament->id]);
         Game::factory()->create(['tournament_id' => $tournament->id, 'host_team_id' => $team->id]);
         $response = $this->delete(route('team.destroy', ['tournament' => $tournament->id, 'team' => $team->id]));
@@ -147,7 +148,7 @@ class TeamTest extends TestCase
     public function test_team_can_not_be_deleted_if_cup_games_already_created(): void
     {
         $this->signInAdmin();
-        $tournament = Tournament::factory()->create(['type' => 'elimination']);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::ELIMINATION]);
         $team = Team::factory()->create(['tournament_id' => $tournament->id]);
         EliminationGame::factory()->create(['tournament_id' => $tournament->id, 'team1_id' => $team->id]);
         $response = $this->delete(route('team.destroy', ['tournament' => $tournament->id, 'team' => $team->id]));

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\TournamentTypeEnum;
 use App\Models\Game;
 use App\Models\Team;
 use App\Models\Tournament;;
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
 use ScheduleBuilder;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -70,6 +72,9 @@ class GameService
 
     public function createAllLeagueGames(Tournament $tournament): array
     {
+        if (!$tournament->isLeague()) {
+            throw new InvalidArgumentException('Not valid tournament type', 422);
+        }
         $teams = $tournament->teams;
         $rounds = $this->setLeagueRounds($tournament);
 

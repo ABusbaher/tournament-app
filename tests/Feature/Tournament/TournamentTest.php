@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Tournament;
 
+use App\Enums\TournamentTypeEnum;
 use App\Models\Tournament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\TestResponse;
@@ -17,7 +18,7 @@ class TournamentTest extends TestCase
         return $this->postWithCsrfToken(route('tournament.store', [
             'name' => 'PES',
             'rounds' => 2,
-            'type' => 'league',
+            'type' => TournamentTypeEnum::LEAGUE->value,
         ]));
     }
 
@@ -37,7 +38,7 @@ class TournamentTest extends TestCase
         $this->assertDatabaseHas('tournaments', [
             'name' => 'PES',
             'rounds' => 2,
-            'type' => 'league'
+            'type' => TournamentTypeEnum::LEAGUE->value
         ]);
     }
 
@@ -46,7 +47,7 @@ class TournamentTest extends TestCase
         $this->signInAdmin();
         $response = $this->postWithCsrfToken(route('tournament.store', [
             'rounds' => 2,
-            'type' => 'league',
+            'type' => TournamentTypeEnum::LEAGUE->value,
         ]));
 
         $response->assertInvalid(['name']);
@@ -59,7 +60,7 @@ class TournamentTest extends TestCase
         $response = $this->postWithCsrfToken(route('tournament.store', [
             'name' => 'PES league',
             'rounds' => 7,
-            'type' => 'league',
+            'type' => TournamentTypeEnum::LEAGUE->value,
         ]));
 
         $response->assertInvalid(['rounds']);
@@ -85,7 +86,7 @@ class TournamentTest extends TestCase
         $response = $this->postWithCsrfToken(route('tournament.store', [
             'name' => 'PE',
             'rounds' => 2,
-            'type' => 'league',
+            'type' => TournamentTypeEnum::LEAGUE->value,
         ]));
 
         $response->assertInvalid(['name']);
@@ -100,7 +101,7 @@ class TournamentTest extends TestCase
         $response->assertStatus(200)->assertJsonFragment([
             'name' => 'PES',
             'rounds' => 2,
-            'type' => 'league',
+            'type' => TournamentTypeEnum::LEAGUE->value,
         ]);
     }
 
@@ -116,14 +117,14 @@ class TournamentTest extends TestCase
         $response = $this->patch(route('tournament.updateName', ['tournament' => 1]), [
             'name' => 'PES updated',
             'rounds' => 2343,
-            'type' => 'elimination',
+            'type' => TournamentTypeEnum::ELIMINATION->value,
         ]);
 
         $response->assertStatus(200)
             ->assertJsonFragment([
             'name' => 'PES updated',
             'rounds' => 2,
-            'type' => 'league',
+            'type' => TournamentTypeEnum::LEAGUE->value,
         ]);
     }
 
@@ -132,7 +133,7 @@ class TournamentTest extends TestCase
         $this->createTournament();
         $response = $this->patch(route('tournament.updateName', ['tournament' => 1]), [
             'rounds' => 2343,
-            'type' => 'elimination',
+            'type' => TournamentTypeEnum::ELIMINATION->value,
         ]);
 
         $response->assertInvalid(['name']);
@@ -162,14 +163,14 @@ class TournamentTest extends TestCase
         $createTournamentResponse = $this->postWithCsrfToken(route('tournament.store', [
             'name' => 'PES',
             'rounds' => 2,
-            'type' => 'league',
+            'type' => TournamentTypeEnum::LEAGUE->value,
         ]));
         $createTournamentResponse->assertStatus(403);
 
         $updateTournamentResponse = $this->patch(route('tournament.updateName', ['tournament' => $tournament->id]), [
             'name' => 'PES updated',
             'rounds' => 2343,
-            'type' => 'elimination',
+            'type' => TournamentTypeEnum::ELIMINATION->value,
         ]);
         $updateTournamentResponse->assertStatus(403);
 
@@ -183,14 +184,14 @@ class TournamentTest extends TestCase
         $createTournamentResponse = $this->postWithCsrfToken(route('tournament.store', [
             'name' => 'PES',
             'rounds' => 2,
-            'type' => 'league',
+            'type' => TournamentTypeEnum::LEAGUE->value,
         ]));
         $createTournamentResponse->assertStatus(403);
 
         $updateTournamentResponse = $this->patch(route('tournament.updateName', ['tournament' => $tournament->id]), [
             'name' => 'PES updated',
             'rounds' => 2343,
-            'type' => 'elimination',
+            'type' => TournamentTypeEnum::ELIMINATION->value,
         ]);
         $updateTournamentResponse->assertStatus(403);
 

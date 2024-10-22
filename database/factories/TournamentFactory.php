@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\TournamentTypeEnum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,8 +19,8 @@ class TournamentFactory extends Factory
     {
         return [
             'name' => fake()->name,
-            'type' => fake()->randomElement(['league', 'elimination', 'group+elimination']),
-            'rounds' => fake()->numberBetween(1, 4),
+            'type' => fake()->randomElement(TournamentTypeEnum::cases())->value,
+            'rounds' => fake()->numberBetween(1, 2),
         ];
     }
 }

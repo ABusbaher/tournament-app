@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\TournamentTypeEnum;
 use App\Models\Team;
 use App\Models\Tournament;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -18,7 +19,7 @@ class GameFactory extends Factory
      */
     public function definition(): array
     {
-        $tournament = Tournament::factory()->create(['type' => 'league', 'rounds' => 2]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::LEAGUE->value, 'rounds' => 2]);
         return [
             'fixture' => $this->faker->numberBetween(1, 10),
             'host_team_id' => function () use ($tournament) {

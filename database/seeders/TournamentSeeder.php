@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\TournamentTypeEnum;
 use App\Models\Tournament;
 use Illuminate\Database\Seeder;
 
@@ -11,13 +12,13 @@ class TournamentSeeder extends Seeder
     {
         Tournament::create([
            'name' => 'Pesoholičari',
-           'type' => 'league',
+           'type' => TournamentTypeEnum::LEAGUE->value,
            'rounds' => 2
         ]);
 
         Tournament::create([
             'name' => 'Tournament 2',
-            'type' => 'league',
+            'type' => TournamentTypeEnum::ELIMINATION->value,
             'rounds' => 1
         ]);
     }

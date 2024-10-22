@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\TournamentTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -36,11 +37,21 @@ class Tournament extends Model
     protected $guarded = [];
 
     protected $casts = [
-        'type' => 'string'
+        'type' => TournamentTypeEnum::class
     ];
 
     public function teams(): HasMany
     {
         return $this->hasMany(Team::class);
+    }
+
+    public function isLeague(): bool
+    {
+        return $this->type === TournamentTypeEnum::LEAGUE;
+    }
+
+    public function isElimination(): bool
+    {
+        return $this->type === TournamentTypeEnum::ELIMINATION;
     }
 }

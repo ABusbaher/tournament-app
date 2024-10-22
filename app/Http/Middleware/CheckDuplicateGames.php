@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\TournamentTypeEnum;
 use App\Models\EliminationGame;
 use App\Models\Game;
 use App\Models\Tournament;
@@ -21,11 +22,11 @@ class CheckDuplicateGames
         $tournamentId = $request->input('tournament_id');
         $tournament = Tournament::find($tournamentId);
 
-        if ($tournament?->type === 'league') {
+        if ($tournament?->isLeague()) {
             if (Game::where('tournament_id', $tournamentId)->exists()) {
                 return response()->json(['message' => 'Fixtures for this tournament already exist!'], 403);
             }
-        } else if ($tournament?->type === 'elimination') {
+        } else if ($tournament?->isElimination()) {
             if (EliminationGame::where('tournament_id', $tournamentId)->exists()) {
                 return response()->json(['message' => 'Elimination cup for this tournament already exist!'], 403);
             }

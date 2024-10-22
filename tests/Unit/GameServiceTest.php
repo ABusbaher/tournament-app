@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Unit;
 
+use App\Enums\TournamentTypeEnum;
 use App\Models\Team;
 use App\Models\Tournament;
 use App\Services\GameService;
@@ -13,7 +14,7 @@ class GameServiceTest extends TestCase
 
     public function test_correct_fixtures_by_league_rounds_can_been_set(): void
     {
-        $tournament = Tournament::factory()->create(['type' => 'league', 'rounds' => 2]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::LEAGUE->value, 'rounds' => 2]);
         Team::factory()->times(6)->create([
                 'tournament_id' => $tournament->id,
             ]);
@@ -26,7 +27,7 @@ class GameServiceTest extends TestCase
 
     public function test_games_by_league_can_be_created(): void
     {
-        $tournament = Tournament::factory()->create(['type' => 'league', 'rounds' => 2]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::LEAGUE->value, 'rounds' => 2]);
         Team::factory()->times(6)->create([
             'tournament_id' => $tournament->id,
         ]);
@@ -47,7 +48,7 @@ class GameServiceTest extends TestCase
 
     public function test_games_by_league_can_be_created_with_odd_number_of_teams(): void
     {
-        $tournament = Tournament::factory()->create(['type' => 'league', 'rounds' => 2]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::LEAGUE->value, 'rounds' => 2]);
         Team::factory()->times(5)->create([
             'tournament_id' => $tournament->id,
         ]);

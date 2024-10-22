@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\TournamentTypeEnum;
 use App\Models\EliminationGame;
 use App\Models\Tournament;
 use Carbon\Carbon;
@@ -15,7 +16,7 @@ class EliminationGameService
 {
     public function createAllEliminationGames(Tournament $tournament): array
     {
-        if ($tournament->type !== 'elimination') {
+        if (!$tournament->isElimination()) {
             throw new InvalidArgumentException('Not valid tournament type', 422);
         }
         $teams = $tournament->teams->pluck('id')->toArray();

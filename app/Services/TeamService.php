@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\TournamentTypeEnum;
 use App\Exceptions\TournamentExistsException;
 use App\Helpers\ImageManager;
 use App\Models\EliminationGame;
@@ -85,7 +86,7 @@ class TeamService
 
     private function gamesAlreadyCreated(Tournament $tournament): bool
     {
-        $model = $tournament->type === 'league' ? Game::class : ($tournament->type === 'elimination' ? EliminationGame::class : null);
+        $model = $tournament->type === TournamentTypeEnum::LEAGUE ? Game::class : ($tournament->type === TournamentTypeEnum::ELIMINATION ? EliminationGame::class : null);
 
         if ($model) {
             return $model::where('tournament_id', $tournament->id)->exists();

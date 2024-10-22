@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\EliminationGame;
 
+use App\Enums\TournamentTypeEnum;
 use App\Models\EliminationGame;
 use App\Models\Team;
 use App\Models\Tournament;
@@ -16,7 +17,7 @@ class EliminationGameTest extends TestCase
     public function test_elimination_games_by_cup_can_be_created_by_admin(): void
     {
         $this->signInAdmin();
-        $tournament = Tournament::factory()->create(['type' => 'elimination', 'rounds' => 1]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::ELIMINATION->value, 'rounds' => 1]);
         Team::factory()->times(6)->create([
             'tournament_id' => $tournament->id,
         ]);
@@ -63,7 +64,7 @@ class EliminationGameTest extends TestCase
     public function test_cup_games_can_not_be_created_if_already_been_created_before(): void
     {
         $this->signInAdmin();
-        $tournament = Tournament::factory()->create(['type' => 'elimination', 'rounds' => 2]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::ELIMINATION, 'rounds' => 2]);
         EliminationGame::factory()->count(6)->create(['tournament_id' => $tournament->id]);
 
         $response = $this->post(route('elimination-games.create.all', ['tournament' => $tournament->id]),
@@ -78,7 +79,7 @@ class EliminationGameTest extends TestCase
     public function test_cup_games_can_not_be_created_with_wrong_tournament_type(): void
     {
         $this->signInAdmin();
-        $tournament = Tournament::factory()->create(['type' => 'league']);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::LEAGUE->value]);
         Team::factory()->times(6)->create([
             'tournament_id' => $tournament->id,
         ]);
@@ -95,12 +96,12 @@ class EliminationGameTest extends TestCase
     public function test_tournament_can_not_be_updated_if_cup_games_are_already_created(): void
     {
         $this->signInAdmin();
-        $tournament = Tournament::factory()->create(['type' => 'elimination']);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::ELIMINATION]);
         EliminationGame::factory()->count(6)->create(['tournament_id' => $tournament->id]);
         $response = $this->put(route('tournament.updateAll', ['tournament' => $tournament->id]), [
             'name' => 'PES updated',
             'rounds' => 3,
-            'type' => 'elimination',
+            'type' => TournamentTypeEnum::ELIMINATION->value,
             'tournament_id' => $tournament->id
         ]);
         $response->assertStatus(403);
@@ -112,7 +113,7 @@ class EliminationGameTest extends TestCase
     public function test_cup_games_can_not_be_created_if_less_than_four_teams_created(): void
     {
         $this->signInAdmin();
-        $tournament = Tournament::factory()->create(['type' => 'elimination']);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::ELIMINATION]);
         Team::factory()->count(3)->create(['tournament_id' => $tournament->id]);
         $response = $this->post(route('elimination-games.create.all', ['tournament' => $tournament->id]),
             ['tournament_id' => $tournament->id]);
@@ -124,7 +125,7 @@ class EliminationGameTest extends TestCase
     public function test_elimination_games_can_be_fetched_by_tournament(): void
     {
         $this->signInAdmin();
-        $tournament = Tournament::factory()->create(['type' => 'elimination', 'rounds' => 1]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::ELIMINATION, 'rounds' => 1]);
         Team::factory()->count(4)->create(['tournament_id' => $tournament->id]);
         $this->post(route('elimination-games.create.all', ['tournament' => $tournament->id]),
             ['tournament_id' => $tournament->id]);
@@ -170,7 +171,7 @@ class EliminationGameTest extends TestCase
     public function test_correct_max_round_and_non_played_games_when_fetching_cup_games(): void
     {
         $this->signInAdmin();
-        $tournament = Tournament::factory()->create(['type' => 'elimination', 'rounds' => 1]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::ELIMINATION, 'rounds' => 1]);
         Team::factory()->count(6)->create(['tournament_id' => $tournament->id]);
         $this->post(route('elimination-games.create.all', ['tournament' => $tournament->id]),
             ['tournament_id' => $tournament->id]);
@@ -183,7 +184,7 @@ class EliminationGameTest extends TestCase
             'non_played_games' => 2,
         ]);
 
-        $tournament2 = Tournament::factory()->create(['type' => 'elimination', 'rounds' => 1]);
+        $tournament2 = Tournament::factory()->create(['type' => TournamentTypeEnum::ELIMINATION, 'rounds' => 1]);
         Team::factory()->count(11)->create(['tournament_id' => $tournament2->id]);
         $this->post(route('elimination-games.create.all', ['tournament' => $tournament2->id]),
             ['tournament_id' => $tournament2->id]);
@@ -196,7 +197,7 @@ class EliminationGameTest extends TestCase
             'non_played_games' => 5,
         ]);
 
-        $tournament3 = Tournament::factory()->create(['type' => 'elimination', 'rounds' => 1]);
+        $tournament3 = Tournament::factory()->create(['type' => TournamentTypeEnum::ELIMINATION, 'rounds' => 1]);
         Team::factory()->count(19)->create(['tournament_id' => $tournament3->id]);
         $this->post(route('elimination-games.create.all', ['tournament' => $tournament3->id]),
             ['tournament_id' => $tournament3->id]);
@@ -272,7 +273,7 @@ class EliminationGameTest extends TestCase
     public function test_when_update_elimination_game_score_with_admin_user_their_next_games_also_updates(): void
     {
         $this->signInAdmin();
-        $tournament = Tournament::factory()->create(['type' => 'elimination', 'rounds' => 1]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::ELIMINATION, 'rounds' => 1]);
         Team::factory()->count(6)->create(['tournament_id' => $tournament->id]);
         $this->post(route('elimination-games.create.all', ['tournament' => $tournament->id]),
             ['tournament_id' => $tournament->id]);
@@ -322,7 +323,7 @@ class EliminationGameTest extends TestCase
     public function test_admin_can_access_elimination_games_edit_page(): void
     {
         $this->signInAdmin();
-        $tournament = Tournament::factory()->create(['type' => 'elimination', 'rounds' => 1]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::ELIMINATION, 'rounds' => 1]);
         Team::factory()->count(6)->create(['tournament_id' => $tournament->id]);
         $this->post(route('elimination-games.create.all', ['tournament' => $tournament->id]),
             ['tournament_id' => $tournament->id]);
@@ -332,7 +333,7 @@ class EliminationGameTest extends TestCase
 
     public function test_guest_can_not_access_elimination_games_edit_page(): void
     {
-        $tournament = Tournament::factory()->create(['type' => 'elimination', 'rounds' => 1]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::ELIMINATION, 'rounds' => 1]);
         Team::factory()->count(6)->create(['tournament_id' => $tournament->id]);
         $this->post(route('elimination-games.create.all', ['tournament' => $tournament->id]),
             ['tournament_id' => $tournament->id]);
@@ -343,7 +344,7 @@ class EliminationGameTest extends TestCase
     public function test_regular_user_can_not_access_elimination_games_edit_page(): void
     {
         $this->signInUser();
-        $tournament = Tournament::factory()->create(['type' => 'elimination', 'rounds' => 1]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::ELIMINATION, 'rounds' => 1]);
         Team::factory()->count(6)->create(['tournament_id' => $tournament->id]);
         $this->post(route('elimination-games.create.all', ['tournament' => $tournament->id]),
             ['tournament_id' => $tournament->id]);
@@ -353,7 +354,7 @@ class EliminationGameTest extends TestCase
 
     public function test_guest_can_not_create_or_edit_elimination_games(): void
     {
-        $tournament = Tournament::factory()->create(['type' => 'elimination', 'rounds' => 1]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::ELIMINATION, 'rounds' => 1]);
         Team::factory()->count(6)->create(['tournament_id' => $tournament->id]);
         $createResponse = $this->post(route('elimination-games.create.all', ['tournament' => $tournament->id]),
             ['tournament_id' => $tournament->id]);
@@ -371,7 +372,7 @@ class EliminationGameTest extends TestCase
     public function test_regular_user_can_not_create_or_edit_elimination_games(): void
     {
         $this->signInUser();
-        $tournament = Tournament::factory()->create(['type' => 'elimination', 'rounds' => 1]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::ELIMINATION, 'rounds' => 1]);
         Team::factory()->count(6)->create(['tournament_id' => $tournament->id]);
         $createResponse = $this->post(route('elimination-games.create.all', ['tournament' => $tournament->id]),
             ['tournament_id' => $tournament->id]);
