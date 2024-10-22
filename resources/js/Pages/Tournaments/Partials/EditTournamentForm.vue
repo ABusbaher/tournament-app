@@ -4,9 +4,9 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import SelectInput from "@/Components/SelectInput.vue";
-import {reactive, onMounted, ref} from 'vue';
+import {reactive, onMounted, ref, watch} from 'vue';
 import { useVuelidate } from '@vuelidate/core'
-import {required, minLength, numeric, minValue, maxValue} from '@vuelidate/validators'
+import {required, minLength, numeric, minValue, maxValue, requiredIf} from '@vuelidate/validators'
 import {useTournamentStore} from "@/stores/Tournament.js";
 
 const props = defineProps({
@@ -29,7 +29,7 @@ const tournamentState = reactive({
 })
 const rulesForTournament = () => ( {
     tournamentName: { required, minLength: minLength(3) },
-    tournamentRounds: { required, numeric, minValue: minValue(1), maxValue: maxValue(4) },
+    tournamentRounds: { requiredIfLeague: requiredIf(() => tournamentState.tournamentType === 'league'), numeric, minValue: minValue(1), maxValue: maxValue(4) },
     tournamentType: { required }
 });
 
@@ -64,6 +64,11 @@ const editTournament = () => {
         });
 }
 
+watch(() => tournamentState.tournamentType, (newType) => {
+    if (newType !== 'league') {
+        tournamentState.tournamentRounds = '1';
+    }
+});
 
 
 onMounted(async() => {

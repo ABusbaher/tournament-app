@@ -54,4 +54,9 @@ class Tournament extends Model
     {
         return $this->type === TournamentTypeEnum::ELIMINATION;
     }
+
+    public function setRoundsAttribute(?int $rounds): void
+    {
+        $this->attributes['rounds'] = $rounds ?? 1;
+    }
 }

@@ -29,7 +29,7 @@ class CreateTournamentRequest extends FormRequest
         return [
             'name' => ['required', 'min:3', 'max:255'],
             'type' => ['required', 'string', Rule::enum(TournamentTypeEnum::class)],
-            'rounds' => ['required', 'integer','between:1,4']
+            'rounds' => ['required_if:type,' . TournamentTypeEnum::LEAGUE->value, 'nullable', 'integer','between:1,2']
         ];
     }
 
@@ -37,7 +37,7 @@ class CreateTournamentRequest extends FormRequest
     {
         return [
             'type.in' => 'Only this three types are allowed: league, elimination, group+elimination!',
-            'rounds.between' => 'You can choose to have from 1 to 4 rounds',
+            'rounds.between' => 'You can choose to have from 1 to 2 rounds',
         ];
     }
 

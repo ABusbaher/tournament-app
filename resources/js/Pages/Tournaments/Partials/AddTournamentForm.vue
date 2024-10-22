@@ -6,9 +6,9 @@ import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import SelectInput from "@/Components/SelectInput.vue";
-import { ref, reactive } from 'vue';
+import {ref, reactive, watch} from 'vue';
 import { useVuelidate } from '@vuelidate/core'
-import {required, minLength, minValue, maxValue, integer} from '@vuelidate/validators'
+import {required, minLength, minValue, maxValue, integer, requiredIf} from '@vuelidate/validators'
 
 const addTournament = ref(false);
 
@@ -19,7 +19,12 @@ const state = reactive({
 })
 const rules = {
     name: { required, minLength: minLength(3) },
-    rounds: { required, integer, minValue: minValue(1), maxValue: maxValue(4) },
+    rounds: {
+        requiredIfLeague: requiredIf(() => state.type === 'league'),
+        integer,
+        minValue: minValue(1),
+        maxValue: maxValue(2)
+    },
     type: { required }
 }
 
@@ -66,6 +71,13 @@ const closeModal = () => {
     state.name = '';
     state.type = ''
 };
+
+watch(() => state.type, (newType) => {
+    if (newType !== 'league') {
+        state.rounds = '1';
+    }
+});
+
 </script>
 
 <template>

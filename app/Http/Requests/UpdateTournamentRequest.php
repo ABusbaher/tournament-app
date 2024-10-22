@@ -29,7 +29,7 @@ class UpdateTournamentRequest extends FormRequest
         return [
             'name' => ['required', 'min:3', 'max:255'],
             'type' => ['required', 'string', Rule::enum(TournamentTypeEnum::class)],
-            'rounds' => ['required', 'integer','between:1,4'],
+            'rounds' => ['required_if:type,' . TournamentTypeEnum::LEAGUE->value, 'nullable', 'integer','between:1,2'],
             'tournament_id' => ['required', 'exists:tournaments,id']
         ];
     }
