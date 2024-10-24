@@ -99,7 +99,6 @@ const submitForm = () => {
     data.append('game_time', new Date(state.gameTime).toISOString());
     axios.post(`/api/tournaments/${tournamentId}/games/${props.gameId}`, data, config).then(response => {
         emit('scoreUpdated', response.data);
-        errorMsg.value = '';
         closeModal();
     })
         .catch(error => {
@@ -109,6 +108,7 @@ const submitForm = () => {
 };
 
 const closeModal = () => {
+    errorMsg.value = '';
     modalOpened.value = false;
 };
 </script>

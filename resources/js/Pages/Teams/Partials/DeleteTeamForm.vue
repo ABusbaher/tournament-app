@@ -21,6 +21,7 @@ const openModal = () => {
 };
 
 const closeModal = () => {
+    errorMsg.value = '';
     confirmingTournamentDeletion.value = false;
 };
 const errorMsg = ref('');

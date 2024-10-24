@@ -41,7 +41,7 @@ class GameTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_games_by_league_can_be_created_by_admin(): void
+    public function test_games_by_league_and_fixture_passwords_can_be_created_by_admin(): void
     {
         $this->signInAdmin();
         $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::LEAGUE->value, 'rounds' => 2]);
@@ -56,8 +56,14 @@ class GameTest extends TestCase
             'tournament_id' => $tournament->id,
             'fixture' => 10 // assert that 10 fixtures is created with 6 teams and 2 rounds of matches.
         ]);
+        $this->assertDatabaseHas('fixture_passwords', [
+            'tournament_id' => $tournament->id,
+            'fixture' => 10 // assert that 10 fixture_passwords is created with 6 teams and 2 rounds of matches.
+        ]);
         // assert 30 games is created with 6 teams and 2 rounds of matches.
         $this->assertEquals(30, \DB::table('games')->count());
+        // assert 10 fixture_passwords is created with 6 teams and 2 rounds of matches.
+        $this->assertEquals(10, \DB::table('fixture_passwords')->count());
     }
 
     public function test_league_games_can_not_be_created_if_already_been_created_before(): void

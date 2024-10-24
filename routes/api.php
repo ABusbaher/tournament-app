@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EliminationGameController;
+use App\Http\Controllers\FixturePasswordController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TournamentController;
@@ -47,3 +48,6 @@ Route::get('/tournaments/{tournament}/elimination', [EliminationGameController::
 Route::get('/tournaments/{tournament}/elimination-games/{game}', [EliminationGameController::class, 'show'])->name('elimination-game.show');
 Route::post('/tournaments/{tournament}/elimination-games', [EliminationGameController::class, 'store'])->name('elimination-games.create.all')->middleware('check.duplicate.games');
 Route::patch('/tournaments/{tournament}/elimination-games/{game}', [EliminationGameController::class, 'updateScore'])->name('elimination-game.updateScore');
+
+Route::patch('/tournaments/{tournament}/fixtures/{fixture}/set-password', [FixturePasswordController::class, 'update'])->name('game.set.fixture.password');
+Route::post('/tournaments/{tournament}/fixtures/{fixture}/check-password', [FixturePasswordController::class, 'checkPassword'])->name('game.fixture.checkPassword');

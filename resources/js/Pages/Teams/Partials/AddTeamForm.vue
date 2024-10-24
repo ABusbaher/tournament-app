@@ -79,6 +79,7 @@ const closeModal = () => {
     addTeam.value = false;
     state.name = '';
     state.shorten_name = '';
+    maxTeamError.value = '';
     state.image = null;
 };
 </script>

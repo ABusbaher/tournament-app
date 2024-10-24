@@ -24,27 +24,27 @@ let url =  ref('');
 
 const emit = defineEmits(['fixturesCreated']);
 
-const createFixtures = () => {
+const createFixtures = async () => {
     if (error403.value) return;
     if (tournamentType.value === 'league') {
         url.value = `/api/tournaments/${tournamentId}/games`;
     } else if (tournamentType.value === 'elimination') {
         url.value = `/api/tournaments/${tournamentId}/elimination-games`;
     }
-    axios.post(url.value, {
-        tournament_id: tournamentId
-    }).then(response => {
-        emit('fixturesCreated', response.data);
-        closeModal();
-        window.location.href = response.data.redirect_url;
-    })
-        .catch(error => {
-            if (error.response && error.response.status === 403) {
-                error403.value = error.response.data.message;
-            } else {
-                console.log(error.response.data);
-            }
+    try {
+        const response = await axios.post(url.value, {
+            tournament_id: tournamentId
         });
+        emit('fixturesCreated', response.data);
+        await closeModal();
+        window.location.href = response.data.redirect_url;
+    } catch (error) {
+        if (error.response && error.response.status === 403) {
+            error403.value = error.response.data.message;
+        } else {
+            console.log(error.response.data);
+        }
+    }
 };
 
 onMounted(async () => {

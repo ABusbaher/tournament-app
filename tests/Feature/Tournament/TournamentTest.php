@@ -15,7 +15,7 @@ class TournamentTest extends TestCase
     private  function createTournament(): TestResponse
     {
         $this->signInAdmin();
-        return $this->postWithCsrfToken(route('tournament.store', [
+        return $this->post(route('tournament.store', [
             'name' => 'PES',
             'rounds' => 2,
             'type' => TournamentTypeEnum::LEAGUE->value,
@@ -45,7 +45,7 @@ class TournamentTest extends TestCase
     public function test_tournament_can_not_be_created_if_name_is_not_provided(): void
     {
         $this->signInAdmin();
-        $response = $this->postWithCsrfToken(route('tournament.store', [
+        $response = $this->post(route('tournament.store', [
             'rounds' => 2,
             'type' => TournamentTypeEnum::LEAGUE->value,
         ]));
@@ -57,7 +57,7 @@ class TournamentTest extends TestCase
     public function test_tournament_can_not_be_created_if_rounds_has_not_between_one_and_four(): void
     {
         $this->signInAdmin();
-        $response = $this->postWithCsrfToken(route('tournament.store', [
+        $response = $this->post(route('tournament.store', [
             'name' => 'PES league',
             'rounds' => 7,
             'type' => TournamentTypeEnum::LEAGUE->value,
@@ -70,7 +70,7 @@ class TournamentTest extends TestCase
     public function test_tournament_can_not_be_created_if_type_is_incorrect(): void
     {
         $this->signInAdmin();
-        $response = $this->postWithCsrfToken(route('tournament.store', [
+        $response = $this->post(route('tournament.store', [
             'name' => 'PES league',
             'rounds' => 2,
             'type' => 'not-valid-type',
@@ -83,7 +83,7 @@ class TournamentTest extends TestCase
     public function test_tournament_can_not_be_created_if_name_is_less_than_three_character(): void
     {
         $this->signInAdmin();
-        $response = $this->postWithCsrfToken(route('tournament.store', [
+        $response = $this->post(route('tournament.store', [
             'name' => 'PE',
             'rounds' => 2,
             'type' => TournamentTypeEnum::LEAGUE->value,
@@ -91,6 +91,22 @@ class TournamentTest extends TestCase
 
         $response->assertInvalid(['name']);
         $response->assertStatus(422);
+    }
+
+    public function test_elimination_tournament_can_be_created_with_no_rounds(): void
+    {
+        $this->signInAdmin();
+        $response = $this->post(route('tournament.store', [
+            'name' => 'PES',
+            'type' => TournamentTypeEnum::ELIMINATION->value,
+        ]));
+
+        $response->assertStatus(201);
+        $this->assertDatabaseHas('tournaments', [
+            'name' => 'PES',
+            'rounds' => 1,
+            'type' => TournamentTypeEnum::ELIMINATION->value
+        ]);
     }
 
     public function test_single_tournament_can_be_fetched_with_proper_id(): void
@@ -160,7 +176,7 @@ class TournamentTest extends TestCase
     {
         $this->signInUser();
         $tournament = Tournament::factory()->create();
-        $createTournamentResponse = $this->postWithCsrfToken(route('tournament.store', [
+        $createTournamentResponse = $this->post(route('tournament.store', [
             'name' => 'PES',
             'rounds' => 2,
             'type' => TournamentTypeEnum::LEAGUE->value,
@@ -181,7 +197,7 @@ class TournamentTest extends TestCase
     public function test_tournament_cannot_be_created_updated_or_deleted_when_regular_user() :void
     {
         $tournament = Tournament::factory()->create();
-        $createTournamentResponse = $this->postWithCsrfToken(route('tournament.store', [
+        $createTournamentResponse = $this->post(route('tournament.store', [
             'name' => 'PES',
             'rounds' => 2,
             'type' => TournamentTypeEnum::LEAGUE->value,

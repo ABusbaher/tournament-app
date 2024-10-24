@@ -6,6 +6,7 @@ import EditGameScore from "@/Pages/Games/Partials/EditFixtureGameScore.vue";
 import StatusMessage from "@/Components/StatusMessage.vue";
 import AppTabs from "@/Components/AppTabs.vue";
 import LeagueTable from "@/Components/LeagueTable.vue";
+import SetFixturePassword from "@/Pages/Games/Partials/SetFixturePassword.vue";
 import {useDateTimeFormatter} from "@/composables/useDateTimeFormatter.js";
 
 const props = defineProps({
@@ -27,6 +28,7 @@ const { formatDate } = useDateTimeFormatter();
 
 const messages = reactive({
     updateGameScore: false,
+    updateFixturePassword: false,
 });
 
 const showMessage = (type) => {
@@ -63,6 +65,11 @@ onMounted(async() => {
     fetchGames(`/api/tournaments/${tournamentId}/fixtures/${fixtureId.value}`);
 });
 
+const handlePasswordUpdated = () => {
+    fetchGames(`/api/tournaments/${tournamentId}/fixtures/${fixtureId.value}`);
+    showMessage("updateFixturePassword");
+};
+
 
 const tabList = ["Fixtures", "Table"];
 
@@ -86,8 +93,13 @@ const fetchTable = () => {
                 <h1 class="mb-4 text-4xl font-extrabold text-center leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
                     Games in Fixture {{ currentPage }}
                 </h1>
+                <StatusMessage message="Fixture password successfully edited" color="green" :show="messages.updateFixturePassword"
+                               @close="messages.updateFixturePassword = false"/>
                 <StatusMessage message="Game score successfully edited" color="green" :show="messages.updateGameScore"
                                @close="messages.updateGameScore = false"/>
+                <div class="flex justify-end mb-6">
+                    <set-fixture-password class="mr-5" @passwordUpdated="handlePasswordUpdated" :fixture-id="fixtureId" :tournament-id="tournamentId"/>
+                </div>
                 <div v-if="games.length" v-for="game in games" :key="game.id" class="mb-6">
                     <div class="match bg-white rounded-lg shadow-md flex items-center justify-center">
                         <div class="match-content flex flex-col md:flex-row">

@@ -3,10 +3,10 @@
 namespace App\Services;
 
 use App\Enums\TournamentTypeEnum;
+use App\Models\FixturePassword;
 use App\Models\Game;
 use App\Models\Team;
 use App\Models\Tournament;;
-
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -99,7 +99,9 @@ class GameService
                 $games[] = $game;
             }
         }
-        // Batch insert the games
+
+        $this->insertFixturePasswords($rounds, $tournament->id);
+
         Game::insert($games);
         return $games;
     }
@@ -107,6 +109,18 @@ class GameService
     private function setLeagueRounds(Tournament $tournament): int
     {
         return (($count = count($tournament->teams)) % 2 === 0 ? $count - 1 : $count) * $tournament->rounds;
+    }
+
+    private function insertFixturePasswords(int $rounds,  int $tournamentId): void
+    {
+        $fixturesPasswords = [];
+        for ($i = 1; $i <= $rounds; $i++) {
+            $fixturesPasswords[] = [
+                'fixture' => $i,
+                'tournament_id' => $tournamentId,
+            ];
+        }
+        FixturePassword::insert($fixturesPasswords);
     }
 
     public function getGame(Tournament $tournament, Game $game): Model|Builder|Game
@@ -191,7 +205,7 @@ class GameService
 
         // final results and sorting
         return DB::query()->fromSub($resultsWithPoints, 'rwp')
-            ->select('rwp.*', 'b.hth', )
+            ->select('rwp.*', 'b.hth')
             ->selectRaw('ROW_NUMBER() OVER (ORDER BY rwp.Points DESC, b.hth DESC, rwp.GoalDiff DESC, rwp.GoalsScored DESC) AS `Ranking`')
             ->leftJoinSub($hthTable, 'b', 'b.hth_team', '=', 'rwp.ID')
             ->orderByDesc('rwp.Points')

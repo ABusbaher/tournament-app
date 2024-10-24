@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('elimination_games', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('team1_id')->nullable()->constrained('teams')->onDelete('cascade');;
-            $table->foreignId('team2_id')->nullable()->constrained('teams')->onDelete('cascade');;
+            $table->foreignId('team1_id')->nullable()->constrained('teams')->onDelete('cascade');
+            $table->foreignId('team2_id')->nullable()->constrained('teams')->onDelete('cascade');
             $table->string('team1_prev')->nullable();
             $table->string('team2_prev')->nullable();
             $table->string('next_match')->nullable();
-            $table->foreignId('tournament_id')->constrained('tournaments')->onDelete('cascade');;
+            $table->foreignId('tournament_id')->constrained('tournaments')->onDelete('cascade');
             $table->integer('team1_goals')->nullable();
             $table->integer('team2_goals')->nullable();
             $table->integer('round');
