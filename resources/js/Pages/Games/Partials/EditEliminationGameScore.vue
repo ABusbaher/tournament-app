@@ -7,7 +7,7 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import {ref, reactive, toRefs, computed} from 'vue';
 import { useVuelidate } from '@vuelidate/core'
-import {required, minValue, maxValue, integer, sameAs, not, helpers} from '@vuelidate/validators'
+import {required, minValue, maxValue, integer, sameAs, not, helpers, requiredUnless} from '@vuelidate/validators'
 import {useTournamentStore} from "@/stores/Tournament.js";
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
@@ -42,17 +42,16 @@ const state = reactive({
 });
 
 const rules = {
-    hostTeamScore: { required, integer, minValue: minValue(0), maxValue: maxValue(100) },
+    hostTeamScore: {
+        requiredIfLeague: requiredUnless(() => state.guestTeamScore === ''),
+        integer, minValue: minValue(0), maxValue: maxValue(100) },
     guestTeamScore: {
-        required,
+        requiredIfLeague: requiredUnless(() => state.hostTeamScore === ''),
         integer,
         minValue: minValue(0),
         maxValue: maxValue(100),
         notEqual: not(() => state.hostTeamScore === state.guestTeamScore),
-        // isDifferent: helpers.withMessage('Custom message', isDifferent(state.hostTeamScore, state.guestTeamScore)),
-        // notEqualToHostTeamScore: notEqualToHostTeamScore(() => state.hostTeamScore)
     },
-        // otherProperty: not(sameAs(state.hostTeamScore))},
     gameTime: { required },
 }
 const date = ref(new Date());
@@ -97,7 +96,7 @@ const config = {
 const { editedScore } = toRefs(props);
 
 const getScoreButtonText = computed(() => {
-    return editedScore.value ? 'Edit score' : 'Insert score';
+    return editedScore.value ? 'Edit match information' : 'Insert match information';
 });
 
 const submitForm = () => {
@@ -121,6 +120,7 @@ const submitForm = () => {
 };
 
 const closeModal = () => {
+    errorMsg.value = '';
     modalOpened.value = false;
 };
 </script>

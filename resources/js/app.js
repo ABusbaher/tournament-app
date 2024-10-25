@@ -26,6 +26,8 @@ import AdminAllByEliminationCup from "@/Pages/Games/AdminAllByEliminationCup.vue
 import Navigation from "@/Layouts/Navigation.vue";
 import AdminNavigation from "@/Layouts/AdminNavigation.vue";
 import SetFixturePassword from "@/Pages/Games/Partials/SetFixturePassword.vue";
+import FixtureLogin from "@/Pages/Games/Partials/FixtureLogin.vue";
+import Spinner from "@/Components/Spinner.vue";
 import VueDatePicker from '@vuepic/vue-datepicker';
 import { Ziggy } from './ziggy.js';
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -53,6 +55,8 @@ const app = createApp({
         Navigation,
         AdminNavigation,
         SetFixturePassword,
+        FixtureLogin,
+        Spinner,
         FontAwesomeIcon,
         VueDatePicker,
         ZiggyVue

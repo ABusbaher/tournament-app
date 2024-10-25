@@ -64,9 +64,14 @@ class GameService
             throw new NotFoundHttpException('No games found for the given tournament and fixture.');
         }
 
+        $fixturePassword = FixturePassword::where('tournament_id', $tournamentId)
+            ->where('fixture', $fixture)
+            ->firstOrFail();
+
         return [
             'games' => $games,
-            'fixtures' => $fixtures
+            'fixtures' => $fixtures,
+            'isPasswordProtected' => (bool)$fixturePassword->password,
         ];
     }
 

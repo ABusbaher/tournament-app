@@ -7,7 +7,7 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import {ref, reactive, toRefs, computed} from 'vue';
 import { useVuelidate } from '@vuelidate/core'
-import {required, minValue, maxValue, integer} from '@vuelidate/validators'
+import {required, minValue, maxValue, integer, requiredUnless} from '@vuelidate/validators'
 import {useTournamentStore} from "@/stores/Tournament.js";
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
@@ -37,8 +37,14 @@ const state = reactive({
 });
 
 const rules = {
-    hostTeamScore: { required, integer, minValue: minValue(0), maxValue: maxValue(100) },
-    guestTeamScore: { required, integer, minValue: minValue(0), maxValue: maxValue(100) },
+     hostTeamScore: {
+         requiredIfLeague: requiredUnless(() => state.guestTeamScore === ''),
+         integer, minValue: minValue(0), maxValue: maxValue(100)
+     },
+     guestTeamScore: {
+         requiredIfLeague: requiredUnless(() => state.hostTeamScore === ''),
+         integer, minValue: minValue(0), maxValue: maxValue(100)
+     },
     gameTime: { required },
 }
 const date = ref(new Date());
@@ -84,7 +90,7 @@ const config = {
 const { editedScore } = toRefs(props);
 
 const getScoreButtonText = computed(() => {
-    return editedScore.value ? 'Edit score' : 'Insert score';
+    return editedScore.value ? 'Edit match information' : 'Insert match information';
 });
 
 const submitForm = () => {
@@ -95,6 +101,10 @@ const submitForm = () => {
     let data = new FormData();
     data.append('_method', 'patch');
     data.append('host_goals', state.hostTeamScore);
+    if(state.hostTeamScore === '') {
+        console.log('it is empty string');
+    }
+    console.log(state.hostTeamScore);
     data.append('guest_goals', state.guestTeamScore);
     data.append('game_time', new Date(state.gameTime).toISOString());
     axios.post(`/api/tournaments/${tournamentId}/games/${props.gameId}`, data, config).then(response => {

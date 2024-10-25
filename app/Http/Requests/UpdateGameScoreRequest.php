@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Game;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -17,8 +18,8 @@ class UpdateGameScoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'host_goals' => ['required', 'integer', 'min:0', 'max:100'],
-            'guest_goals' => ['required', 'integer', 'min:0', 'max:100'],
+            'host_goals' => ['nullable', 'required_unless:guest_goals,null', 'integer', 'min:0', 'max:100'],
+            'guest_goals' => ['nullable', 'required_unless:host_goals,null', 'integer', 'min:0', 'max:100'],
             'game_time' => ['required', 'date'],
         ];
     }

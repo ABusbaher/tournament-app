@@ -159,7 +159,7 @@ class EliminationGameService
             return $game;
         }
 
-        if ($data['team1_goals'] === $data['team2_goals']) {
+        if ($data['team1_goals'] && $data['team2_goals'] && $data['team1_goals'] === $data['team2_goals']) {
             throw new InvalidArgumentException("Teams can not have same score", 422);
         }
 

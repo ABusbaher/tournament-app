@@ -25,8 +25,8 @@ class UpdateFixturePasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'current_password' => 'nullable',
-            'new_password' => 'nullable',
+            'current_password' => 'nullable|min:3',
+            'new_password' => 'nullable|min:3',
             'confirm_new_password' => 'nullable|same:new_password',
         ];
     }

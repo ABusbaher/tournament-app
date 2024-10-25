@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\DifferentIfNotNull;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -18,8 +19,11 @@ class UpdateEliminationGameScoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'team1_goals' => ['required', 'integer', 'min:0', 'max:100', 'different:team2_goals'],
-            'team2_goals' => ['required', 'integer', 'min:0', 'max:100'],
+            'team1_goals' => [
+                'nullable', 'required_unless:team2_goals,null', 'integer', 'min:0', 'max:100',
+                new DifferentIfNotNull('team2_goals'),
+            ],
+            'team2_goals' => ['nullable', 'required_unless:team1_goals,null', 'integer', 'min:0', 'max:100'],
             'game_time' => ['required', 'date'],
         ];
     }

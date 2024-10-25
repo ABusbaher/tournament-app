@@ -79,7 +79,7 @@ onMounted(async() => {
                         <div class="team flex flex-col items-center">
                             <div class="team-logo w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
                                 <img v-if="game.team1_image" :src="game.team1_image" alt="Team Image" />
-                                <p v-else class="text-center p-3">Team has no logo sett</p>
+                                <p v-else class="text-center p-3">Team has no logo set</p>
                             </div>
                             <h2 class="team-name mt-4">{{ game.team1_shorten_name || 'No team yet' }}</h2>
                         </div>
@@ -113,7 +113,7 @@ onMounted(async() => {
                         <div class="team flex flex-col items-center">
                             <div class="team-logo w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
                                 <img v-if="game.team2_image" :src="game.team2_image" alt="Team Image" />
-                                <p v-else class="text-center p-3">Team has no logo sett</p>
+                                <p v-else class="text-center p-3">Team has no logo set</p>
                             </div>
                             <h2 class="team-name mt-4">{{ game.team2_shorten_name || 'No team yet' }}</h2>
                         </div>
