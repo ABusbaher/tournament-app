@@ -266,7 +266,7 @@ class EliminationGameTest extends TestCase
         $response->assertStatus(422);
         $response->assertInvalid(['team1_goals']);
         $response->assertJsonValidationErrors([
-            'team1_goals' => 'The team1 goals field and team2 goals must be different.',
+            'team1_goals' => 'The team1_goals must be different from team2_goals if both fields have values.',
         ]);
     }
 

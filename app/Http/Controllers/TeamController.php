@@ -51,7 +51,6 @@ class TeamController extends Controller
         $this->authorize('adminAccess', $request->user());
         try {
             $team = $this->teamService->createTeam($request->validated(), $tournament);
-//            dd($team);
             return response()->json($team, 201);
         } catch (TournamentExistsException $e) {
             Log::error($e->getMessage());

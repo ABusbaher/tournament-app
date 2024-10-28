@@ -3,6 +3,7 @@
 namespace Tests\Feature\Game;
 
 use App\Enums\TournamentTypeEnum;
+use App\Models\FixturePassword;
 use App\Models\Game;
 use App\Models\Team;
 use App\Models\Tournament;
@@ -113,6 +114,7 @@ class GameTest extends TestCase
     {
         $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::LEAGUE->value, 'rounds' => 2]);
         Game::factory()->count(4)->create(['tournament_id' => $tournament->id, 'fixture' => 1]);
+        FixturePassword::factory()->create(['tournament_id' => $tournament->id, 'fixture' => 1]);
         $response = $this->get(route('games.by_fixture', [
             'tournament' => $tournament->id,
             'fixture' => 1,
@@ -123,6 +125,9 @@ class GameTest extends TestCase
             'fixture' => 1,
             'prev_fixture' => NULL,
             'next_fixture' => NULL
+        ]);
+        $response->assertJsonFragment([
+            'isPasswordProtected' => false,
         ]);
         $response->assertJsonCount(4, $key = 'games');
     }

@@ -32,7 +32,7 @@ class TeamServiceTest extends TestCase
     }
 
 
-    public function test_team_can_be_created_without_image(): void
+    public function test_team_can_be_created_without_image_and_negative_points(): void
     {
         $tournament = Tournament::factory()->create();
         $teamData = [
@@ -47,10 +47,11 @@ class TeamServiceTest extends TestCase
             'name' => 'Test team',
             'tournament_id' => $teamData['tournament_id'],
             'shorten_name' => 'Voša',
+            'negative_points' => null
         ]);
     }
 
-    public function test_team_can_be_created_with_image(): void
+    public function test_team_can_be_created_with_image_and_negative_points(): void
     {
         $file = UploadedFile::fake()->image($this->testFilename);
         $tournament = Tournament::factory()->create();
@@ -58,6 +59,7 @@ class TeamServiceTest extends TestCase
             'name' => 'Test team',
             'shorten_name' => 'Voša',
             'tournament_id' => $tournament->id,
+            'negative_points' => -34,
             'image' => $file
         ];
         $teamService = new TeamService();
@@ -67,6 +69,7 @@ class TeamServiceTest extends TestCase
             'name' => 'Test team',
             'shorten_name' => 'Voša',
             'tournament_id' => $teamData['tournament_id'],
+            'negative_points' => -34,
         ]);
 
         $this->assertNotNull($team->image_path);
