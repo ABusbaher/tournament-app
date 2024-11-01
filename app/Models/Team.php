@@ -28,6 +28,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Team whereTournamentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Team whereUpdatedAt($value)
  * @method static \Database\Factories\TeamFactory factory($count = null, $state = [])
+ * @property int|null $negative_points
+ * @method static \Illuminate\Database\Eloquent\Builder|Team whereNegativePoints($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Team whereShortenName($value)
  * @mixin \Eloquent
  */
 class Team extends Model

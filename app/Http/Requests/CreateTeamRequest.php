@@ -30,6 +30,7 @@ class CreateTeamRequest extends FormRequest
         return [
             'name' => 'required|string|min:3|max:255',
             'shorten_name' => 'required|string|min:2|max:4',
+            'negative_points' =>  ['nullable', 'integer', 'min:-100', 'max:0'],
             'tournament_id' => [
                 'required',
                 'exists:tournaments,id',

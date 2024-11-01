@@ -171,12 +171,12 @@ class GameService
         });
 
         // calculate games played, goal scored, goal received and goal difference between teams
-        $resultsWithPoints = Team::select('teams.id AS ID', 'teams.name AS team', 'teams.tournament_id', 'teams.image_path')
+        $resultsWithPoints = Team::select('teams.id AS ID', 'teams.name AS team', 'teams.tournament_id', 'teams.image_path', 'teams.negative_points')
             ->selectRaw('COUNT(pt.team) AS GamesPlayed')
             ->selectRaw('SUM(CASE WHEN pt.Points = 3 THEN 1 ELSE 0 END) as Wins')
             ->selectRaw('SUM(CASE WHEN pt.Points = 1 THEN 1 ELSE 0 END) as Draws')
             ->selectRaw('SUM(CASE WHEN pt.Points = 0 THEN 1 ELSE 0 END) as Losses')
-            ->selectRaw('SUM(pt.Points) AS Points')
+            ->selectRaw('(COALESCE(SUM(pt.Points), 0) + COALESCE(teams.negative_points, 0)) AS Points')
             ->selectRaw('SUM(pt.host_goals) AS GoalsScored')
             ->selectRaw('SUM(pt.guest_goals) AS GoalsReceived')
             ->selectRaw('SUM(pt.host_goals - pt.guest_goals) AS GoalDiff')

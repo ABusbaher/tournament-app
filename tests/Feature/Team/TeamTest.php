@@ -24,7 +24,7 @@ class TeamTest extends TestCase
         ]);
     }
 
-    public function test_team_without_image_can_be_created_by_admin(): void
+    public function test_team_without_image_and_negative_points_can_be_created_by_admin(): void
     {
         $this->signInAdmin();
         $response = $this->createTeam();
@@ -34,6 +34,7 @@ class TeamTest extends TestCase
             'name' => 'Team 1',
             'tournament_id' => 1,
             'shorten_name' => 'Voša',
+            'negative_points' => null
         ]);
     }
 
@@ -164,13 +165,27 @@ class TeamTest extends TestCase
         $this->signInAdmin();
         $team = Team::factory()->create();
         $response = $this->put(route('team.update', ['tournament' => $team->tournament_id, 'team' => $team->id]),
-        ['name' => 'Updated Team', 'shorten_name' => 'Voša']);
+        ['name' => 'Updated Team', 'shorten_name' => 'Voša', 'negative_points' => -2]);
 
         $response->assertStatus(200);
         $this->assertDatabaseHas('teams', [
             'name' => 'Updated Team',
             'shorten_name' => 'Voša',
+            'negative_points' => -2,
             'tournament_id' => $team->tournament_id
+        ]);
+    }
+
+    public function test_team_can_be_edited_with_positive_points(): void
+    {
+        $this->signInAdmin();
+        $team = Team::factory()->create();
+        $response = $this->put(route('team.update', ['tournament' => $team->tournament_id, 'team' => $team->id]),
+            ['name' => 'Updated Team', 'shorten_name' => 'Voša', 'negative_points' => 2]);
+
+        $response->assertStatus(422);
+        $response->assertJsonFragment([
+            'negative_points' => ['The negative points field must not be greater than 0.'],
         ]);
     }
 

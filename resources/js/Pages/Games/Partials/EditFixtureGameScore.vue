@@ -102,9 +102,7 @@ const submitForm = () => {
     data.append('_method', 'patch');
     data.append('host_goals', state.hostTeamScore);
     if(state.hostTeamScore === '') {
-        console.log('it is empty string');
     }
-    console.log(state.hostTeamScore);
     data.append('guest_goals', state.guestTeamScore);
     data.append('game_time', new Date(state.gameTime).toISOString());
     axios.post(`/api/tournaments/${tournamentId}/games/${props.gameId}`, data, config).then(response => {

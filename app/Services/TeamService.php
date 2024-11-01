@@ -42,6 +42,7 @@ class TeamService
         $team = new Team();
         $team->name = $data['name'];
         $team->shorten_name = $data['shorten_name'];
+        $team->negative_points = $data['negative_points'] ?? null;
         $team->tournament_id = $data['tournament_id'];
 
         if (isset($data['image'])) {
@@ -59,6 +60,7 @@ class TeamService
         $old_image = $team->image_path;
         $team->name = $data['name'];
         $team->shorten_name = $data['shorten_name'];
+        $team->negative_points = $data['negative_points'] ?? null;
         if (isset($data['image'])) {
             $imagePath = $this->uploads($data['image'], 'team_images');
             $team->image_path = $imagePath;
@@ -86,7 +88,7 @@ class TeamService
 
     private function gamesAlreadyCreated(Tournament $tournament): bool
     {
-        $model = $tournament->type === TournamentTypeEnum::LEAGUE ? Game::class : ($tournament->type === TournamentTypeEnum::ELIMINATION ? EliminationGame::class : null);
+        $model = $tournament->isLeague() ? Game::class : ($tournament->isElimination() ? EliminationGame::class : null);
 
         if ($model) {
             return $model::where('tournament_id', $tournament->id)->exists();
