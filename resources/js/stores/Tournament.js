@@ -45,6 +45,9 @@ export const useTournamentStore = defineStore('tournament', {
             } catch (error) {
                 console.log(error);
             }
+        },
+        setType(newType) {
+            this.tournamentType = newType;
         }
     },
 })

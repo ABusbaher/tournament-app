@@ -266,4 +266,101 @@ class GameTest extends TestCase
         $response->assertStatus(404);
     }
 
+    public function test_game_score_table_with_valid_results_can_be_fetched(): void
+    {
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::LEAGUE->value, 'rounds' => 2]);
+        $teamWithNegativePoints = Team::factory()->create([
+            'id' => 1,
+            'name' => 'eliminated_team',
+            'tournament_id' => $tournament->id,
+            'negative_points' => -2
+        ]);
+        Team::factory()->times(3)->create([
+            'tournament_id' => $tournament->id,
+        ]);
+        Game::factory()->create([
+            'tournament_id' => $tournament->id,
+            'host_team_id' => $teamWithNegativePoints->id,
+            'host_goals' => 2,
+            'guest_team_id' => 2,
+            'guest_goals' => 5,
+        ]);
+
+        Game::factory()->create([
+            'tournament_id' => $tournament->id,
+            'host_team_id' => 2,
+            'host_goals' => 2,
+            'guest_team_id' => 3,
+            'guest_goals' => 0,
+        ]);
+
+        Game::factory()->create([
+            'tournament_id' => $tournament->id,
+            'host_team_id' => 3,
+            'host_goals' => 1,
+            'guest_team_id' => 4,
+            'guest_goals' => 1,
+        ]);
+
+        $response = $this->get(route('games.table', [
+            'tournament' => $tournament->id,
+        ]));
+
+        $response->assertStatus(200);
+        $response->assertJsonCount(4);
+
+        $response->assertJsonFragment([
+            'ID' => 1,
+            'team' => $teamWithNegativePoints->name,
+            'tournament_id' => $tournament->id,
+            'image_path' => null,
+            'negative_points' => $teamWithNegativePoints->negative_points,
+            'Wins' => 0,
+            'Draws' => 0,
+            'Losses' => 1,
+            'Points' => $teamWithNegativePoints->negative_points,
+            'GamesPlayed' => 1,
+            'Ranking' => 4
+        ]);
+
+        $response->assertJsonFragment([
+            'ID' => 2,
+            'tournament_id' => $tournament->id,
+            'image_path' => null,
+            'negative_points' => null,
+            'Wins' => 2,
+            'Draws' => 0,
+            'Losses' => 0,
+            'Points' => 6,
+            'GamesPlayed' => 2,
+            'Ranking' => 1
+        ]);
+
+        $response->assertJsonFragment([
+            'ID' => 3,
+            'tournament_id' => $tournament->id,
+            'image_path' => null,
+            'negative_points' => null,
+            'Wins' => 0,
+            'Draws' => 1,
+            'Losses' => 1,
+            'Points' => 1,
+            'GamesPlayed' => 2,
+            'Ranking' => 3
+        ]);
+
+        $response->assertJsonFragment([
+            'ID' => 4,
+            'tournament_id' => $tournament->id,
+            'image_path' => null,
+            'negative_points' => null,
+            'Wins' => 0,
+            'Draws' => 1,
+            'Losses' => 0,
+            'Points' => 1,
+            'GamesPlayed' => 2,
+            'Ranking' => 2
+        ]);
+    }
+
 }

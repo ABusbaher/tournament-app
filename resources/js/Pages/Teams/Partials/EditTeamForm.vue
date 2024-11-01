@@ -5,7 +5,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import {ref, reactive, watch} from 'vue';
+import {ref, reactive, watch, computed} from 'vue';
 import { useVuelidate } from '@vuelidate/core'
 import {required, minLength, helpers, maxLength, integer, minValue, maxValue} from '@vuelidate/validators'
 import {useTournamentStore} from "@/stores/Tournament.js";
@@ -21,7 +21,7 @@ const props = defineProps({
 });
 const tournamentStore = useTournamentStore();
 const tournamentId = tournamentStore.getId;
-const tournamentType = tournamentStore.getType;
+const tournamentType = computed(() => tournamentStore.getType);
 
 const state = reactive({
     name: '',
@@ -57,17 +57,18 @@ const errorMsg = ref('');
 
 const v$ = useVuelidate(rules, state)
 
-const openModal = () => {
+const openModal = async () => {
     editTeam.value = true;
-    axios.get(`/api/tournaments/${tournamentId}/teams/${props.teamId}`)
+    await tournamentStore.getByTournamentById(tournamentId);
+    await axios.get(`/api/tournaments/${tournamentId}/teams/${props.teamId}`)
         .then(response => {
             state.name = response.data['name'];
             state.shorten_name = response.data['shorten_name'];
-            if (response.data['negative_points'] === 0) {
+            if (response.data['negative_points'] === 0 && tournamentType.value === 'league') {
                 state.negative_points = '0'
-            }else if (response.data['negative_points']) {
+            } else if (response.data['negative_points'] && tournamentType.value === 'league') {
                 state.negative_points = response.data['negative_points'].toString()
-            }else{
+            } else {
                 state.negative_points = '';
             }
             state.previous_image = response.data['image_path'];
@@ -84,12 +85,6 @@ const config = {
         'Accept': 'application/json',
     },
 };
-
-watch(() => tournamentType, (newType) => {
-    if (newType !== 'league') {
-        state.negative_points = '';
-    }
-});
 
 const submitForm = () => {
     v$.value.$touch();

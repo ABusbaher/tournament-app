@@ -6,7 +6,7 @@ import FileInput from "@/Components/FileInput.vue";
 import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import {onMounted, reactive, ref, watch} from 'vue';
+import {computed, onMounted, reactive, ref, watch} from 'vue';
 import {useVuelidate} from '@vuelidate/core'
 import {helpers, integer, maxLength, maxValue, minLength, minValue, required} from '@vuelidate/validators'
 import {useTournamentStore} from "@/stores/Tournament.js";
@@ -15,7 +15,7 @@ const addTeam = ref(false);
 const tournamentStore = useTournamentStore();
 const tournamentId = tournamentStore.getId;
 tournamentStore.getByTournamentById(tournamentId);
-const tournamentType = ref(tournamentStore.getType);
+const tournamentType = computed(() => tournamentStore.getType);
 
 const state = reactive({
     name: '',
@@ -48,17 +48,11 @@ const rules = {
 
 const v$ = useVuelidate(rules, state)
 const maxTeamError = ref('');
-const openModal = () => {
-    console.log(tournamentType.value);
+const openModal = async () => {
+    await tournamentStore.getByTournamentById(tournamentId);
     addTeam.value = true;
 };
 const emit = defineEmits(['teamCreated']);
-
-watch(() => tournamentType.value, (newType) => {
-    if (newType && newType !== 'league') {
-        state.negative_points = '';
-    }
-});
 
 const config = {
     headers: {
@@ -69,7 +63,6 @@ const config = {
 onMounted(async () => {
     try {
         await tournamentStore.getByTournamentById(tournamentId);
-        tournamentType.value = tournamentStore.getType;
     } catch (error) {
         console.log(error);
     }
@@ -83,7 +76,7 @@ const submitForm = () => {
     axios.post(`/api/tournaments/${tournamentId}/teams`, {
         name: state.name,
         shorten_name: state.shorten_name,
-        negative_points: state.negative_points,
+        negative_points: tournamentType.value === 'league' ? state.negative_points : null,
         tournament_id: tournamentId,
         ...(state.image && { image: state.image }),
     }, config).then(response => {

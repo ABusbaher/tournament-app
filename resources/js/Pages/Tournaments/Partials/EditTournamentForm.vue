@@ -49,19 +49,20 @@ const editTournament = () => {
         tournament_id: tournamentId
     }).then(response => {
         const updatedTournament = response.data;
+        tournamentStore.setType(tournamentState.tournamentType);
         emit('tournamentEdited', updatedTournament);
     })
-        .catch(error => {
-            if (error.response && error.response.status === 403) {
-                error403.value = 'Tournament information can not be updated, since fixtures has been already created!';
-                setTimeout(() => {error403.value = '';}, 5000);
-                tournamentState.tournamentName = tournamentStore.getName;
-                tournamentState.tournamentRounds = tournamentStore.getRounds.toString();
-                tournamentState.tournamentType = tournamentStore.getType;
-            } else {
-                console.log(error.response.data);
-            }
-        });
+    .catch(error => {
+        if (error.response && error.response.status === 403) {
+            error403.value = 'Tournament information can not be updated, since fixtures has been already created!';
+            setTimeout(() => {error403.value = '';}, 5000);
+            tournamentState.tournamentName = tournamentStore.getName;
+            tournamentState.tournamentRounds = tournamentStore.getRounds.toString();
+            tournamentState.tournamentType = tournamentStore.getType;
+        } else {
+            console.log(error.response.data);
+        }
+    });
 }
 
 watch(() => tournamentState.tournamentType, (newType) => {
