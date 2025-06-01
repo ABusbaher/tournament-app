@@ -19,7 +19,7 @@ class TeamSeeder extends Seeder
                 Team::create([
                     'tournament_id' => $tournamentId,
                     'name' => "Team $i",
-                    'short_name' => "AB$i",
+                    'shorten_name' => "AB$i",
                     'image_path' => null,
                 ]);
             }
