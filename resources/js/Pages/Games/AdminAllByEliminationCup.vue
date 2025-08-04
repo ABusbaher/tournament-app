@@ -43,17 +43,17 @@ const handleScoreUpdate = () => {
 const getRoundName = (value) => {
     switch (value) {
         case 5:
-            return 'Round of 32';
+            return '1/16 finala';
         case 4:
-            return 'Round of 16';
+            return '1/8 finala';
         case 3:
-            return 'Quarterfinals';
+            return 'Četvrtfinale';
         case 2:
-            return 'Semifinals';
+            return 'Polufinale';
         case 1:
             return 'Finale';
         default:
-            return 'Unknown round';
+            return 'Nepoznato kolo';
     }
 };
 
@@ -67,21 +67,21 @@ onMounted(async() => {
 <template>
     <div class="bg-white min-h-screen">
         <h1 class="mb-4 text-4xl font-extrabold text-center leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-            Update {{ tournamentName }} games
+            Ažuriraj utakmice turnira {{ tournamentName }}
         </h1>
-        <StatusMessage message="Game score successfully edited" color="green" :show="messages.updateGameScore"
+        <StatusMessage message="Rezultat utakmice uspešno izmenjen" color="green" :show="messages.updateGameScore"
                        @close="messages.updateGameScore = false"/>
         <div v-if="games.length" v-for="game in games" :key="game.id" class="mb-6">
-            <h2 v-if="game.team1_name || game.team2_name" class="team-name mt-4">{{ getRoundName(game.round) }} game</h2>
+            <h2 v-if="game.team1_name || game.team2_name" class="team-name mt-4">{{ getRoundName(game.round) }}</h2>
             <div v-if="game.team1_name || game.team2_name" class="match bg-white rounded-lg shadow-md flex items-center justify-center">
                 <div class="match-content flex flex-col md:flex-row">
                     <div class="column p-3 flex justify-center items-center" :title="game.team1_name">
                         <div class="team flex flex-col items-center">
                             <div class="team-logo w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
                                 <img v-if="game.team1_image" :src="game.team1_image" alt="Team Image" />
-                                <p v-else class="text-center p-3">Team has no logo set</p>
+                                <p v-else class="text-center p-3">Tim nema postavljen logo</p>
                             </div>
-                            <h2 class="team-name mt-4">{{ game.team1_shorten_name || 'No team yet' }}</h2>
+                            <h2 class="team-name mt-4">{{ game.team1_shorten_name || 'Još nema tima' }}</h2>
                         </div>
                     </div>
 
@@ -89,7 +89,7 @@ onMounted(async() => {
                         <div class="match-details text-center">
                             <div>
                                 <p class="date-caption">
-                                    {{ game.game_time !== null ? formatDate(new Date(game.game_time)) : 'Game time not set yet' }}
+                                    {{ game.game_time !== null ? formatDate(new Date(game.game_time)) : 'Vreme utakmice nije još postavljeno' }}
                                 </p>
                             </div>
                             <div class="match-score flex items-center justify-center mt-2">
@@ -113,9 +113,9 @@ onMounted(async() => {
                         <div class="team flex flex-col items-center">
                             <div class="team-logo w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
                                 <img v-if="game.team2_image" :src="game.team2_image" alt="Team Image" />
-                                <p v-else class="text-center p-3">Team has no logo set</p>
+                                <p v-else class="text-center p-3">Tim nema postavljen logo</p>
                             </div>
-                            <h2 class="team-name mt-4">{{ game.team2_shorten_name || 'No team yet' }}</h2>
+                            <h2 class="team-name mt-4">{{ game.team2_shorten_name || 'Još nema tima' }}</h2>
                         </div>
                     </div>
                 </div>

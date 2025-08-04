@@ -48,8 +48,8 @@ const rules = {
     shorten_name: { required, minLength: minLength(2), maxLength: maxLength(4) },
     negative_points: { integer, minValue: minValue(-100), maxValue: maxValue(0) },
     image: {
-        validImg: helpers.withMessage('File type not supported', validImg),
-        validImgSize: helpers.withMessage('Image can not bigger than ' + fileSizeLimit + ' bytes', validImgSize)
+        validImg: helpers.withMessage('Tip fajla nije podržan', validImg),
+        validImgSize: helpers.withMessage('Slika ne može biti veća od ' + fileSizeLimit + ' bajtova', validImgSize)
     }
 }
 
@@ -124,11 +124,11 @@ const closeModal = () => {
         <Modal :show="editTeam" @close="closeModal">
             <div class="p-6">
                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                    Edit Team
+                    Izmeni Tim
                 </h2>
 
                 <div :class="['mt-6', { error: v$.name.$errors.length }]">
-                    <InputLabel for="name" value="Team name" />
+                    <InputLabel for="name" value="Ime tima" />
 
                     <TextInput
                         id="name"
@@ -136,7 +136,7 @@ const closeModal = () => {
                         v-model="state.name"
                         type="text"
                         class="mt-1 block w-full"
-                        placeholder="Team name"
+                        placeholder="Ime tima"
                     />
                     <div class="input-errors mt-2" v-for="error of v$.name.$errors" :key="error.$uid">
                         <InputError :message="error.$message" class="mt-2" />
@@ -144,14 +144,14 @@ const closeModal = () => {
                 </div>
 
                 <div :class="['mt-6', { error: v$.shorten_name.$errors.length }]">
-                    <InputLabel for="shorten_name" value="Shorten team name" />
+                    <InputLabel for="shorten_name" value="Skraćeno ime tima" />
                     <TextInput
                         id="shorten_name"
                         ref="nameInput"
                         v-model="state.shorten_name"
                         type="text"
                         class="mt-1 block w-full"
-                        placeholder="Short team name (2 to 4 letters)"
+                        placeholder="Kratko ime tima (2 do 4 slova)"
                     />
                     <div class="input-errors mt-2" v-for="error of v$.shorten_name.$errors" :key="error.$uid">
                         <InputError :message="error.$message" class="mt-2" />
@@ -159,7 +159,7 @@ const closeModal = () => {
                 </div>
 
                 <div v-if="tournamentType === 'league'" :class="['mt-6', { error: v$.negative_points.$errors.length }]">
-                    <InputLabel for="negative_points" value="Negative points (optional)" />
+                    <InputLabel for="negative_points" value="Negativni poeni (opciono)" />
                     <TextInput
                         id="negative_points"
                         ref="nameInput"
@@ -168,7 +168,7 @@ const closeModal = () => {
                         min="-100"
                         max="0"
                         class="mt-1 block w-full"
-                        placeholder="Enter negative points"
+                        placeholder="Unesite negativne poene"
                     />
                     <div class="input-errors mt-2" v-for="error of v$.negative_points.$errors" :key="error.$uid">
                         <InputError :message="error.$message" class="mt-2" />
@@ -177,12 +177,12 @@ const closeModal = () => {
 
                 <div :class="['mt-6', { error: v$.image.$errors.length }]">
                     <template  v-if="state.previous_image">
-                        <p>Current logo</p>
-                        <img :src="state.previous_image" alt="Team Image" width="100" height="100"/>
+                        <p>Trenutni logo</p>
+                        <img :src="state.previous_image" alt="Logo tima" width="100" height="100"/>
                     </template>
                     <FileInput
-                        label-name="Change team logo"
-                        help-text="Supported formats JPEG, JPG, PNG, WEBP."
+                        label-name="Promeni logo tima"
+                        help-text="Podržani formati JPEG, JPG, PNG, WEBP."
                         v-model="state.image"
                     />
                     <div class="input-errors mt-2" v-for="error of v$.image.$errors" :key="error.$uid">
@@ -197,8 +197,8 @@ const closeModal = () => {
                 </div>
 
                 <div class="mt-6 flex justify-end">
-                    <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
-                    <PrimaryButton class="ml-3" @click="submitForm">Edit Team</PrimaryButton>
+                    <SecondaryButton @click="closeModal"> Otkaži </SecondaryButton>
+                    <PrimaryButton class="ml-3" @click="submitForm">Izmeni Tim</PrimaryButton>
                 </div>
             </div>
         </Modal>

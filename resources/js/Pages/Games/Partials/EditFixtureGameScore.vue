@@ -90,7 +90,7 @@ const config = {
 const { editedScore } = toRefs(props);
 
 const getScoreButtonText = computed(() => {
-    return editedScore.value ? 'Edit match information' : 'Insert match information';
+    return editedScore.value ? 'Izmeni informacije o utakmici' : 'Unesi informacije o utakmici';
 });
 
 const submitForm = () => {
@@ -133,7 +133,7 @@ const closeModal = () => {
                 </h2>
 
                 <div :class="['mt-6', { error: v$.gameTime.$errors.length }]">
-                    <InputLabel for="gameTime" value="Game time" />
+                    <InputLabel for="gameTime" value="Vreme utakmice" />
                     <VueDatePicker
                         id="gameTime"
                         v-model="state.gameTime"
@@ -147,7 +147,7 @@ const closeModal = () => {
 
                 <div class="flex space-x-4 mt-6">
                     <div :class="['w-1/2', { error: v$.hostTeamScore.$errors.length }]">
-                        <InputLabel for="hostTeamScore" :value="state.hostTeam + ' score'" />
+                        <InputLabel for="hostTeamScore" :value="state.hostTeam + ' golovi'" />
                         <TextInput
                             id="hostTeamScore"
                             ref="nameInput"
@@ -156,7 +156,7 @@ const closeModal = () => {
                             min="0"
                             max="100"
                             class="mt-1 block w-full"
-                            placeholder="Home team score"
+                            placeholder="Golovi domaćeg tima"
                         />
                         <div class="input-errors mt-2" v-for="error of v$.hostTeamScore.$errors" :key="error.$uid">
                             <InputError :message="error.$message" class="mt-2" />
@@ -164,7 +164,7 @@ const closeModal = () => {
                     </div>
 
                     <div :class="['w-1/2', { error: v$.guestTeamScore.$errors.length }]">
-                        <InputLabel for="guestTeamScore" :value="state.guestTeam + ' score'" />
+                        <InputLabel for="guestTeamScore" :value="state.guestTeam + ' golovi'" />
                         <TextInput
                             id="guestTeamScore"
                             ref="nameInput"
@@ -173,7 +173,7 @@ const closeModal = () => {
                             min="0"
                             max="100"
                             class="mt-1 block w-full"
-                            placeholder="Guest team score"
+                            placeholder="Golovi gostujućeg tima"
                         />
                         <div class="input-errors mt-2" v-for="error of v$.guestTeamScore.$errors" :key="error.$uid">
                             <InputError :message="error.$message" class="mt-2" />
@@ -187,7 +187,7 @@ const closeModal = () => {
                     </p>
                 </div>
                 <div class="mt-6 flex justify-end">
-                    <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
+                    <SecondaryButton @click="closeModal"> Otkaži </SecondaryButton>
                     <PrimaryButton class="ml-3" @click="submitForm">
                         {{ getScoreButtonText }}
                     </PrimaryButton>

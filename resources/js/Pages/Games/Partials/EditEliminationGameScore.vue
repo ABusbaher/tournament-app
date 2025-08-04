@@ -96,7 +96,7 @@ const config = {
 const { editedScore } = toRefs(props);
 
 const getScoreButtonText = computed(() => {
-    return editedScore.value ? 'Edit match information' : 'Insert match information';
+    return editedScore.value ? 'Izmeni informacije o utakmici' : 'Unesi informacije o utakmici';
 });
 
 const submitForm = () => {
@@ -137,7 +137,7 @@ const closeModal = () => {
                 </h2>
 
                 <div :class="['mt-6', { error: v$.gameTime.$errors.length }]">
-                    <InputLabel for="gameTime" value="Game time" />
+                    <InputLabel for="gameTime" value="Vreme utakmice" />
                     <VueDatePicker
                         id="gameTime"
                         v-model="state.gameTime"
@@ -159,7 +159,7 @@ const closeModal = () => {
                             min="0"
                             max="100"
                             class="mt-1 block w-full"
-                            placeholder="Home team score"
+                            placeholder="Golovi domaćeg tima"
                         />
                         <div class="input-errors mt-2" v-for="error of v$.hostTeamScore.$errors" :key="error.$uid">
                             <InputError :message="error.$message" class="mt-2" />
@@ -176,11 +176,11 @@ const closeModal = () => {
                             min="0"
                             max="100"
                             class="mt-1 block w-full"
-                            placeholder="Guest team score"
+                            placeholder="Golovi gostujućeg tima"
                         />
                         <div class="input-errors mt-2" v-for="error of v$.guestTeamScore.$errors" :key="error.$uid">
                             <InputError :message="error.$message === 'The value does not match the provided validator' ?
-                            'Home and guest goals cannot be the same.' : error.$message" class="mt-2" />
+                            'Golovi domaćeg i gostujućeg tima ne mogu biti isti.' : error.$message" class="mt-2" />
                         </div>
                     </div>
                 </div>
@@ -190,7 +190,7 @@ const closeModal = () => {
                     </p>
                 </div>
                 <div class="mt-6 flex justify-end">
-                    <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
+                    <SecondaryButton @click="closeModal"> Otkaži </SecondaryButton>
                     <PrimaryButton class="ml-3" @click="submitForm">
                         {{ getScoreButtonText }}
                     </PrimaryButton>

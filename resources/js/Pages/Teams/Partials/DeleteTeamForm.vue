@@ -52,7 +52,7 @@ const deleteTeam = () => {
         <Modal :show="confirmingTournamentDeletion" @close="closeModal">
             <div class="p-6">
                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                    Are you sure you want to delete your team?
+                    Da li ste sigurni da želite da obrišete tim?
                 </h2>
                 <div v-if="errorMsg" class="mt-2">
                     <p class="text-sm text-red-600 dark:text-red-400 text-center">
@@ -60,13 +60,13 @@ const deleteTeam = () => {
                     </p>
                 </div>
                 <div class="mt-6 flex justify-end">
-                    <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
+                    <SecondaryButton @click="closeModal"> Otkaži </SecondaryButton>
 
                     <DangerButton
                         class="ml-3"
                         @click="deleteTeam"
                     >
-                        Delete Team
+                        Obriši Tim
                     </DangerButton>
                 </div>
             </div>

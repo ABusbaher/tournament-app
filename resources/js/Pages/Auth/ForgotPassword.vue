@@ -23,11 +23,11 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Forgot Password" />
+        <Head title="Zaboravili ste Lozinku" />
 
         <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-            Forgot your password? No problem. Just let us know your email address and we will email you a password reset
-            link that will allow you to choose a new one.
+            Zaboravili ste lozinku? Nema problema. Samo nam recite vašu email adresu i poslaćemo vam link za resetovanje
+            lozinke koji će vam omogućiti da izaberete novu.
         </div>
 
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
@@ -53,7 +53,7 @@ const submit = () => {
 
             <div class="flex items-center justify-end mt-4">
                 <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Email Password Reset Link
+                    Pošalji Link za Resetovanje Lozinke
                 </PrimaryButton>
             </div>
         </form>

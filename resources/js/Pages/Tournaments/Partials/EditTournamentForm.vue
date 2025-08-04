@@ -54,7 +54,7 @@ const editTournament = () => {
     })
     .catch(error => {
         if (error.response && error.response.status === 403) {
-            error403.value = 'Tournament information can not be updated, since fixtures has been already created!';
+            error403.value = 'Informacije o turniru se ne mogu ažurirati jer je raspored već kreiran!';
             setTimeout(() => {error403.value = '';}, 5000);
             tournamentState.tournamentName = tournamentStore.getName;
             tournamentState.tournamentRounds = tournamentStore.getRounds.toString();
@@ -84,11 +84,11 @@ onMounted(async() => {
 <template>
     <div class="w-3/5 mx-auto mt-10">
         <h4 class="text-lg font-medium text-gray-900 dark:text-gray-100 text-center">
-            Edit Tournament (you can not change later this settings)
+            Izmeni Turnir (nećete moći kasnije da menjate ove postavke)
         </h4>
 
         <div :class="['mt-6', { error: v$.tournamentName.$errors.length }]">
-            <InputLabel for="tournamentName" value="Tournament name" />
+            <InputLabel for="tournamentName" value="Naziv turnira" />
 
             <TextInput
                 id="tournamentName"
@@ -96,7 +96,7 @@ onMounted(async() => {
                 v-model="tournamentState.tournamentName"
                 type="text"
                 class="mt-1 block w-full"
-                placeholder="Tournament name"
+                placeholder="Naziv turnira"
             />
             <div class="input-errors mt-2" v-for="error of v$.tournamentName.$errors" :key="error.$uid">
                 <InputError :message="error.$message" class="mt-2" />
@@ -104,7 +104,7 @@ onMounted(async() => {
         </div>
 
         <div class="mt-6">
-            <InputLabel for="types" value="Choose type of tournament"/>
+            <InputLabel for="types" value="Izaberi tip turnira"/>
 
             <SelectInput
                 id="types"
@@ -119,7 +119,7 @@ onMounted(async() => {
         </div>
 
         <div v-if="tournamentState.tournamentType === 'league'" :class="['mt-6', { error: v$.tournamentRounds.$errors.length }]">
-            <InputLabel for="rounds" value="Number of rounds" />
+            <InputLabel for="rounds" value="Broj rundi" />
 
             <SelectInput
                 id="rounds"
@@ -144,7 +144,7 @@ onMounted(async() => {
                 class="ml-3"
                 @click="editTournament"
             >
-                Edit Tournament
+                Izmeni Turnir
             </PrimaryButton>
         </div>
     </div>

@@ -27,7 +27,7 @@ const { tournamentId } = toRefs(props);
 const modalOpened = ref(false);
 
 const passwordRule = helpers.withMessage(
-    'New password can be empty or at least 3 characters long.',
+    'Nova lozinka može biti prazna ili mora imati najmanje 3 karaktera.',
     value => !value || minLength(3).$validator(value)
 );
 
@@ -88,15 +88,15 @@ const closeModal = () => {
 
 <template>
     <section class="space-y-6">
-        <PrimaryButton @click="openModal">Set fixture password</PrimaryButton>
+        <PrimaryButton @click="openModal">Postavi lozinku za kolo</PrimaryButton>
 
         <Modal :show="modalOpened" @close="closeModal">
             <div class="p-6">
                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                    Set fixture password
+                    Postavi lozinku za kolo
                 </h2>
                 <div class="mt-6">
-                    <InputLabel for="current_password" value="Current password, leave blank if not set yet" />
+                    <InputLabel for="current_password" value="Trenutna lozinka, ostavite prazno ako nije još postavljena" />
                     <div class="relative">
                         <TextInput
                             id="current_password"
@@ -104,7 +104,7 @@ const closeModal = () => {
                             v-model="state.current_password"
                             :type="showPassword ? 'text' : 'password'"
                             class="mt-1 block w-full"
-                            placeholder="Enter current password"
+                            placeholder="Unesite trenutnu lozinku"
                         />
                         <button type="button" @click="toggleShow" class="absolute right-2 top-2">
                             <font-awesome-icon v-if="showPassword" :icon="['fas', 'eye-slash']" />
@@ -114,7 +114,7 @@ const closeModal = () => {
                 </div>
 
                 <div :class="['mt-6', { error: v$.new_password.$errors.length }]">
-                    <InputLabel for="new_password" value="New password" />
+                    <InputLabel for="new_password" value="Nova lozinka" />
                     <div class="relative">
                         <TextInput
                             id="new_password"
@@ -122,7 +122,7 @@ const closeModal = () => {
                             v-model="state.new_password"
                             :type="showPassword ? 'text' : 'password'"
                             class="mt-1 block w-full"
-                            placeholder="New password"
+                            placeholder="Nova lozinka"
                         />
                         <button type="button" @click="toggleShow" class="absolute right-2 top-2">
                             <font-awesome-icon v-if="showPassword" :icon="['fas', 'eye-slash']" />
@@ -135,7 +135,7 @@ const closeModal = () => {
                 </div>
 
                 <div :class="['mt-6', { error: v$.confirm_new_password.$errors.length }]">
-                    <InputLabel for="confirm_new_password" value="Confirm new password" />
+                    <InputLabel for="confirm_new_password" value="Potvrdi novu lozinku" />
                     <div class="relative">
                         <TextInput
                             id="confirm_new_password"
@@ -143,7 +143,7 @@ const closeModal = () => {
                             v-model="state.confirm_new_password"
                             :type="showPassword ? 'text' : 'password'"
                             class="mt-1 block w-full"
-                            placeholder="Confirm new password"
+                            placeholder="Potvrdi novu lozinku"
                         />
                         <button type="button" @click="toggleShow" class="absolute right-2 top-2">
                             <font-awesome-icon v-if="showPassword" :icon="['fas', 'eye-slash']" />
@@ -151,7 +151,7 @@ const closeModal = () => {
                         </button>
                     </div>
                     <div class="input-errors mt-2" v-for="error of v$.confirm_new_password.$errors" :key="error.$uid">
-                        <InputError message="New password and confirm new password are not the same" class="mt-2" />
+                        <InputError message="Nova lozinka i potvrda nove lozinke se ne poklapaju" class="mt-2" />
                     </div>
                 </div>
 
@@ -162,13 +162,13 @@ const closeModal = () => {
                 </div>
 
                 <div class="mt-6 flex justify-end">
-                    <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
+                    <SecondaryButton @click="closeModal"> Otkaži </SecondaryButton>
 
                     <PrimaryButton
                         class="ml-3"
                         @click="submitForm"
                     >
-                        Set fixture password
+                        Postavi lozinku za kolo
                     </PrimaryButton>
                 </div>
             </div>

@@ -44,18 +44,18 @@ const deleteTournament = () => {
         <Modal :show="confirmingTournamentDeletion" @close="closeModal">
             <div class="p-6">
                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                    Are you sure you want to delete your tournament?
-                    All teams and games connected to this tournament will be deleted also.
+                    Da li ste sigurni da želite da obrišete turnir?
+                    Svi timovi i utakmice povezani sa ovim turnirom će takođe biti obrisani.
                 </h2>
 
                 <div class="mt-6 flex justify-end">
-                    <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
+                    <SecondaryButton @click="closeModal"> Otkaži </SecondaryButton>
 
                     <DangerButton
                         class="ml-3"
                         @click="deleteTournament"
                     >
-                        Delete Tournament
+                        Obriši Turnir
                     </DangerButton>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 <template>
     <div id="app" class="container mx-auto p-6 bg-gray-50">
-        <h1>{{ tournamentName }} Bracket</h1>
+        <h1>{{ tournamentName }} - Kostur takmičenja</h1>
         <div class="tournament-bracket tournament-bracket--rounded">
 
             <div v-for="round in rounds" :key="round.number" :class="round.class">
@@ -14,8 +14,8 @@
                                 </caption>
                                 <thead class="sr-only">
                                 <tr>
-                                    <th>Country</th>
-                                    <th>Score</th>
+                                    <th>Tim</th>
+                                    <th>Rezultat</th>
                                 </tr>
                                 </thead>
                                 <tbody class="tournament-bracket__content">
@@ -101,12 +101,12 @@ onMounted(async() => {
 
 const rounds = computed(() => {
     const allRounds = [
-        { number: 5, title: 'Round of 32', class: 'tournament-bracket__round tournament-bracket__round--round-of-32' },
-        { number: 4, title: 'Round of 16', class: 'tournament-bracket__round tournament-bracket__round--round-of-16' },
-        { number: 3, title: 'Quarterfinals', class: 'tournament-bracket__round tournament-bracket__round--quarterfinals' },
-        { number: 2, title: 'Semifinals', class: 'tournament-bracket__round tournament-bracket__round--semifinals' },
-        // { number: 1, title: 'Bronze medal game', class: 'tournament-bracket__round tournament-bracket__round--bronze', isFinal: true, medalType: 'Bronze medal', medalColor: '#CD7F32' },
-        { number: 1, title: 'Gold medal game', class: 'tournament-bracket__round tournament-bracket__round--gold', isFinal: true, medalType: 'Gold medal', medalColor: '#FFD700' },
+        { number: 5, title: '1/16 finala', class: 'tournament-bracket__round tournament-bracket__round--round-of-32' },
+        { number: 4, title: '1/8 finala', class: 'tournament-bracket__round tournament-bracket__round--round-of-16' },
+        { number: 3, title: 'Četvrtfinale', class: 'tournament-bracket__round tournament-bracket__round--quarterfinals' },
+        { number: 2, title: 'Polufinale', class: 'tournament-bracket__round tournament-bracket__round--semifinals' },
+        // { number: 1, title: 'Meč za treće mesto', class: 'tournament-bracket__round tournament-bracket__round--bronze', isFinal: true, medalType: 'Bronzana medalja', medalColor: '#CD7F32' },
+        { number: 1, title: 'Finale', class: 'tournament-bracket__round tournament-bracket__round--gold', isFinal: true, medalType: 'Zlatna medalja', medalColor: '#FFD700' },
     ];
     return allRounds.filter(round => round.number <= maxRound.value);
 });

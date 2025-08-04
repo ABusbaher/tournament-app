@@ -46,17 +46,17 @@ onMounted(async() => {
 					<span
               class="block rotate-90 transform origin-center font-bold whitespace-nowrap flex justify-center items-center h-full w-full"
           >
-						Admin menu
+						Admin meni
 					</span>
     </button>
   </div>
 
   <!-- drawer component -->
   <div id="drawer-navigation" class="fixed top-0 left-0 z-40 w-64 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-navigation-label">
-    <h5 id="drawer-navigation-label" class="text-base font-semibold text-gray-500 uppercase dark:text-gray-400">Admin menu</h5>
+    <h5 id="drawer-navigation-label" class="text-base font-semibold text-gray-500 uppercase dark:text-gray-400">Admin meni</h5>
     <button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 end-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" >
       <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-      <span class="sr-only">Close menu</span>
+      <span class="sr-only">Zatvori meni</span>
     </button>
     <div class="py-4 overflow-y-auto">
       <ul class="space-y-2 font-medium">
@@ -66,7 +66,7 @@ onMounted(async() => {
             <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
               <font-awesome-icon :icon="['fas', 'house']" />
             </svg>
-            <span class="ms-3">Tournaments</span>
+            <span class="ms-3">Turniri</span>
           </a>
         </li>
         <li>
@@ -74,7 +74,7 @@ onMounted(async() => {
             <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
               <font-awesome-icon :icon="['fas', 'trophy']" />
             </svg>
-            <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Cup Games</span>
+            <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Kup Utakmice</span>
             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
             </svg>
@@ -90,7 +90,7 @@ onMounted(async() => {
             <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
               <font-awesome-icon :icon="['fas', 'futbol']" />
             </svg>
-            <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Fixture Games</span>
+            <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Utakmice u Kolu</span>
             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
             </svg>
@@ -106,14 +106,14 @@ onMounted(async() => {
             <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
               <font-awesome-icon :icon="['fas', 'pen-to-square']" />
             </svg>
-            <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Edit Teams</span>
+            <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Izmeni Timove</span>
             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
             </svg>
           </button>
           <ul id="edit-teams" class="hidden py-2 space-y-2">
             <li v-for="tournament in tournaments">
-              <a :href="route('team.all', {tournament: tournament.id})" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"> {{ tournament.name }} teams </a>
+              <a :href="route('team.all', {tournament: tournament.id})" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"> {{ tournament.name }} timovi </a>
             </li>
           </ul>
         </li>
@@ -122,14 +122,14 @@ onMounted(async() => {
             <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
               <font-awesome-icon :icon="['fas', 'pen-to-square']" />
             </svg>
-            <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Edit Cup games</span>
+            <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Izmeni Kup utakmice</span>
             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
             </svg>
           </button>
           <ul id="edit-cup-games" class="hidden py-2 space-y-2">
             <li v-for="(value, key) in eliminationGames">
-              <a :href="route('admin.elimination.games', {tournament: key})" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"> Edit {{  value }} </a>
+              <a :href="route('admin.elimination.games', {tournament: key})" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"> Izmeni {{  value }} </a>
             </li>
           </ul>
         </li>
@@ -139,7 +139,7 @@ onMounted(async() => {
             <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
               <font-awesome-icon :icon="['fas', 'user']" />
             </svg>
-            <span class="ms-3">Profile</span>
+            <span class="ms-3">Profil</span>
           </a>
         </li>
         <li>
@@ -152,7 +152,7 @@ onMounted(async() => {
             <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
               <font-awesome-icon :icon="['fas', 'arrow-right-from-bracket']" />
             </svg>
-            <span class="flex-1 ms-3 whitespace-nowrap text-left">Log out</span>
+            <span class="flex-1 ms-3 whitespace-nowrap text-left">Odjavi se</span>
           </Link>
         </li>
       </ul>

@@ -81,7 +81,7 @@ const loginSuccessfully = () => {
 };
 
 
-const tabList = ["Fixtures", "Table"];
+const tabList = ["Utakmice", "Tabela"];
 
 const teamsRanking = reactive([]);
 const fetchTable = () => {
@@ -104,11 +104,11 @@ const fetchTable = () => {
         <app-tabs v-else class="w-11/12 lg:w-10/12 mx-auto mb-16" :tabList="tabList" @handle-click-second-tab="fetchTable">
             <template v-slot:tabPanel-1>
                 <h1 class="mb-4 text-4xl font-extrabold text-center leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-                    Games in Fixture {{ currentPage }}
+                    Utakmice u kolu {{ currentPage }}
                 </h1>
-                <StatusMessage message="Fixture password successfully edited" color="green" :show="messages.updateFixturePassword"
+                <StatusMessage message="Lozinka za kolo uspešno izmenjena" color="green" :show="messages.updateFixturePassword"
                                @close="messages.updateFixturePassword = false"/>
-                <StatusMessage message="Game score successfully edited" color="green" :show="messages.updateGameScore"
+                <StatusMessage message="Rezultat utakmice uspešno izmenjen" color="green" :show="messages.updateGameScore"
                                @close="messages.updateGameScore = false"/>
                 <div class="flex justify-end mb-6">
                     <set-fixture-password v-if="user && user.role === 'admin'" class="mr-5" @passwordUpdated="handlePasswordUpdated" :fixture-id="fixtureId" :tournament-id="tournamentId"/>
@@ -120,7 +120,7 @@ const fetchTable = () => {
                                 <div class="team flex flex-col items-center">
                                     <div class="team-logo w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
                                         <img v-if="game.host_team_image" class="object-scale-down w-24 h-24" :src="game.host_team_image" alt="Team Image" />
-                                        <p v-else class="text-center p-3">Team has no logo set</p>
+                                        <p v-else class="text-center p-3">Tim nema postavljen logo</p>
                                     </div>
                                     <h2 class="team-name mt-4">{{ game.host_team_shortname }}</h2>
                                 </div>
@@ -130,7 +130,7 @@ const fetchTable = () => {
                                 <div class="match-details text-center">
                                     <div>
                                         <p class="date-caption">
-                                            {{ game.game_time !== null ? formatDate(new Date(game.game_time)) : 'Game time not set yet' }}
+                                            {{ game.game_time !== null ? formatDate(new Date(game.game_time)) : 'Vreme utakmice nije još postavljeno' }}
                                         </p>
                                     </div>
                                     <div class="match-score flex items-center justify-center mt-2">
@@ -147,14 +147,14 @@ const fetchTable = () => {
                             </div>
                             <div class="column p-3 flex justify-center items-center" v-else>
                                 <span class="match-score-number text-5xl font-bold">
-                                    free team
+                                    slobodan tim
                                 </span>
                             </div>
                             <div v-if="game.guest_team_name" class="column p-3 flex justify-center items-center" :title="game.guest_team_name">
                                 <div class="team flex flex-col items-center">
                                     <div class="team-logo w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
                                         <img v-if="game.guest_team_image" class="object-scale-down w-24 h-24" :src="game.guest_team_image" alt="Team Image" />
-                                        <p v-else class="text-center p-3">Team has no logo set</p>
+                                        <p v-else class="text-center p-3">Tim nema postavljen logo</p>
                                     </div>
                                     <h2 class="team-name mt-4">{{ game.guest_team_shortname }}</h2>
                                 </div>

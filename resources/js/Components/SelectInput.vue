@@ -21,7 +21,7 @@ defineEmits(['update:modelValue']);
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
     >
-        <option value="">-- Select --</option>
+        <option value="">-- Izaberi --</option>
         <option v-for="option in options" :key="option.value" :value="option.value">{{ option.label }}</option>
     </select>
 </template>

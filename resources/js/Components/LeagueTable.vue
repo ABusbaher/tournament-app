@@ -16,7 +16,7 @@ const getRowClasses = (index) => {
 
 <template>
     <div class="flex flex-col items-center justify-center bg-gray-900 py-10">
-        <h1 class="text-lg text-gray-400 font-medium">{{ tournamentName }} table</h1>
+        <h1 class="text-lg text-gray-400 font-medium">{{ tournamentName }} tabela</h1>
         <div class="flex flex-col mt-6">
             <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -25,10 +25,10 @@ const getRowClasses = (index) => {
                             <thead class="bg-gray-800 text-xs uppercase font-medium">
                             <tr>
                                 <th scope="col" class="py-3 px-1 text-left tracking-wider">
-                                    Rank
+                                    Rang
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left tracking-wider">
-                                    Club
+                                    Klub
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left tracking-wider">
                                     MP
@@ -63,8 +63,8 @@ const getRowClasses = (index) => {
                                     {{ team.Ranking }}
                                 </td>
                                 <td class="flex justify-left items-center h-full px-6 py-4 ">
-                                    <img v-if=" team.image_path" :src=" team.image_path" alt="Team Image" class="w-10" />
-                                    <img v-else src="https://placehold.co/40x40?text=No+team+logo+set" alt="Team Logo">
+                                    <img v-if=" team.image_path" :src=" team.image_path" alt="Logo tima" class="w-10" />
+                                    <img v-else src="https://placehold.co/40x40?text=No+team+logo+set" alt="Logo tima">
                                     <span class="ml-2 font-medium text-center">{{ team.team }}</span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">

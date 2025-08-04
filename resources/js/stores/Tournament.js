@@ -4,8 +4,8 @@ export const useTournamentStore = defineStore('tournament', {
     state: () => ({
         id: 0,
         types: [
-            { value: 'league', label: 'League' },
-            { value: 'elimination', label: 'Elimination (Cup)' },
+            { value: 'league', label: 'Liga' },
+            { value: 'elimination', label: 'Kup' },
             // { value: 'group+elimination', label: 'Group+Elimination' }
         ],
         type: '',

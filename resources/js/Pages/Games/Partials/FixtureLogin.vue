@@ -72,14 +72,14 @@ onMounted(async() => {
             class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg"
         >
             <h4>
-                This page is password protected.
+                Ova stranica je zaštićena lozinkom.
             </h4>
             <h4>
-                Please provide valid password in order to check games.
+                Molimo unesite ispravnu lozinku da biste pregledali utakmice.
             </h4>
 
             <div :class="['mt-6', { error: v$.password.$errors.length }]">
-                <InputLabel for="password" value="Enter fixture password"/>
+                <InputLabel for="password" value="Unesite lozinku za utakmicu"/>
                 <div class="relative">
                     <TextInput
                         id="password"
@@ -110,7 +110,7 @@ onMounted(async() => {
                     class="ml-3"
                     @click="submitFixturePassword"
                 >
-                    Submit password
+                    Potvrdi lozinku
                 </PrimaryButton>
             </div>
 

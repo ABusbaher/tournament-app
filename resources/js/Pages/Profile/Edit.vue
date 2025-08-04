@@ -17,7 +17,7 @@ defineProps({
 </script>
 
 <template>
-    <Head title="Profile" />
+    <Head title="Profil" />
 
     <div v-if="$page.props.auth.user && $page.props.auth.user.role === 'admin'">
         <admin-navigation></admin-navigation>
@@ -43,7 +43,7 @@ defineProps({
     </div>
     <navigation >
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Profile</h2>
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Profil</h2>
         </template>
 
         <template #main>

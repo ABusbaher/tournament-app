@@ -67,7 +67,7 @@ onMounted(async() => {
                         <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                             <a class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700 transition duration-150 ease-in-out"
                                :href="route('tournament.all')">
-                                Tournaments
+                                Turniri
                             </a>
                         </div>
                     </div>
@@ -83,7 +83,7 @@ onMounted(async() => {
                                                 class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150"
                                             >
                                                  <font-awesome-icon class="inline-flex items-center px-3 py-2" :icon="['fas', 'futbol']" />
-                                                Fixture Games
+                                                Utakmice u Kolu
 
                                                 <svg
                                                     class="ml-2 -mr-0.5 h-4 w-4"
@@ -119,7 +119,7 @@ onMounted(async() => {
                                                 class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150"
                                             >
                                                 <font-awesome-icon class="inline-flex items-center px-3 py-2" :icon="['fas', 'trophy']" />
-                                                Cup Games
+                                                Kup Utakmice
 
                                                 <svg
                                                     class="ml-2 -mr-0.5 h-4 w-4"
@@ -173,9 +173,9 @@ onMounted(async() => {
                                 </template>
 
                                 <template #content>
-                                    <DropdownLink :href="route('profile.edit')"> Profile </DropdownLink>
+                                    <DropdownLink :href="route('profile.edit')"> Profil </DropdownLink>
                                     <DropdownLink :href="route('logout')" method="post" as="button">
-                                        Log Out
+                                        Odjavi se
                                     </DropdownLink>
                                 </template>
                             </Dropdown>
@@ -187,7 +187,7 @@ onMounted(async() => {
                             <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
                                 <font-awesome-icon :icon="['fas', 'arrow-right-to-bracket']" />
                             </svg>
-                            <span class="ms-3">Login</span>
+                            <span class="ms-3">Prijava</span>
                         </a>
                     </div>
 
@@ -235,7 +235,7 @@ onMounted(async() => {
                         <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
                             <font-awesome-icon :icon="['fas', 'house']" />
                         </svg>
-                        <span class="ms-3">Tournaments</span>
+                        <span class="ms-3">Turniri</span>
                     </a>
                 </div>
 
@@ -248,7 +248,7 @@ onMounted(async() => {
                                     <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
                                         <font-awesome-icon :icon="['fas', 'trophy']" />
                                     </svg>
-                                    <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Cup Games</span>
+                                    <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Kup Utakmice</span>
                                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                                     </svg>
@@ -264,7 +264,7 @@ onMounted(async() => {
                                     <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
                                         <font-awesome-icon :icon="['fas', 'futbol']" />
                                     </svg>
-                                    <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Fixture Games</span>
+                                    <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Utakmice u Kolu</span>
                                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                                     </svg>
@@ -281,7 +281,7 @@ onMounted(async() => {
                                     <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
                                         <font-awesome-icon class="mr-2" :icon="['fas', 'user']" />
                                     </svg>
-                                    <span class="ms-3">Profile</span>
+                                    <span class="ms-3">Profil</span>
                                 </a>
                                 <Link
                                     :href="route('logout')"
@@ -292,7 +292,7 @@ onMounted(async() => {
                                     <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                         <font-awesome-icon :icon="['fas', 'arrow-right-from-bracket']" />
                                     </svg>
-                                    <span class="flex-1 ms-3 whitespace-nowrap text-left">Log out</span>
+                                    <span class="flex-1 ms-3 whitespace-nowrap text-left">Odjavi se</span>
                                 </Link>
                             </li>
                             <li v-else>
@@ -305,7 +305,7 @@ onMounted(async() => {
                                     <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                         <font-awesome-icon :icon="['fas', 'arrow-right-to-bracket']" />
                                     </svg>
-                                    <span class="flex-1 ms-3 whitespace-nowrap text-left">Login</span>
+                                    <span class="flex-1 ms-3 whitespace-nowrap text-left">Prijava</span>
                                 </Link>
                             </li>
                         </ul>

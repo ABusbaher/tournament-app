@@ -78,15 +78,15 @@ onMounted(async() => {
 });
 </script>
 <template>
-    <StatusMessage message="Tournament successfully edited" color="green" :show="messages.editTournament"
+    <StatusMessage message="Turnir uspešno izmenjen" color="green" :show="messages.editTournament"
                    @close="messages.editTournament = false"/>
-    <StatusMessage message="Team successfully added" color="green"  :show="messages.addTeam"
+    <StatusMessage message="Tim uspešno dodat" color="green"  :show="messages.addTeam"
                    @close="messages.addTeam = false"/>
-    <StatusMessage message="Team successfully edited" color="green" :show="messages.editTeam"
+    <StatusMessage message="Tim uspešno izmenjen" color="green" :show="messages.editTeam"
                    @close="messages.editTeam = false"/>
-    <StatusMessage message="Team successfully deleted" color="green" :show="messages.deleteTeam"
+    <StatusMessage message="Tim uspešno obrisan" color="green" :show="messages.deleteTeam"
                    @close="messages.deleteTeam = false"/>
-    <StatusMessage message="Fixtures successfully created" color="green" :show="messages.createFixtures"
+    <StatusMessage message="Raspored uspešno kreiran" color="green" :show="messages.createFixtures"
                    @close="messages.createFixtures = false"/>
     <div class="flex justify-end mb-6">
         <add-team-form class="mr-5" @teamCreated="handleTeamCreated"/>
@@ -94,10 +94,10 @@ onMounted(async() => {
     <table class="min-w-full divide-y divide-gray-200">
         <thead>
         <tr>
-            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Name</th>
-            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Short name</th>
-            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Image</th>
-            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Action</th>
+            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Ime</th>
+            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Skraćeno ime</th>
+            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Logo</th>
+            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Akcija</th>
         </tr>
         </thead>
         <tbody>
@@ -106,10 +106,10 @@ onMounted(async() => {
             <td class="py-3 px-4 text-center">{{ team.shorten_name }}</td>
             <td class="py-3 px-4 text-center flex justify-center">
                 <template  v-if="team.image_path">
-                    <img :src="team.image_path" alt="Team Image" width="100" height="100"/>
+                    <img :src="team.image_path" alt="Logo tima" width="100" height="100"/>
                 </template>
                 <template v-else>
-                    No image available
+                    Logo nije postavljen
                 </template>
             </td>
             <td class="py-3 px-4 text-center">
@@ -118,7 +118,7 @@ onMounted(async() => {
             </td>
         </tr>
         <tr v-else>
-            <td class="text-center" colspan="4">No teams created yet.</td>
+            <td class="text-center" colspan="4">Još nema kreiranih timova.</td>
         </tr>
         </tbody>
     </table>

@@ -4,13 +4,13 @@
             <table class="tournament-bracket__table">
                 <caption class="tournament-bracket__caption">
                     <time :datetime="gameTime">
-                        {{ game.game_time !== null ? formatDate(new Date(game.game_time)) : 'Game time not set yet' }}
+                        {{ game.game_time !== null ? formatDate(new Date(game.game_time)) : 'Vreme utakmice nije još postavljeno' }}
                     </time>
                 </caption>
                 <thead class="sr-only">
                 <tr>
-                    <th>Country</th>
-                    <th>Score</th>
+                    <th>Tim</th>
+                    <th>Rezultat</th>
                 </tr>
                 </thead>
                 <tbody class="tournament-bracket__content">
