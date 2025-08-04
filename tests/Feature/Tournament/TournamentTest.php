@@ -16,6 +16,7 @@ class TournamentTest extends TestCase
     {
         $this->signInAdmin();
         return $this->post(route('tournament.store', [
+            'id' => 1,
             'name' => 'PES',
             'rounds' => 2,
             'type' => TournamentTypeEnum::LEAGUE->value,
@@ -112,7 +113,8 @@ class TournamentTest extends TestCase
     public function test_single_tournament_can_be_fetched_with_proper_id(): void
     {
         $this->createTournament();
-        $response = $this->get(route('tournament.show', ['tournament' => 1]));
+        $tournament = Tournament::first();
+        $response = $this->get(route('tournament.show', ['tournament' => $tournament->id]));
 
         $response->assertStatus(200)->assertJsonFragment([
             'name' => 'PES',
@@ -130,7 +132,8 @@ class TournamentTest extends TestCase
     public function test_tournament_name_can_be_edited_by_admin_other_properties_stays_unchanged(): void
     {
         $this->createTournament();
-        $response = $this->patch(route('tournament.updateName', ['tournament' => 1]), [
+        $tournament = Tournament::first();
+        $response = $this->patch(route('tournament.updateName', ['tournament' => $tournament->id]), [
             'name' => 'PES updated',
             'rounds' => 2343,
             'type' => TournamentTypeEnum::ELIMINATION->value,
@@ -147,7 +150,8 @@ class TournamentTest extends TestCase
     public function test_tournament_can_not_be_edited_if_name_is_not_provided(): void
     {
         $this->createTournament();
-        $response = $this->patch(route('tournament.updateName', ['tournament' => 1]), [
+        $tournament = Tournament::first();
+        $response = $this->patch(route('tournament.updateName', ['tournament' => $tournament->id]), [
             'rounds' => 2343,
             'type' => TournamentTypeEnum::ELIMINATION->value,
         ]);
@@ -159,7 +163,8 @@ class TournamentTest extends TestCase
     public function test_tournament_can_be_deleted_when_valid_id_is_provided() :void
     {
         $this->createTournament();
-        $response = $this->delete(route('tournament.destroy', ['tournament' => 1]));
+        $tournament = Tournament::first();
+        $response = $this->delete(route('tournament.destroy', ['tournament' => $tournament->id]));
 
         $response->assertStatus(204);
     }

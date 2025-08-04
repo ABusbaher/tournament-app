@@ -17,10 +17,11 @@ class TeamTest extends TestCase
 
     private  function createTeam(): TestResponse
     {
-        return $this->postWithCsrfToken(route('team.store', ['tournament' => 1]),[
+        $tournament = Tournament::factory()->create();
+        return $this->postWithCsrfToken(route('team.store', ['tournament' => $tournament->id]),[
             'name' => 'Team 1',
             'shorten_name' => 'Voša',
-            'tournament_id' => Tournament::factory()->create()->id,
+            'tournament_id' => $tournament->id,
         ]);
     }
 
@@ -28,11 +29,12 @@ class TeamTest extends TestCase
     {
         $this->signInAdmin();
         $response = $this->createTeam();
+        $tournament = Tournament::first();
 
         $response->assertStatus(201);
         $this->assertDatabaseHas('teams', [
             'name' => 'Team 1',
-            'tournament_id' => 1,
+            'tournament_id' => $tournament->id,
             'shorten_name' => 'Voša',
             'negative_points' => null
         ]);

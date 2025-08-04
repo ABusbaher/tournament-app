@@ -65,6 +65,19 @@ const submitForm = () => {
 const closeModal = () => {
     editTournament.value = false;
 };
+
+const getTypeLabel = (type) => {
+    switch (type) {
+        case 'league':
+            return 'liga';
+        case 'elimination':
+            return 'kup';
+        // case 'championship':
+        //     return 'lš';
+        default:
+            return type;
+    }
+}
 </script>
 
 <template>
@@ -75,11 +88,11 @@ const closeModal = () => {
         <Modal :show="editTournament" @close="closeModal">
             <div class="p-6">
                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                    Edit Tournament
+                    Izmeni turnir
                 </h2>
 
                 <div :class="['mt-6', { error: v$.name.$errors.length }]">
-                    <InputLabel for="name" value="Tournament name" />
+                    <InputLabel for="name" value="Naziv turnira" />
 
                     <TextInput
                         id="name"
@@ -87,7 +100,7 @@ const closeModal = () => {
                         v-model="state.name"
                         type="text"
                         class="mt-1 block w-full"
-                        placeholder="Tournament name"
+                        placeholder="Naziv turnira"
                     />
                     <div class="input-errors mt-2" v-for="error of v$.name.$errors" :key="error.$uid">
                         <InputError :message="error.$message" class="mt-2" />
@@ -95,20 +108,20 @@ const closeModal = () => {
                 </div>
 
                 <div class="mt-6">
-                    <InputLabel for="types" value="Type of tournament"/>
+                    <InputLabel for="types" value="Tip turnira"/>
 
                     <TextInput
                         readonly
                         id="types"
                         ref="nameInput"
-                        v-model="state.type"
+                        :modelValue="getTypeLabel(state.type)"
                         type="text"
                         class="mt-1 block w-full"
                     />
                 </div>
 
                 <div class="mt-6">
-                    <InputLabel for="rounds" value="Number of rounds" />
+                    <InputLabel for="rounds" value="Broj rundi" />
 
                     <TextInput
                         readonly
@@ -121,13 +134,13 @@ const closeModal = () => {
                 </div>
 
                 <div class="mt-6 flex justify-end">
-                    <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
+                    <SecondaryButton @click="closeModal"> Poništi </SecondaryButton>
 
                     <PrimaryButton
                         class="ml-3"
                         @click="submitForm"
                     >
-                        Edit Tournament
+                        Izmeni turnir
                     </PrimaryButton>
                 </div>
             </div>

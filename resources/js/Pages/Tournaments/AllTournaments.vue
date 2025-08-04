@@ -95,6 +95,19 @@ const showDeleteTournamentMsg = () => {
 const closeDeleteTournamentMsg = () => {
     DeleteTournamentMsg.value = false;
 };
+
+const getTypeLabel = (type) => {
+    switch (type) {
+        case 'league':
+            return 'liga';
+        case 'elimination':
+            return 'kup';
+        // case 'championship':
+        //     return 'lš';
+        default:
+            return type;
+    }
+}
 </script>
 <template>
     <StatusMessage message="Tournament successfully added" color="green" :show="AddTournamentMsg"  @close="closeAddTournamentMsg"/>
@@ -106,24 +119,24 @@ const closeDeleteTournamentMsg = () => {
     <table class="min-w-full divide-y divide-gray-200">
         <thead>
         <tr>
-            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Tournament name</th>
-            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Tournament type</th>
-            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Number of rounds</th>
-            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Games link</th>
-            <th v-if="user && user.role === 'admin'" class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Create/Update teams</th>
-            <th v-if="user && user.role === 'admin'" class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Action</th>
+            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Naziv turnira</th>
+            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Tip turnira</th>
+            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Broj rundi</th>
+            <th class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Link do utakmica</th>
+            <th v-if="user && user.role === 'admin'" class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Kreiraj/Izmeni timove</th>
+            <th v-if="user && user.role === 'admin'" class="py-3 px-4 bg-gray-100 font-medium text-gray-600">Akcija</th>
         </tr>
         </thead>
         <tbody>
             <tr v-for="tournament in tournaments" :key="tournament.id">
                 <td class="py-3 px-4 text-center">{{ tournament.name }}</td>
-                <td class="py-3 px-4 text-center">{{ tournament.type }}</td>
+                <td class="py-3 px-4 text-center">{{ getTypeLabel(tournament.type) }}</td>
                 <td class="py-3 px-4 text-center">{{ tournament.rounds }}</td>
                 <td class="py-3 px-4 text-center">
-                    <a :href="gameLink(tournament.type, tournament.id)" class="hover:underline hover:font-bold">Visit games page</a>
+                    <a :href="gameLink(tournament.type, tournament.id)" class="hover:underline hover:font-bold">Poseti strane o utakmicama</a>
                 </td>
                 <td v-if="user && user.role === 'admin'" class="py-3 px-4 text-center">
-                    <a :href="`/tournaments/${tournament.id}/teams`" class="hover:underline hover:font-bold">Visit teams page</a></td>
+                    <a :href="`/tournaments/${tournament.id}/teams`" class="hover:underline hover:font-bold">Poseti stranu o timovima</a></td>
                 <td v-if="user && user.role === 'admin'" class="py-3 px-4 text-center">
                     <edit-tournament-name-form @tournamentEdited="handleTournamentUpdate" :tournamentId="tournament.id" />
                     <delete-tournament-form @tournament-deleted="handleTournamentDelete" :tournament-id="tournament.id" />

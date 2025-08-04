@@ -213,23 +213,26 @@ class EliminationGameTest extends TestCase
 
     public function test_cup_game_can_be_fetched_by_tournament_id_and_game_id(): void
     {
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::ELIMINATION, 'rounds' => 1]);
         $this->signInAdmin();
-        EliminationGame::factory()->count(4)->create(['tournament_id' => 1]);
+        $games = EliminationGame::factory()->count(4)->create(['tournament_id' => $tournament->id]);
+        $game = $games->first();
         $response = $this->get(route('elimination-game.show', [
-            'tournament' => 1,
-            'game' => 1,
+            'tournament' => $tournament->id,
+            'game' => $game->id,
         ]));
         $response->assertStatus(200);
         $response->assertJson([
-            'id' => 1,
-            'tournament_id' => 1
+            'id' => $game->id,
+            'tournament_id' => $tournament->id
         ]);
     }
 
     public function test_cup_game_can_not_be_fetched_if_wrong_tournament_id_or_game_id(): void
     {
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::ELIMINATION, 'rounds' => 1]);
         $this->signInAdmin();
-        EliminationGame::factory()->count(4)->create(['tournament_id' => 1]);
+        EliminationGame::factory()->count(4)->create(['tournament_id' => $tournament->id]);
         $response = $this->get(route('elimination-game.show', [
             'tournament' => 1,
             'game' => 'none-existing-game-id',
@@ -239,11 +242,13 @@ class EliminationGameTest extends TestCase
 
     public function test_elimination_game_score_and_time_can_be_updated_by_admin(): void
     {
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::ELIMINATION, 'rounds' => 1]);
         $this->signInAdmin();
-        EliminationGame::factory()->count(4)->create(['tournament_id' => 1]);
+        $games = EliminationGame::factory()->count(4)->create(['tournament_id' => $tournament->id]);
+        $game = $games->first();
         $gameTime = new Carbon('2024-05-26');
         $gameTime->setTimeFromTimeString('16:00:00');
-        $response = $this->patch(route('elimination-game.updateScore', ['tournament' => 1, 'game' => 1]),
+        $response = $this->patch(route('elimination-game.updateScore', ['tournament' => $tournament->id, 'game' => $game->id]),
             ['team1_goals' => 2, 'team2_goals' => 0, 'game_time' => $gameTime]
         );
         $response->assertStatus(200);
@@ -257,10 +262,12 @@ class EliminationGameTest extends TestCase
     public function test_elimination_game_score_can_not_be_updated_if_scores_are_equal(): void
     {
         $this->signInAdmin();
-        EliminationGame::factory()->count(4)->create(['tournament_id' => 1]);
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::ELIMINATION, 'rounds' => 1]);
+        $games = EliminationGame::factory()->count(4)->create(['tournament_id' => $tournament->id]);
+        $game = $games->first();
         $gameTime = new Carbon('2024-05-26');
         $gameTime->setTimeFromTimeString('16:00:00');
-        $response = $this->patch(route('elimination-game.updateScore', ['tournament' => 1, 'game' => 1]),
+        $response = $this->patch(route('elimination-game.updateScore', ['tournament' => $tournament->id, 'game' => $game->id]),
             ['team1_goals' => 2, 'team2_goals' => 2, 'game_time' => $gameTime]
         );
         $response->assertStatus(422);
@@ -277,10 +284,11 @@ class EliminationGameTest extends TestCase
         Team::factory()->count(6)->create(['tournament_id' => $tournament->id]);
         $this->post(route('elimination-games.create.all', ['tournament' => $tournament->id]),
             ['tournament_id' => $tournament->id]);
+        $game = EliminationGame::where('tournament_id', $tournament->id)->firstOrFail();
 
         $responseFirstGame = $this->get(route('elimination-game.show', [
             'tournament' => $tournament,
-            'game' => 1,
+            'game' => $game->id,
         ]));
         $firstGame = json_decode($responseFirstGame->content());
 
@@ -360,10 +368,11 @@ class EliminationGameTest extends TestCase
             ['tournament_id' => $tournament->id]);
         $createResponse->assertStatus(403);
 
-        EliminationGame::factory()->count(4)->create(['tournament_id' => $tournament->id]);
+        $games = EliminationGame::factory()->count(4)->create(['tournament_id' => $tournament->id]);
+        $game = $games->first();
         $gameTime = new Carbon('2024-05-26');
         $gameTime->setTimeFromTimeString('16:00:00');
-        $updateResponse = $this->patch(route('elimination-game.updateScore', ['tournament' => $tournament->id, 'game' => 1]),
+        $updateResponse = $this->patch(route('elimination-game.updateScore', ['tournament' => $tournament->id, 'game' => $game->id]),
             ['team1_goals' => 2, 'team2_goals' => 0, 'game_time' => $gameTime]
         );
         $updateResponse->assertStatus(403);
@@ -378,10 +387,11 @@ class EliminationGameTest extends TestCase
             ['tournament_id' => $tournament->id]);
         $createResponse->assertStatus(403);
 
-        EliminationGame::factory()->count(4)->create(['tournament_id' => $tournament->id]);
+        $games = EliminationGame::factory()->count(4)->create(['tournament_id' => $tournament->id]);
+        $game = $games->first();
         $gameTime = new Carbon('2024-05-26');
         $gameTime->setTimeFromTimeString('16:00:00');
-        $updateResponse = $this->patch(route('elimination-game.updateScore', ['tournament' => $tournament->id, 'game' => 1]),
+        $updateResponse = $this->patch(route('elimination-game.updateScore', ['tournament' => $tournament->id, 'game' => $game->id]),
             ['team1_goals' => 2, 'team2_goals' => 0, 'game_time' => $gameTime]
         );
         $updateResponse->assertStatus(403);

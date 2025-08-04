@@ -32,8 +32,8 @@ const v$ = useVuelidate(rules, state)
 
 const data = {
     types: [
-        { value: 'league', label: 'League' },
-        { value: 'elimination', label: 'Elimination (Cup)' },
+        { value: 'league', label: 'Liga' },
+        { value: 'elimination', label: 'Kup' },
         // { value: 'group+elimination', label: 'Group+Elimination' }
     ],
     roundOptions: [
@@ -82,16 +82,16 @@ watch(() => state.type, (newType) => {
 
 <template>
     <section class="space-y-6">
-        <PrimaryButton @click="openModal">Add Tournament</PrimaryButton>
+        <PrimaryButton @click="openModal">Dodaj turnir</PrimaryButton>
 
         <Modal :show="addTournament" @close="closeModal">
             <div class="p-6">
                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                    Add Tournament
+                    Dodaj turnir
                 </h2>
 
                 <div :class="['mt-6', { error: v$.name.$errors.length }]">
-                    <InputLabel for="name" value="Tournament name" />
+                    <InputLabel for="name" value="Naziv turnira" />
 
                     <TextInput
                         id="name"
@@ -99,7 +99,7 @@ watch(() => state.type, (newType) => {
                         v-model="state.name"
                         type="text"
                         class="mt-1 block w-full"
-                        placeholder="Tournament name"
+                        placeholder="Naziv turnira"
                     />
                     <div class="input-errors mt-2" v-for="error of v$.name.$errors" :key="error.$uid">
                         <InputError :message="error.$message" class="mt-2" />
@@ -107,7 +107,7 @@ watch(() => state.type, (newType) => {
                 </div>
 
                 <div class="mt-6">
-                    <InputLabel for="types" value="Choose type of tournament"/>
+                    <InputLabel for="types" value="Tip turnira"/>
 
                     <SelectInput
                         id="types"
@@ -122,7 +122,7 @@ watch(() => state.type, (newType) => {
                 </div>
 
                 <div v-if="state.type === 'league'" :class="['mt-6', { error: v$.rounds.$errors.length }]">
-                    <InputLabel for="rounds" value="Number of rounds" />
+                    <InputLabel for="rounds" value="Broj rundi" />
 
                     <SelectInput
                         id="rounds"
@@ -137,13 +137,13 @@ watch(() => state.type, (newType) => {
                 </div>
 
                 <div class="mt-6 flex justify-end">
-                    <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
+                    <SecondaryButton @click="closeModal"> Poništi </SecondaryButton>
 
                     <PrimaryButton
                         class="ml-3"
                         @click="submitForm"
                     >
-                        Add Tournament
+                        Dodaj turnir
                     </PrimaryButton>
                 </div>
             </div>
