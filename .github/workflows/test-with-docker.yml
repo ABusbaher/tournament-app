@@ -1,4 +1,4 @@
-name: Run Tests with Docker (Alternative)
+name: CI Pipeline with Docker
 
 # This workflow is disabled by default - remove the 'workflow_dispatch' to enable it
 on:
@@ -11,7 +11,7 @@ env:
   DB_PASSWORD: root
 
 jobs:
-  test-docker:
+  docker-build-and-test:
     runs-on: ubuntu-latest
     
     steps:

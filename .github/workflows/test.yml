@@ -1,13 +1,12 @@
-name: Run Tests
+name: CI Pipeline (Main)
 
 on:
-  push:
-    branches: [ feature/serbian-app ]
-  pull_request:
-    branches: [ feature/serbian-app ]
-
+#  push:
+#    branches: [ feature/serbian-app ]
+#  pull_request:
+#    branches: [ feature/serbian-app ]
 jobs:
-  test:
+  build-and-test:
     runs-on: ubuntu-latest
 
     services:
@@ -113,13 +112,6 @@ jobs:
     - name: Build assets
       run: npm run build
 
-    - name: Verify Vite build output
-      run: |
-        echo "Checking Vite build output:"
-        ls -la public/build/ || echo "Build directory doesn't exist"
-        echo "Manifest content:"
-        cat public/build/manifest.json || echo "Manifest file doesn't exist"
-
     - name: Generate application key
       run: php artisan key:generate
 
@@ -133,11 +125,7 @@ jobs:
     - name: Run database migrations
       run: php artisan migrate --env=testing --force
 
-    - name: Run database seeders (if needed)
-      run: php artisan db:seed --env=testing --force
-      continue-on-error: true
-
-    - name: Run tests
+    - name: Execute test suite
       run: php artisan test --env=testing
 
     - name: Upload test results

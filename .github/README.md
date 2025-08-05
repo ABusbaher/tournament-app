@@ -4,35 +4,38 @@ This directory contains GitHub Actions workflows for the Tournament App.
 
 ## Available Workflows
 
-### 1. `test.yml` - Main Test Workflow (Recommended) ✅
-- **Trigger**: Pushes and Pull Requests to `feature/serbian-app` branch
+### 1. `test.yml` - CI Pipeline (Main) ✅
+- **Trigger**: Currently disabled (commented out)
 - **Environment**: Ubuntu with PHP 8.1 and MySQL 8.0 service
 - **Configuration**: Creates `.env` file directly in workflow
-- **Features**:
-  - Runs all PHPUnit tests
+- **Pipeline Steps**:
+  - Installs PHP and Node.js dependencies
   - Builds frontend assets with Vite
-  - Runs tests sequentially (parallel testing requires ParaTest package)
-  - Uploads test artifacts on failure
-  - No external dependencies or secrets required
+  - Configures testing environment
+  - Runs database migrations
+  - Executes PHPUnit test suite
+  - Uploads failure artifacts
+- **Features**: Fast, reliable, no external dependencies required
 
-### 2. `test-with-docker.yml` - Docker-based Testing (Alternative)
+### 2. `test-with-docker.yml` - CI Pipeline with Docker
 - **Trigger**: Manual dispatch only (disabled by default)
 - **Environment**: Uses your existing Docker Compose setup
 - **Configuration**: Creates `.env` file for Docker environment
-- **Features**:
-  - Tests in an environment closer to production
-  - Uses the same Docker containers as development
-  - More complex setup but higher fidelity
+- **Pipeline Steps**: Same as main pipeline but runs inside Docker containers
+- **Features**: Higher environment fidelity, matches development setup exactly
 
-### 3. `test-with-secrets.yml` - Secrets-based Testing (Advanced)
-- **Trigger**: Manual dispatch only (disabled by default)
-- **Environment**: Ubuntu with configurable secrets
-- **Configuration**: Uses GitHub repository secrets for sensitive data
-- **Features**:
-  - Allows customization of environment variables via secrets
-  - Better security for production-like configurations
-  - Fallback values for missing secrets
-  - Demonstrates best practices for secret management
+### 3. `test-with-secrets.yml` - CI/CD Pipeline with Secrets ✅
+- **Trigger**: Pushes and Pull Requests to `feature/serbian-app` branch
+- **Environment**: Ubuntu with configurable GitHub secrets
+- **Configuration**: Uses repository secrets for sensitive configuration
+- **Pipeline Steps**:
+  - Environment configuration with secrets
+  - Complete dependency installation
+  - Frontend asset building
+  - Database setup and migrations
+  - Comprehensive test execution
+  - Failure log collection
+- **Features**: Production-ready, secure secret management, highly configurable
 
 ## Configuration
 
@@ -75,40 +78,47 @@ Tests run against a fresh MySQL database that's created for each workflow run:
 ### Asset Building
 Frontend assets are built using Vite during the workflow to ensure JavaScript/CSS dependencies are properly compiled.
 
-## Which Workflow Should You Use?
+## Which Pipeline Should You Use?
 
-### For Most Cases: `test.yml` (Recommended) ✅
-- **Use when**: You want simple, fast, reliable testing
-- **Pros**: Fast setup, no configuration needed, runs automatically
-- **Cons**: Environment differs slightly from your Docker development setup
+### For Production Use: `test-with-secrets.yml` (Currently Active) ✅
+- **Use when**: You want production-ready CI/CD with configurable secrets
+- **Pros**: Secure, configurable, comprehensive, runs automatically
+- **Cons**: Requires GitHub secrets setup for advanced features
+- **Status**: Currently enabled and running on push/PR
 
-### For Docker Parity: `test-with-docker.yml`
+### For Simple Testing: `test.yml` (Currently Disabled)
+- **Use when**: You want basic CI without secrets or special configuration
+- **Pros**: Fast setup, no configuration needed, simple and reliable
+- **Cons**: Less configurable, currently disabled
+- **Status**: Commented out, can be enabled by uncommenting triggers
+
+### For Docker Parity: `test-with-docker.yml` (Manual Only)
 - **Use when**: You need testing environment identical to development
 - **Pros**: Exact same environment as development, uses your Docker setup
-- **Cons**: Slower, more complex, requires Docker Compose knowledge
+- **Cons**: Slower, more complex, manual trigger only
+- **Status**: Manual dispatch only
 
-### For Advanced Configuration: `test-with-secrets.yml`
-- **Use when**: You need custom environment variables or secrets
-- **Pros**: Flexible configuration, secure secret management, production-ready
-- **Cons**: Requires manual setup of GitHub secrets
+## Enabling/Disabling Pipelines
 
-## Enabling/Disabling Workflows
+### Currently Active: `test-with-secrets.yml`
+This pipeline runs automatically on every push/PR to `feature/serbian-app`. To disable:
+1. Comment out the `push:` and `pull_request:` sections
+2. Keep only `workflow_dispatch:` for manual triggers
 
-### Main Workflow (test.yml)
-This runs automatically on every push/PR to `feature/serbian-app`. To disable:
-1. Change the `on:` section to `workflow_dispatch:`
-2. Or delete the file entirely
+### Currently Disabled: `test.yml`
+This pipeline is commented out. To enable:
+1. Uncomment the `push:` and `pull_request:` sections
+2. You may want to disable the secrets pipeline to avoid running both
 
-### Alternative Workflows
-Both `test-with-docker.yml` and `test-with-secrets.yml` are disabled by default. To enable either:
-1. Change `workflow_dispatch:` to:
+### Manual Only: `test-with-docker.yml`
+This pipeline only runs on manual dispatch. To enable automatic runs:
+1. Add the push/pull_request triggers:
    ```yaml
    push:
      branches: [ feature/serbian-app ]
    pull_request:
      branches: [ feature/serbian-app ]
    ```
-2. For the secrets workflow, also set up the required GitHub secrets in your repository settings
 
 ## Troubleshooting
 
