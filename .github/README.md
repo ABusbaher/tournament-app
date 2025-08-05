@@ -126,6 +126,8 @@ Both `test-with-docker.yml` and `test-with-secrets.yml` are disabled by default.
 - Ensure `package.json` has the correct `build` script
 - Check that all npm dependencies are properly listed
 - Verify Vite configuration is correct
+- The workflow includes fallback assets creation if Vite build fails
+- Check the "Build assets" and "Create fallback assets" steps for errors
 
 ### Environment File Issues
 - The workflow creates `.env` from scratch (doesn't rely on `.env.testing`)
