@@ -24,7 +24,7 @@ class UpdateEliminationGameScoreRequest extends FormRequest
                 new DifferentIfNotNull('team2_goals'),
             ],
             'team2_goals' => ['nullable', 'required_unless:team1_goals,null', 'integer', 'min:0', 'max:100'],
-            'game_time' => ['required', 'date'],
+            'game_time' => ['nullable', 'date'],
         ];
     }
 

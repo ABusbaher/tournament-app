@@ -151,7 +151,7 @@ class EliminationGameService
 
         $game->team1_goals = $data['team1_goals'];
         $game->team2_goals = $data['team2_goals'];
-        $game->game_time = $data['game_time'];
+        $game->game_time = $data['game_time'] ?? null;
         $game->save();
 
         // Finale game do not have next match.

@@ -232,17 +232,20 @@ class GameTest extends TestCase
         $response->assertInvalid(['host_goals']);
     }
 
-    public function test_game_score_can_not_be_updated_if_game_time_is_not_provided()
+    public function test_game_score_can_be_updated_without_game_time(): void
     {
         $this->signInAdmin();
         $tournament = Tournament::factory()->create();
-        $games =  Game::factory()->count(4)->create(['tournament_id' => $tournament->id]);
+        $games = Game::factory()->count(4)->create(['tournament_id' => $tournament->id]);
         $game = $games->first();
         $response = $this->patch(route('game.updateScore', ['tournament' => $tournament->id, 'game' => $game->id]),
             ['host_goals' => 2, 'guest_goals' => 0]
         );
-        $response->assertStatus(422);
-        $response->assertInvalid(['game_time']);
+        $response->assertStatus(200);
+        $response->assertJson([
+            'host_goals' => 2,
+            'guest_goals' => 0,
+        ]);
     }
 
     public function test_game_score_can_not_be_updated_if_wrong_game_id_is_provided(): void

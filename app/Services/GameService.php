@@ -143,7 +143,7 @@ class GameService
             ->firstOrFail();
         $game->host_goals = $data['host_goals'];
         $game->guest_goals = $data['guest_goals'];
-        $game->game_time = $data['game_time'];
+        $game->game_time = $data['game_time'] ?? null;
         $game->save();
         return $game;
     }

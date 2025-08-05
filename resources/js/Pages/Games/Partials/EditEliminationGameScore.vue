@@ -7,7 +7,7 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import {ref, reactive, toRefs, computed} from 'vue';
 import { useVuelidate } from '@vuelidate/core'
-import {required, minValue, maxValue, integer, sameAs, not, helpers, requiredUnless} from '@vuelidate/validators'
+import {minValue, maxValue, integer, sameAs, not, helpers, requiredUnless} from '@vuelidate/validators'
 import {useTournamentStore} from "@/stores/Tournament.js";
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
@@ -52,7 +52,7 @@ const rules = {
         maxValue: maxValue(100),
         notEqual: not(() => state.hostTeamScore === state.guestTeamScore),
     },
-    gameTime: { required },
+    gameTime: {},
 }
 const date = ref(new Date());
 const { formatDate } = useDateTimeFormatter();
@@ -108,7 +108,9 @@ const submitForm = () => {
     data.append('_method', 'patch');
     data.append('team1_goals', state.hostTeamScore);
     data.append('team2_goals', state.guestTeamScore);
-    data.append('game_time', new Date(state.gameTime).toISOString());
+    if (state.gameTime) {
+        data.append('game_time', new Date(state.gameTime).toISOString());
+    }
     axios.post(`/api/tournaments/${tournamentId}/elimination-games/${props.gameId}`, data, config).then(response => {
         emit('scoreUpdated');
         closeModal();

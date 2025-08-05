@@ -396,4 +396,20 @@ class EliminationGameTest extends TestCase
         );
         $updateResponse->assertStatus(403);
     }
+
+    public function test_elimination_game_score_can_be_updated_without_game_time(): void
+    {
+        $tournament = Tournament::factory()->create(['type' => TournamentTypeEnum::ELIMINATION, 'rounds' => 1]);
+        $this->signInAdmin();
+        $games = EliminationGame::factory()->count(4)->create(['tournament_id' => $tournament->id]);
+        $game = $games->first();
+        $response = $this->patch(route('elimination-game.updateScore', ['tournament' => $tournament->id, 'game' => $game->id]),
+            ['team1_goals' => 2, 'team2_goals' => 0]
+        );
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'team1_goals' => 2,
+            'team2_goals' => 0,
+        ]);
+    }
 }
