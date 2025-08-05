@@ -11,7 +11,7 @@ This directory contains GitHub Actions workflows for the Tournament App.
 - **Features**:
   - Runs all PHPUnit tests
   - Builds frontend assets with Vite
-  - Uses parallel testing for faster execution
+  - Runs tests sequentially (parallel testing requires ParaTest package)
   - Uploads test artifacts on failure
   - No external dependencies or secrets required
 
@@ -131,3 +131,19 @@ Both `test-with-docker.yml` and `test-with-secrets.yml` are disabled by default.
 - The workflow creates `.env` from scratch (doesn't rely on `.env.testing`)
 - Check the "Create testing environment file" step for any errors
 - Verify all required environment variables are set
+
+### Parallel Testing (Optional)
+The workflows run tests sequentially by default. To enable parallel testing:
+
+1. Add ParaTest to your composer.json:
+   ```bash
+   composer require --dev brianium/paratest
+   ```
+
+2. Update the workflow test command:
+   ```yaml
+   - name: Run tests
+     run: php artisan test --env=testing --parallel
+   ```
+
+**Note**: Parallel testing can be faster but may cause issues with database transactions or shared resources.
