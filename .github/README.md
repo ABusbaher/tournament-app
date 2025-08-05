@@ -1,161 +1,141 @@
-# GitHub Actions Workflows
+# GitHub Actions CI/CD Pipeline
 
-This directory contains GitHub Actions workflows for the Tournament App.
+This directory contains the CI/CD pipeline configuration for the Tournament App.
 
-## Available Workflows
+## Pipeline Overview
 
-### 1. `test.yml` - CI Pipeline (Main) ✅
-- **Trigger**: Currently disabled (commented out)
-- **Environment**: Ubuntu with PHP 8.1 and MySQL 8.0 service
-- **Configuration**: Creates `.env` file directly in workflow
-- **Pipeline Steps**:
-  - Installs PHP and Node.js dependencies
-  - Builds frontend assets with Vite
-  - Configures testing environment
-  - Runs database migrations
-  - Executes PHPUnit test suite
-  - Uploads failure artifacts
-- **Features**: Fast, reliable, no external dependencies required
+The `ci-pipeline.yml` workflow provides a complete CI/CD pipeline that automatically:
 
-### 2. `test-with-docker.yml` - CI Pipeline with Docker
-- **Trigger**: Manual dispatch only (disabled by default)
-- **Environment**: Uses your existing Docker Compose setup
-- **Configuration**: Creates `.env` file for Docker environment
-- **Pipeline Steps**: Same as main pipeline but runs inside Docker containers
-- **Features**: Higher environment fidelity, matches development setup exactly
+- **Builds** the application with all dependencies
+- **Configures** the testing environment  
+- **Migrates** the database schema
+- **Tests** the application with PHPUnit
+- **Reports** results and collects failure logs
 
-### 3. `test-with-secrets.yml` - CI/CD Pipeline with Secrets ✅
-- **Trigger**: Pushes and Pull Requests to `feature/serbian-app` branch
-- **Environment**: Ubuntu with configurable GitHub secrets
-- **Configuration**: Uses repository secrets for sensitive configuration
-- **Pipeline Steps**:
-  - Environment configuration with secrets
-  - Complete dependency installation
-  - Frontend asset building
-  - Database setup and migrations
-  - Comprehensive test execution
-  - Failure log collection
-- **Features**: Production-ready, secure secret management, highly configurable
+## Triggers
+
+The pipeline runs automatically on:
+- **Push** to `feature/serbian-app` branch
+- **Pull Request** to `feature/serbian-app` branch
+- **Manual dispatch** (can be triggered manually from GitHub Actions tab)
+
+## Pipeline Steps
+
+### 1. Environment Setup
+- Ubuntu latest with PHP 8.1 and MySQL 8.0
+- Node.js 18 for frontend asset building
+- All required PHP extensions (pdo, mysql, gd, etc.)
+
+### 2. Application Configuration
+- Creates `.env` file with testing configuration
+- Supports GitHub repository secrets for customization
+- Configures database connection and application settings
+
+### 3. Dependency Installation
+- Installs PHP dependencies with Composer
+- Installs Node.js dependencies with npm
+- Optimizes autoloader for better performance
+
+### 4. Asset Building
+- Builds frontend assets with Vite
+- Compiles CSS and JavaScript files
+- Ensures all assets are available for testing
+
+### 5. Database Setup
+- Creates fresh test database
+- Runs all database migrations
+- Ensures clean state for each test run
+
+### 6. Test Execution
+- Runs complete PHPUnit test suite
+- Tests all application features and functionality
+- Provides detailed test results
+
+### 7. Result Reporting
+- Uploads failure logs and artifacts if tests fail
+- Provides detailed feedback on pipeline status
 
 ## Configuration
 
 ### Environment Variables
-The workflows create a `.env` file directly in the workflow (since `.env.testing` is not in git). Key settings:
-- Database: MySQL 8.0 with `tournament_app_testing` database
-- Cache/Session: Array drivers for testing
-- Mail: Array driver (no actual emails sent)
-- Environment: Set to `testing` for proper Laravel test behavior
+The pipeline creates a complete `.env` file with testing-appropriate settings:
+- **Database**: Fresh MySQL database for each run
+- **Cache/Session**: Array drivers (no persistence needed)
+- **Mail**: Array driver (no actual emails sent)
+- **Environment**: Set to `testing` for proper Laravel behavior
 
-### Using GitHub Secrets (Optional)
-If you need to customize environment variables, you can use GitHub repository secrets:
+### GitHub Secrets (Optional)
+You can customize the pipeline using GitHub repository secrets:
 
-1. Go to your repository → Settings → Secrets and variables → Actions
-2. Add secrets like:
-   - `APP_KEY` (if you want a specific key)
-   - `DB_PASSWORD` (if you want a different password)
-   - Any other sensitive configuration
+1. Go to **Repository Settings** → **Secrets and variables** → **Actions**
+2. Add any of these optional secrets:
+   - `APP_KEY` - Custom application encryption key
+   - `DB_PASSWORD` - Custom database password  
+   - `MAIL_FROM_ADDRESS` - Custom email sender address
 
-3. Then modify the workflow to use them:
+3. The pipeline will use these secrets with sensible fallbacks:
    ```yaml
-   - name: Create testing environment file
-     env:
-       APP_KEY: ${{ secrets.APP_KEY }}
-       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-     run: |
-       cat > .env << EOF
-       APP_KEY=${APP_KEY}
-       DB_PASSWORD=${DB_PASSWORD}
-       # ... rest of config
-       EOF
+   APP_KEY: ${{ secrets.APP_KEY }}           # Auto-generated if not provided
+   DB_PASSWORD: ${{ secrets.DB_PASSWORD || 'root' }}
+   MAIL_FROM_ADDRESS: ${{ secrets.MAIL_FROM_ADDRESS || 'hello@example.com' }}
    ```
 
-### Database Setup
-Tests run against a fresh MySQL database that's created for each workflow run:
-- Database: `tournament_app_testing`
-- Host: `127.0.0.1` (for main workflow) or `db` (for Docker workflow)
-- Credentials: `root/root`
+## Pipeline Control
 
-### Asset Building
-Frontend assets are built using Vite during the workflow to ensure JavaScript/CSS dependencies are properly compiled.
-
-## Which Pipeline Should You Use?
-
-### For Production Use: `test-with-secrets.yml` (Currently Active) ✅
-- **Use when**: You want production-ready CI/CD with configurable secrets
-- **Pros**: Secure, configurable, comprehensive, runs automatically
-- **Cons**: Requires GitHub secrets setup for advanced features
-- **Status**: Currently enabled and running on push/PR
-
-### For Simple Testing: `test.yml` (Currently Disabled)
-- **Use when**: You want basic CI without secrets or special configuration
-- **Pros**: Fast setup, no configuration needed, simple and reliable
-- **Cons**: Less configurable, currently disabled
-- **Status**: Commented out, can be enabled by uncommenting triggers
-
-### For Docker Parity: `test-with-docker.yml` (Manual Only)
-- **Use when**: You need testing environment identical to development
-- **Pros**: Exact same environment as development, uses your Docker setup
-- **Cons**: Slower, more complex, manual trigger only
-- **Status**: Manual dispatch only
-
-## Enabling/Disabling Pipelines
-
-### Currently Active: `test-with-secrets.yml`
-This pipeline runs automatically on every push/PR to `feature/serbian-app`. To disable:
+### Disable Pipeline
+To temporarily disable the pipeline:
 1. Comment out the `push:` and `pull_request:` sections
-2. Keep only `workflow_dispatch:` for manual triggers
+2. Keep `workflow_dispatch:` for manual triggers only
 
-### Currently Disabled: `test.yml`
-This pipeline is commented out. To enable:
-1. Uncomment the `push:` and `pull_request:` sections
-2. You may want to disable the secrets pipeline to avoid running both
-
-### Manual Only: `test-with-docker.yml`
-This pipeline only runs on manual dispatch. To enable automatic runs:
-1. Add the push/pull_request triggers:
-   ```yaml
-   push:
-     branches: [ feature/serbian-app ]
-   pull_request:
-     branches: [ feature/serbian-app ]
-   ```
+### Enable Manual-Only Mode
+```yaml
+on:
+  # push:
+  #   branches: [ feature/serbian-app ]
+  # pull_request:
+  #   branches: [ feature/serbian-app ]
+  workflow_dispatch:
+```
 
 ## Troubleshooting
 
 ### Test Failures
-- Check the "Run tests" step output for specific test failures
-- Test artifacts (logs) are uploaded automatically on failure
+- Check the **"Execute test suite"** step output for specific failures
+- Download failure artifacts automatically uploaded by the pipeline
 - Ensure your local tests pass before pushing
 
 ### Database Issues
-- The workflow creates a fresh database for each run
-- Check that migrations run successfully
-- Verify the environment configuration is correct
+- Pipeline creates a fresh database for each run
+- Check that migrations run successfully in the logs
+- Verify database configuration in environment setup
 
 ### Asset Build Issues
-- Ensure `package.json` has the correct `build` script
-- Check that all npm dependencies are properly listed
-- Verify Vite configuration is correct
-- The workflow includes fallback assets creation if Vite build fails
-- Check the "Build assets" and "Create fallback assets" steps for errors
+- Check the **"Build frontend assets"** step for Vite errors
+- Ensure `package.json` has correct build script
+- Verify all npm dependencies are properly listed
 
-### Environment File Issues
-- The workflow creates `.env` from scratch (doesn't rely on `.env.testing`)
-- Check the "Create testing environment file" step for any errors
+### Environment Configuration
+- Pipeline creates `.env` from scratch (no dependency on local files)
+- Check the **"Configure application environment"** step
 - Verify all required environment variables are set
 
-### Parallel Testing (Optional)
-The workflows run tests sequentially by default. To enable parallel testing:
+### Secret Management
+- Secrets are optional - pipeline works without them
+- Check secret names match exactly (case-sensitive)
+- Verify secrets are set in repository settings, not personal settings
 
-1. Add ParaTest to your composer.json:
-   ```bash
-   composer require --dev brianium/paratest
-   ```
+## Performance
 
-2. Update the workflow test command:
-   ```yaml
-   - name: Run tests
-     run: php artisan test --env=testing --parallel
-   ```
+The pipeline typically completes in **3-5 minutes** with these approximate timings:
+- Environment setup: ~30 seconds
+- Dependency installation: ~60 seconds  
+- Asset building: ~30 seconds
+- Database setup: ~15 seconds
+- Test execution: ~60-180 seconds (depends on test count)
 
-**Note**: Parallel testing can be faster but may cause issues with database transactions or shared resources.
+## Security
+
+- No sensitive data is stored in the workflow file
+- Database credentials are temporary and isolated
+- Optional secrets provide secure configuration management
+- All artifacts are automatically cleaned up after the pipeline
