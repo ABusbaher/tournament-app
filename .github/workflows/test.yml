@@ -1,0 +1,86 @@
+name: Run Tests
+
+on:
+  push:
+    branches: [ feature/serbian-app ]
+  pull_request:
+    branches: [ feature/serbian-app ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: tournament_app_testing
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'
+        extensions: pdo, pdo_mysql, mbstring, exif, pcntl, bcmath, gd
+        coverage: none
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Copy environment file
+      run: cp .env.testing .env
+
+    - name: Update database configuration for CI
+      run: |
+        sed -i 's/DB_HOST=laravel_db/DB_HOST=127.0.0.1/' .env
+        sed -i 's/DB_PORT=3306/DB_PORT=3306/' .env
+        sed -i 's/DB_USERNAME=root/DB_USERNAME=root/' .env
+        sed -i 's/DB_PASSWORD=root/DB_PASSWORD=root/' .env
+
+    - name: Install Composer dependencies
+      run: composer install --prefer-dist --no-progress --optimize-autoloader
+
+    - name: Install npm dependencies
+      run: npm ci
+
+    - name: Build assets
+      run: npm run build
+
+    - name: Generate application key
+      run: php artisan key:generate
+
+    - name: Directory permissions
+      run: chmod -R 755 storage bootstrap/cache
+
+    - name: Create database
+      run: |
+        mysql --host 127.0.0.1 --port 3306 -uroot -proot -e "CREATE DATABASE IF NOT EXISTS tournament_app_testing;"
+
+    - name: Run database migrations
+      run: php artisan migrate --env=testing --force
+
+    - name: Run database seeders (if needed)
+      run: php artisan db:seed --env=testing --force
+      continue-on-error: true
+
+    - name: Run tests
+      run: php artisan test --env=testing --parallel
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: failure()
+      with:
+        name: test-results
+        path: |
+          storage/logs/
+          tests/

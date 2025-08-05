@@ -1,0 +1,73 @@
+name: Run Tests with Docker (Alternative)
+
+# This workflow is disabled by default - remove the 'workflow_dispatch' to enable it
+on:
+  workflow_dispatch:
+
+env:
+  DB_ROOT_PASSWORD: root
+  DB_DATABASE: tournament_app_testing
+  DB_USERNAME: root
+  DB_PASSWORD: root
+
+jobs:
+  test-docker:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Create environment file for testing
+      run: |
+        cp .env.testing .env
+        echo "DB_HOST=db" >> .env
+        echo "DB_PORT=3306" >> .env
+        echo "DB_DATABASE=tournament_app_testing" >> .env
+        echo "DB_USERNAME=root" >> .env
+        echo "DB_PASSWORD=root" >> .env
+
+    - name: Build and run with Docker Compose
+      run: |
+        # Start the services
+        docker-compose up -d db
+        
+        # Wait for database to be ready
+        echo "Waiting for database to be ready..."
+        sleep 30
+        
+        # Build and start the app
+        docker-compose up -d --build app
+        
+        # Wait for app to be ready
+        sleep 10
+
+    - name: Install dependencies and run tests
+      run: |
+        # Install PHP dependencies
+        docker-compose exec -T app composer install --optimize-autoloader
+        
+        # Install Node dependencies and build assets
+        docker-compose exec -T app npm ci
+        docker-compose exec -T app npm run build
+        
+        # Generate application key
+        docker-compose exec -T app php artisan key:generate
+        
+        # Run migrations
+        docker-compose exec -T app php artisan migrate --env=testing --force
+        
+        # Run tests
+        docker-compose exec -T app php artisan test --env=testing
+
+    - name: Cleanup
+      if: always()
+      run: docker-compose down -v
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: failure()
+      with:
+        name: docker-test-results
+        path: |
+          storage/logs/
