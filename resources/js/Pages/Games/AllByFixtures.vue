@@ -104,7 +104,7 @@ const fetchTable = () => {
         <app-tabs v-else class="w-11/12 lg:w-10/12 mx-auto mb-16" :tabList="tabList" @handle-click-second-tab="fetchTable">
             <template v-slot:tabPanel-1>
                 <h1 class="mb-4 text-4xl font-extrabold text-center leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-                    Utakmice u kolu {{ currentPage }}
+                    Utakmice u ligi {{ currentPage }}
                 </h1>
                 <StatusMessage message="Lozinka za kolo uspešno izmenjena" color="green" :show="messages.updateFixturePassword"
                                @close="messages.updateFixturePassword = false"/>

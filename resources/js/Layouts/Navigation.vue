@@ -49,7 +49,7 @@ onMounted(async() => {
 
 <template>
     <div>
-        <nav class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+        <nav class="bg-gray-900 border-b border-gray-700">
             <!-- Primary Navigation Menu -->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between h-16">
@@ -58,14 +58,14 @@ onMounted(async() => {
                         <div class="shrink-0 flex items-center">
                             <Link :href="route('tournament.all')">
                                 <ApplicationLogo
-                                    class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200"
+                                    class="block h-14 w-auto"
                                 />
                             </Link>
                         </div>
 
                         <!-- Navigation Links -->
                         <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                            <a class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700 transition duration-150 ease-in-out"
+                            <a class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-400 hover:text-gray-100 hover:border-gray-300 focus:outline-none focus:text-gray-100 focus:border-gray-300 transition duration-150 ease-in-out"
                                :href="route('tournament.all')">
                                 Turniri
                             </a>
@@ -80,13 +80,13 @@ onMounted(async() => {
                                         <span class="inline-flex rounded-md">
                                             <button
                                                 type="button"
-                                                class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150"
+                                                class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-400 bg-gray-900 hover:text-gray-100 focus:outline-none transition ease-in-out duration-150"
                                             >
                                                  <font-awesome-icon class="inline-flex items-center px-3 py-2" :icon="['fas', 'futbol']" />
-                                                Utakmice u Kolu
+                                                Utakmice u Ligi
 
                                                 <svg
-                                                    class="ml-2 -mr-0.5 h-4 w-4"
+                                                    class="ml-2 -mr-0.5 h-4 w-4 text-gray-400"
                                                     xmlns="http://www.w3.org/2000/svg"
                                                     viewBox="0 0 20 20"
                                                     fill="currentColor"
@@ -102,7 +102,7 @@ onMounted(async() => {
                                 </template>
 
                                 <template #content>
-                                    <a v-for="(value, key) in games" :class="mobileLinkClasses" :href="route('fixture.games', {tournament: key, fixture: 1})"> {{ value }} </a>
+                                    <a v-for="(value, key) in games" class="block w-full pl-3 pr-4 py-2 border-l-4 border-transparent text-left text-base font-medium text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600 focus:outline-none focus:text-gray-800 dark:focus:text-gray-200 focus:bg-gray-50 dark:focus:bg-gray-700 focus:border-gray-300 dark:focus:border-gray-600 transition duration-150 ease-in-out" :href="route('fixture.games', {tournament: key, fixture: 1})"> {{ value }} </a>
                                 </template>
                             </Dropdown>
                         </div>
@@ -116,13 +116,13 @@ onMounted(async() => {
 
                                             <button
                                                 type="button"
-                                                class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150"
+                                                class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-400 bg-gray-900 hover:text-gray-100 focus:outline-none transition ease-in-out duration-150"
                                             >
                                                 <font-awesome-icon class="inline-flex items-center px-3 py-2" :icon="['fas', 'trophy']" />
                                                 Kup Utakmice
 
                                                 <svg
-                                                    class="ml-2 -mr-0.5 h-4 w-4"
+                                                    class="ml-2 -mr-0.5 h-4 w-4 text-gray-400"
                                                     xmlns="http://www.w3.org/2000/svg"
                                                     viewBox="0 0 20 20"
                                                     fill="currentColor"
@@ -151,13 +151,13 @@ onMounted(async() => {
                                         <span class="inline-flex rounded-md">
                                             <button
                                                 type="button"
-                                                class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150"
+                                                class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-400 bg-gray-900 hover:text-gray-100 focus:outline-none transition ease-in-out duration-150"
                                             >
                                                 <font-awesome-icon class="mr-2" :icon="['fas', 'user']" />
                                                {{ user ? user.name : inertiaUser.name  }}
 
                                                 <svg
-                                                    class="ml-2 -mr-0.5 h-4 w-4"
+                                                    class="ml-2 -mr-0.5 h-4 w-4 text-gray-400"
                                                     xmlns="http://www.w3.org/2000/svg"
                                                     viewBox="0 0 20 20"
                                                     fill="currentColor"
@@ -182,9 +182,9 @@ onMounted(async() => {
                         </div>
                     </div>
                     <div v-else class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                        <a class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700 transition duration-150 ease-in-out"
+                        <a class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-400 hover:text-gray-100 hover:border-gray-300 focus:outline-none focus:text-gray-100 focus:border-gray-300 transition duration-150 ease-in-out"
                            :href="route('login')">
-                            <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
+                            <svg class="w-5 h-5 text-gray-400 transition duration-75 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
                                 <font-awesome-icon :icon="['fas', 'arrow-right-to-bracket']" />
                             </svg>
                             <span class="ms-3">Prijava</span>
@@ -195,9 +195,9 @@ onMounted(async() => {
                     <div class="-mr-2 flex items-center sm:hidden">
                         <button
                             @click="showingNavigationDropdown = !showingNavigationDropdown"
-                            class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out"
+                            class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
                         >
-                            <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                            <svg class="h-6 w-6 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                                 <path
                                     :class="{
                                             hidden: showingNavigationDropdown,
@@ -230,9 +230,9 @@ onMounted(async() => {
                 class="sm:hidden"
             >
                 <div class="pt-2 pb-3 space-y-1">
-                    <a class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                    <a class="flex items-center p-2 text-gray-400 rounded-lg hover:bg-gray-700 group"
                        :href="route('tournament.all')">
-                        <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
+                        <svg class="w-5 h-5 text-gray-400 transition duration-75 group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
                             <font-awesome-icon :icon="['fas', 'house']" />
                         </svg>
                         <span class="ms-3">Turniri</span>
@@ -240,45 +240,45 @@ onMounted(async() => {
                 </div>
 
                 <!-- Responsive Settings Options -->
-                <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
+                <div class="pt-4 pb-1 border-t border-gray-600">
                     <div class="mt-3 space-y-1">
                         <ul class="space-y-2 font-medium">
                             <li>
-                                <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="elimination-games" data-collapse-toggle="elimination-games">
-                                    <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
+                                <button type="button" class="flex items-center w-full p-2 text-base text-gray-400 transition duration-75 rounded-lg group hover:bg-gray-700" aria-controls="elimination-games" data-collapse-toggle="elimination-games">
+                                    <svg class="flex-shrink-0 w-5 h-5 text-gray-400 transition duration-75 group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
                                         <font-awesome-icon :icon="['fas', 'trophy']" />
                                     </svg>
                                     <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Kup Utakmice</span>
-                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <svg class="w-3 h-3 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                                     </svg>
                                 </button>
                                 <ul id="elimination-games" class="hidden py-2 space-y-2">
                                     <li v-for="(value, key) in eliminationGames">
-                                        <a :href="route('elimination.games', {tournament: key})" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"> {{ value }} </a>
+                                        <a :href="route('elimination.games', {tournament: key})" class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700"> {{ value }} </a>
                                     </li>
                                 </ul>
                             </li>
                             <li>
-                                <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="games" data-collapse-toggle="games">
-                                    <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
+                                <button type="button" class="flex items-center w-full p-2 text-base text-gray-400 transition duration-75 rounded-lg group hover:bg-gray-700" aria-controls="games" data-collapse-toggle="games">
+                                    <svg class="flex-shrink-0 w-5 h-5 text-gray-400 transition duration-75 group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
                                         <font-awesome-icon :icon="['fas', 'futbol']" />
                                     </svg>
-                                    <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Utakmice u Kolu</span>
-                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Utakmice u Ligi</span>
+                                    <svg class="w-3 h-3 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                                     </svg>
                                 </button>
                                 <ul id="games" class="hidden py-2 space-y-2">
                                     <li v-for="(value, key) in games">
-                                        <a :href="route('fixture.games', {tournament: key, fixture: 1})" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"> {{ value }} </a>
+                                        <a :href="route('fixture.games', {tournament: key, fixture: 1})" class="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-700"> {{ value }} </a>
                                     </li>
                                 </ul>
                             </li>
                             <li v-if="user || inertiaUser">
-                                <a class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                                <a class="flex items-center p-2 text-gray-400 rounded-lg hover:bg-gray-700 group"
                                    :href="route('profile.edit')">
-                                    <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
+                                    <svg class="w-5 h-5 text-gray-400 transition duration-75 group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
                                         <font-awesome-icon class="mr-2" :icon="['fas', 'user']" />
                                     </svg>
                                     <span class="ms-3">Profil</span>
@@ -287,9 +287,9 @@ onMounted(async() => {
                                     :href="route('logout')"
                                     method="post"
                                     as="button"
-                                    class="w-full flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                                    class="w-full flex items-center p-2 text-gray-400 rounded-lg hover:bg-gray-700 group"
                                 >
-                                    <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <svg class="flex-shrink-0 w-5 h-5 text-gray-400 transition duration-75 group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                         <font-awesome-icon :icon="['fas', 'arrow-right-from-bracket']" />
                                     </svg>
                                     <span class="flex-1 ms-3 whitespace-nowrap text-left">Odjavi se</span>
@@ -300,9 +300,9 @@ onMounted(async() => {
                                     :href="route('login')"
                                     method="post"
                                     as="button"
-                                    class="w-full flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                                    class="w-full flex items-center p-2 text-gray-400 rounded-lg hover:bg-gray-700 group"
                                 >
-                                    <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <svg class="flex-shrink-0 w-5 h-5 text-gray-400 transition duration-75 group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                         <font-awesome-icon :icon="['fas', 'arrow-right-to-bracket']" />
                                     </svg>
                                     <span class="flex-1 ms-3 whitespace-nowrap text-left">Prijava</span>
@@ -313,9 +313,8 @@ onMounted(async() => {
                 </div>
             </div>
         </nav>
-
-        <!-- Page Heading -->
-        <header class="bg-white dark:bg-gray-800 shadow" v-if="$slots.header">
+            <!-- Page Heading -->
+            <header class="bg-gray-800 shadow" v-if="$slots.header">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                 <slot name="header" />
             </div>
