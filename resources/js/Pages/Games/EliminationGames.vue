@@ -59,7 +59,6 @@
     </div>
 </template>
 
-
 <script setup>
 import {computed, onMounted, ref} from "vue";
 import {useTournamentStore} from "@/stores/Tournament.js";
@@ -115,5 +114,62 @@ const filterGamesByRound = (round) => {
 };
 
 </script>
+
+<style scoped>
+/* Override the original CSS for dark theme */
+:deep(.tournament-bracket__round-title) {
+    color: #d1d5db !important;
+    font-weight: 600 !important;
+}
+
+:deep(.tournament-bracket__match) {
+    background: linear-gradient(135deg, #374151, #1f2937) !important;
+    border: 1px solid #4b5563 !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+:deep(.tournament-bracket__match:hover) {
+    border-color: #60a5fa !important;
+    box-shadow: 0 0 20px rgba(96, 165, 250, 0.3) !important;
+}
+
+:deep(.tournament-bracket__code) {
+    color: #f3f4f6 !important;
+}
+
+:deep(.tournament-bracket__number) {
+    background: linear-gradient(135deg, #374151, #1f2937) !important;
+    border-color: #4b5563 !important;
+    color: #f3f4f6 !important;
+}
+
+:deep(.tournament-bracket__team--winner .tournament-bracket__number) {
+    background: linear-gradient(135deg, #059669, #047857) !important;
+    border-color: #10b981 !important;
+    color: #ffffff !important;
+}
+
+:deep(.tournament-bracket__caption) {
+    color: #d1d5db !important;
+}
+
+/* Custom scrollbar for dark theme */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1f2937;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #374151;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #4b5563;
+}
+</style>
 
 

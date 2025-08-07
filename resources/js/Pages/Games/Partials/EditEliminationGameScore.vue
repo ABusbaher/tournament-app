@@ -129,87 +129,428 @@ const closeModal = () => {
 
 <template>
     <section class="space-y-6">
-        <PrimaryButton class="mt-3" @click="openModal" :disabled="isDisabled">
+        <!-- Modern Button -->
+        <button 
+            @click="openModal" 
+            :disabled="isDisabled"
+            :class="[
+                'inline-flex items-center px-4 py-2 font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border',
+                isDisabled 
+                    ? 'bg-gray-600/50 text-gray-400 border-gray-500/30 cursor-not-allowed' 
+                    : 'bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white border-red-500/30 hover:border-red-400/50'
+            ]"
+        >
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+            </svg>
             {{ getScoreButtonText }}
-        </PrimaryButton>
+        </button>
+
         <Modal :show="modalOpened" @close="closeModal">
-            <div class="p-6">
-                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                    {{ getScoreButtonText }}
-                </h2>
-
-                <div :class="['mt-6', { error: v$.gameTime.$errors.length }]">
-                    <InputLabel for="gameTime" value="Vreme utakmice" />
-                    <VueDatePicker
-                        id="gameTime"
-                        v-model="state.gameTime"
-                        time-picker-inline
-                        :format="formatDate"
-                    />
-                    <div class="input-errors mt-2" v-for="error of v$.gameTime.$errors" :key="error.$uid">
-                        <InputError :message="error.$message" class="mt-2" />
+            <!-- Modern Modal Content -->
+            <div class="relative bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 rounded-2xl shadow-2xl border border-gray-600/30 backdrop-blur-sm overflow-hidden">
+                <!-- Animated Background -->
+                <div class="absolute inset-0 bg-gradient-to-r from-red-500/10 via-orange-500/10 to-yellow-500/10 animate-pulse"></div>
+                
+                <!-- Header -->
+                <div class="relative p-8 border-b border-gray-600/30">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-gradient-to-r from-red-600 to-orange-600 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="text-2xl font-bold text-white">
+                                    {{ getScoreButtonText }}
+                                </h2>
+                                <p class="text-gray-400 text-sm">Eliminacijska utakmica</p>
+                            </div>
+                        </div>
+                        <button 
+                            @click="closeModal"
+                            class="text-gray-400 hover:text-white transition-colors duration-200 p-2 rounded-lg hover:bg-gray-700/50"
+                        >
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
                     </div>
                 </div>
-                <div class="flex space-x-4 mt-6">
-                    <div :class="['w-1/2', { error: v$.hostTeamScore.$errors.length }]">
-                        <InputLabel for="hostTeamScore" :value="state.hostTeam + ' score'" />
-                        <TextInput
-                            id="hostTeamScore"
-                            ref="nameInput"
-                            v-model="state.hostTeamScore"
-                            type="number"
-                            min="0"
-                            max="100"
-                            class="mt-1 block w-full"
-                            placeholder="Golovi domaćeg tima"
-                        />
-                        <div class="input-errors mt-2" v-for="error of v$.hostTeamScore.$errors" :key="error.$uid">
-                            <InputError :message="error.$message" class="mt-2" />
+
+                <!-- Content -->
+                <div class="relative p-8 space-y-6">
+                    <!-- Game Time Section -->
+                    <div class="space-y-3">
+                        <label class="block text-sm font-semibold text-gray-300">
+                            Vreme utakmice
+                        </label>
+                        <div class="relative">
+                            <VueDatePicker
+                                v-model="state.gameTime"
+                                time-picker-inline
+                                :format="formatDate"
+                                class="modern-datepicker"
+                            />
+                            <div class="input-errors mt-2" v-for="error of v$.gameTime.$errors" :key="error.$uid">
+                                <InputError :message="error.$message" class="mt-2" />
+                            </div>
                         </div>
                     </div>
 
-                    <div :class="['w-1/2', { error: v$.guestTeamScore.$errors.length }]">
-                        <InputLabel for="guestTeamScore" :value="state.guestTeam + ' score'" />
-                        <TextInput
-                            id="guestTeamScore"
-                            ref="nameInput"
-                            v-model="state.guestTeamScore"
-                            type="number"
-                            min="0"
-                            max="100"
-                            class="mt-1 block w-full"
-                            placeholder="Golovi gostujućeg tima"
-                        />
-                        <div class="input-errors mt-2" v-for="error of v$.guestTeamScore.$errors" :key="error.$uid">
-                            <InputError :message="error.$message === 'The value does not match the provided validator' ?
-                            'Golovi domaćeg i gostujućeg tima ne mogu biti isti.' : error.$message" class="mt-2" />
+                    <!-- Score Inputs -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Team 1 Score -->
+                        <div class="space-y-3">
+                            <label class="block text-sm font-semibold text-gray-300">
+                                {{ state.hostTeam }} - Golovi
+                            </label>
+                            <div class="relative">
+                                <input
+                                    v-model="state.hostTeamScore"
+                                    type="number"
+                                    min="0"
+                                    max="100"
+                                    class="w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 transition-all duration-300"
+                                    placeholder="Unesite broj golova"
+                                />
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="input-errors" v-for="error of v$.hostTeamScore.$errors" :key="error.$uid">
+                                <InputError :message="error.$message" />
+                            </div>
+                        </div>
+
+                        <!-- Team 2 Score -->
+                        <div class="space-y-3">
+                            <label class="block text-sm font-semibold text-gray-300">
+                                {{ state.guestTeam }} - Golovi
+                            </label>
+                            <div class="relative">
+                                <input
+                                    v-model="state.guestTeamScore"
+                                    type="number"
+                                    min="0"
+                                    max="100"
+                                    class="w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500/50 transition-all duration-300"
+                                    placeholder="Unesite broj golova"
+                                />
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="input-errors" v-for="error of v$.guestTeamScore.$errors" :key="error.$uid">
+                                <InputError :message="error.$message === 'The value does not match the provided validator' ?
+                                'Golovi domaćeg i gostujućeg tima ne mogu biti isti.' : error.$message" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Warning Message for Elimination Games -->
+                    <div class="p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                            </svg>
+                            <p class="text-sm text-yellow-400">U eliminacijskim utakmicama rezultat ne može biti nerešen</p>
+                        </div>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div v-if="errorMsg" class="p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <p class="text-sm text-red-400">{{ errorMsg }}</p>
                         </div>
                     </div>
                 </div>
-                <div v-if="errorMsg" class="mt-2">
-                    <p class="text-sm text-red-600 dark:text-red-400">
-                        {{ errorMsg }}
-                    </p>
-                </div>
-                <div class="mt-6 flex justify-end">
-                    <SecondaryButton @click="closeModal"> Otkaži </SecondaryButton>
-                    <PrimaryButton class="ml-3" @click="submitForm">
-                        {{ getScoreButtonText }}
-                    </PrimaryButton>
+
+                <!-- Footer -->
+                <div class="relative p-8 border-t border-gray-600/30 bg-gray-800/50">
+                    <div class="flex justify-end space-x-3">
+                        <button 
+                            @click="closeModal"
+                            class="px-6 py-3 text-gray-300 hover:text-white bg-gray-700/50 hover:bg-gray-600/50 border border-gray-600/50 hover:border-gray-500/50 rounded-lg font-medium transition-all duration-300 transform hover:scale-105"
+                        >
+                            Otkaži
+                        </button>
+                        <button 
+                            @click="submitForm"
+                            class="px-6 py-3 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-red-500/30 hover:border-red-400/50 flex items-center space-x-2"
+                        >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>{{ getScoreButtonText }}</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </Modal>
     </section>
 </template>
+
 <style scoped>
-/deep/ .dp--menu-wrapper {
+/* Modern DatePicker Styling */
+:deep(.dp--menu-wrapper) {
     position: relative;
     top: 20px !important;
     z-index: 99999;
     left: 0 !important;
+    background: #1f2937 !important;
+    border: 1px solid #4b5563 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
 }
 
-/deep/ .dp--tp-wrap {
+:deep(.dp--tp-wrap) {
     max-width: 100%;
+    background: #1f2937 !important;
+    border-radius: 12px !important;
+}
+
+:deep(.dp--tp-col) {
+    background: #374151 !important;
+    border-radius: 8px !important;
+    margin: 4px !important;
+}
+
+:deep(.dp--tp-col:hover) {
+    background: #4b5563 !important;
+}
+
+:deep(.dp--tp-col.dp--tp-col-active) {
+    background: #dc2626 !important;
+}
+
+:deep(.dp--tp-col.dp--tp-col-active:hover) {
+    background: #b91c1c !important;
+}
+
+:deep(.dp--tp-col-value) {
+    color: #f3f4f6 !important;
+}
+
+:deep(.dp--tp-col.dp--tp-col-active .dp--tp-col-value) {
+    color: #ffffff !important;
+}
+
+/* Time picker specific styling */
+:deep(.dp--tp-wrap .dp--tp-col) {
+    background: #374151 !important;
+    color: #f3f4f6 !important;
+}
+
+:deep(.dp--tp-wrap .dp--tp-col:hover) {
+    background: #4b5563 !important;
+    color: #ffffff !important;
+}
+
+:deep(.dp--tp-wrap .dp--tp-col.dp--tp-col-active) {
+    background: #dc2626 !important;
+    color: #ffffff !important;
+}
+
+:deep(.dp--tp-wrap .dp--tp-col-value) {
+    color: #f3f4f6 !important;
+}
+
+:deep(.dp--tp-wrap .dp--tp-col.dp--tp-col-active .dp--tp-col-value) {
+    color: #ffffff !important;
+}
+
+/* Time picker inline container - white background for visibility */
+:deep(.dp__time_picker_inline_container) {
+    background: #ffffff !important;
+    border-radius: 8px !important;
+    padding: 8px !important;
+    margin-top: 8px !important;
+}
+
+:deep(.dp__time_picker_inline_container .dp--tp-col) {
+    background: #f3f4f6 !important;
+    color: #374151 !important;
+}
+
+:deep(.dp__time_picker_inline_container .dp--tp-col:hover) {
+    background: #e5e7eb !important;
+    color: #1f2937 !important;
+}
+
+:deep(.dp__time_picker_inline_container .dp--tp-col.dp--tp-col-active) {
+    background: #dc2626 !important;
+    color: #ffffff !important;
+}
+
+:deep(.dp__time_picker_inline_container .dp--tp-col-value) {
+    color: #374151 !important;
+}
+
+:deep(.dp__time_picker_inline_container .dp--tp-col.dp--tp-col-active .dp--tp-col-value) {
+    color: #ffffff !important;
+}
+
+/* Calendar styling */
+:deep(.dp--calendar) {
+    background: #1f2937 !important;
+    color: #f3f4f6 !important;
+}
+
+:deep(.dp--calendar-header) {
+    background: #374151 !important;
+    color: #f3f4f6 !important;
+}
+
+:deep(.dp--calendar-header button) {
+    color: #f3f4f6 !important;
+}
+
+:deep(.dp--calendar-header button:hover) {
+    background: #4b5563 !important;
+    color: #ffffff !important;
+}
+
+:deep(.dp--calendar-nav) {
+    background: #374151 !important;
+    color: #f3f4f6 !important;
+}
+
+:deep(.dp--calendar-nav button) {
+    color: #f3f4f6 !important;
+}
+
+:deep(.dp--calendar-nav button:hover) {
+    background: #4b5563 !important;
+    color: #ffffff !important;
+}
+
+:deep(.dp--calendar-nav button:disabled) {
+    color: #6b7280 !important;
+}
+
+:deep(.dp--calendar-nav button:disabled:hover) {
+    background: transparent !important;
+    color: #6b7280 !important;
+}
+
+:deep(.dp--calendar-nav button:disabled svg) {
+    color: #6b7280 !important;
+}
+
+:deep(.dp--calendar-nav button:disabled:hover svg) {
+    color: #6b7280 !important;
+}
+
+/* Calendar days */
+:deep(.dp--calendar-day) {
+    background: #374151 !important;
+    color: #f3f4f6 !important;
+}
+
+:deep(.dp--calendar-day:hover) {
+    background: #4b5563 !important;
+    color: #ffffff !important;
+}
+
+:deep(.dp--calendar-day.dp--today) {
+    background: #dc2626 !important;
+    color: #ffffff !important;
+}
+
+:deep(.dp--calendar-day.dp--selected) {
+    background: #dc2626 !important;
+    color: #ffffff !important;
+}
+
+:deep(.dp--calendar-day.dp--disabled) {
+    background: #1f2937 !important;
+    color: #6b7280 !important;
+}
+
+:deep(.dp--calendar-day.dp--disabled:hover) {
+    background: #1f2937 !important;
+    color: #6b7280 !important;
+}
+
+/* Calendar weekdays */
+:deep(.dp--calendar-weekday) {
+    background: #374151 !important;
+    color: #9ca3af !important;
+}
+
+/* Calendar month/year display */
+:deep(.dp--calendar-month) {
+    color: #f3f4f6 !important;
+}
+
+:deep(.dp--calendar-year) {
+    color: #f3f4f6 !important;
+}
+
+/* Custom scrollbar for modal */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1f2937;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #4b5563;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #6b7280;
+}
+
+/* Input focus animations - improved */
+input:focus {
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+    border-color: #dc2626 !important;
+    background: #374151 !important;
+}
+
+/* Remove white background on input hover/focus */
+input:hover {
+    background: #374151 !important;
+    border-color: #4b5563 !important;
+}
+
+input {
+    background: #374151 !important;
+    color: #f3f4f6 !important;
+}
+
+input::placeholder {
+    color: #9ca3af !important;
+}
+
+/* Button hover effects */
+button:hover {
+    transform: translateY(-1px);
+}
+
+/* Modal backdrop blur */
+:deep(.fixed) {
+    backdrop-filter: blur(8px);
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Disabled button styling */
+button:disabled {
+    transform: none !important;
+    cursor: not-allowed;
 }
 </style>
