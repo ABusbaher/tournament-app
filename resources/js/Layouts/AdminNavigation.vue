@@ -39,7 +39,7 @@ onMounted(async() => {
 <template>
   <div class="absolute flex top-0 h-screen z-20">
     <button
-        class="w-12 h-48 my-auto rounded-lg text-white bg-gradient-to-b from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:ring-4 focus:ring-blue-500/50 font-medium text-sm focus:outline-none transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+        class="w-12 h-48 my-auto rounded-lg text-gray-300 bg-gradient-to-b from-gray-800/90 to-gray-900/90 hover:from-gray-700/90 hover:to-gray-800/90 focus:ring-4 focus:ring-gray-600/50 font-medium text-sm focus:outline-none transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-gray-700/50 backdrop-blur-sm"
         data-drawer-target="drawer-navigation" 
         data-drawer-show="drawer-navigation" 
         aria-controls="drawer-navigation"
@@ -281,7 +281,7 @@ button:focus, a:focus {
 
 /* Button glow effect */
 button[data-drawer-target="drawer-navigation"]:hover {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 0 20px rgba(75, 85, 99, 0.3);
 }
 
 /* Submenu animations */
