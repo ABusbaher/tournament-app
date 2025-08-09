@@ -10,6 +10,7 @@ import SetFixturePassword from "@/Pages/Games/Partials/SetFixturePassword.vue";
 import FixtureLogin from "@/Pages/Games/Partials/FixtureLogin.vue";
 import Spinner from "@/Components/Spinner.vue";
 import {useDateTimeFormatter} from "@/composables/useDateTimeFormatter.js";
+import {Link} from "@inertiajs/vue3";
 
 const props = defineProps({
     fixtureId: {
@@ -128,8 +129,32 @@ const fetchTable = () => {
                                @close="messages.updateGameScore = false"/>
 
                 <!-- Admin Controls -->
-                <div class="flex justify-end mb-8">
-                    <set-fixture-password v-if="user && user.role === 'admin'" class="mr-5" @passwordUpdated="handlePasswordUpdated" :fixture-id="fixtureId" :tournament-id="tournamentId"/>
+                <div class="flex justify-between items-center mb-8">
+                    <!-- Admin Navigation Controls -->
+                    <div v-if="user && user.role === 'admin'" class="flex items-center space-x-4">
+                        <!-- Previous Fixture Button -->
+                        <Link v-if="previousPageLink" 
+                              :href="`/tournaments/${tournamentId}/fixtures/${currentPage - 1}`"
+                              class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-blue-500/30 hover:border-blue-400/50">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                            Prethodno kolo
+                        </Link>
+                        
+                        <!-- Next Fixture Button -->
+                        <Link v-if="nextPageLink" 
+                              :href="`/tournaments/${tournamentId}/fixtures/${currentPage + 1}`"
+                              class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-green-500/30 hover:border-green-400/50">
+                            Sledeće kolo
+                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </Link>
+                    </div>
+                    
+                    <!-- Set Fixture Password -->
+                    <set-fixture-password v-if="user && user.role === 'admin'" @passwordUpdated="handlePasswordUpdated" :fixture-id="fixtureId" :tournament-id="tournamentId"/>
                 </div>
 
                 <!-- Games Grid -->

@@ -7,6 +7,7 @@ import {Link} from "@inertiajs/vue3";
 const games = ref({});
 const eliminationGames = ref({});
 const tournaments = ref([]);
+const fixturesByTournament = ref({});
 const user = window.Laravel.user;
 
 const fetchGames = () => {
@@ -14,6 +15,16 @@ const fetchGames = () => {
       .then(response => {
         games.value = response.data['fixtureGames'];
         eliminationGames.value = response.data['eliminationGames'];
+      })
+      .catch(error => {
+        console.log(error);
+      });
+};
+
+const fetchFixtures = () => {
+  axios.get('/api/tournaments/getFixtures')
+      .then(response => {
+        fixturesByTournament.value = response.data['fixturesByTournament'];
       })
       .catch(error => {
         console.log(error);
@@ -32,6 +43,7 @@ const fetchTournaments = () => {
 
 onMounted(async() => {
   fetchGames();
+  fetchFixtures();
   fetchTournaments();
 });
 </script>
@@ -143,11 +155,23 @@ onMounted(async() => {
           </button>
           <ul id="games" class="hidden py-2 space-y-1 pl-11">
             <li v-for="(value, key) in games" :key="key">
-              <Link :href="route('fixture.games', {tournament: key, fixture: 1})" 
-                    class="flex items-center w-full p-2 text-gray-400 transition-all duration-200 rounded-lg hover:bg-gray-700/50 hover:text-white group">
-                <div class="w-2 h-2 bg-green-500 rounded-full mr-3 group-hover:bg-green-400 transition-all duration-200"></div>
-                {{ value }}
-              </Link>
+              <div class="mb-2">
+                <Link :href="route('fixture.games', {tournament: key, fixture: 1})" 
+                      class="flex items-center w-full p-2 text-gray-400 transition-all duration-200 rounded-lg hover:bg-gray-700/50 hover:text-white group">
+                  <div class="w-2 h-2 bg-green-500 rounded-full mr-3 group-hover:bg-green-400 transition-all duration-200"></div>
+                  {{ value }}
+                </Link>
+              </div>
+              <!-- Fixture Links -->
+              <div v-if="fixturesByTournament[key]" class="ml-4 space-y-1">
+                <div v-for="fixture in fixturesByTournament[key].fixtures" :key="fixture" class="ml-4">
+                  <Link :href="route('fixture.games', {tournament: key, fixture: fixture})" 
+                        class="flex items-center w-full p-1 text-gray-500 transition-all duration-200 rounded hover:bg-gray-700/30 hover:text-gray-300 group text-xs">
+                    <div class="w-1 h-1 bg-green-400 rounded-full mr-2 group-hover:bg-green-300 transition-all duration-200"></div>
+                    Kolo {{ fixture }}
+                  </Link>
+                </div>
+              </div>
             </li>
           </ul>
         </li>
