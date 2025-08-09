@@ -226,14 +226,18 @@ const fetchTable = () => {
                                     <!-- Free Team Placeholder -->
                                     <div v-else class="flex-1 flex flex-col items-center px-8">
                                         <div class="text-center">
-                                            <div class="w-32 h-32 bg-gradient-to-br from-gray-700/50 to-gray-800/50 rounded-full flex items-center justify-center border-2 border-dashed border-gray-600/50">
-                                                <svg class="w-16 h-16 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                                </svg>
+                                            <div class="relative group">
+                                                <div class="w-32 h-32 bg-gradient-to-br from-gray-700/50 to-gray-800/50 rounded-full flex items-center justify-center border-2 border-dashed border-gray-600/50 group-hover:border-gray-500/50 transition-all duration-300 shadow-lg">
+                                                    <svg class="w-12 h-12 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                                    </svg>
+                                                </div>
+                                                <!-- Subtle glow effect on hover -->
+                                                <div class="absolute inset-0 bg-gradient-to-r from-gray-500/10 to-gray-600/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                             </div>
-                                            <span class="match-score-number text-2xl font-bold text-gray-500 mt-4 block">
+                                            <h2 class="team-name mt-6 text-xl font-bold text-gray-400 text-center max-w-48 truncate">
                                                 Slobodan tim
-                                            </span>
+                                            </h2>
                                         </div>
                                     </div>
 
