@@ -93,4 +93,26 @@ class TournamentController extends Controller
             'eliminationGames' => $eliminationGames,
         ];
     }
+
+    public function getFixturesByTournaments(): array
+    {
+        $fixturesByTournament = Game::join('tournaments', 'games.tournament_id', '=', 'tournaments.id')
+            ->select('games.tournament_id', 'tournaments.name', 'games.fixture')
+            ->distinct()
+            ->orderBy('games.tournament_id')
+            ->orderBy('games.fixture')
+            ->get()
+            ->groupBy('tournament_id')
+            ->map(function ($tournament) {
+                return [
+                    'name' => $tournament->first()->name,
+                    'fixtures' => $tournament->pluck('fixture')->toArray()
+                ];
+            })
+            ->toArray();
+
+        return [
+            'fixturesByTournament' => $fixturesByTournament,
+        ];
+    }
 }
