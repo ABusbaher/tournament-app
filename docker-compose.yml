@@ -13,6 +13,7 @@ services:
             - laravel
         ports:
             - "9000:9000"
+            - "5173:5173"
 
     web:
         image: nginx:latest
@@ -41,12 +42,10 @@ services:
         ports:
             - "3305:3306"
         volumes:
-            - dbdata:/var/lib/mysql
+            - ./dbdata:/var/lib/mysql
         networks:
             - laravel
 
 networks:
     laravel:
 
-volumes:
-    dbdata:
