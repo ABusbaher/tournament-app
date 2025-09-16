@@ -21,6 +21,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (app()->isProduction()) {
+           \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
+
         Gate::define('admin-access', function (User $user) {
             return $user->isAdmin();
         });
