@@ -131,10 +131,10 @@ onMounted(async() => {
                                             {{ getRoundName(game.round) }}
                                         </p>
                                     </div>
-                                    <!-- Date/Time -->
+                                    <!-- Game Number -->
                                     <div class="mb-4">
                                         <p class="date-caption text-gray-300 font-medium">
-                                            {{ game.game_time !== null ? formatDate(new Date(game.game_time)) : '-' }}
+                                            Utakmica {{ index + 1 }}
                                         </p>
                                     </div>
 

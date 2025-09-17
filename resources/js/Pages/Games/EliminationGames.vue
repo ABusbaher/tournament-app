@@ -6,7 +6,7 @@
                 <h1 class="text-4xl md:text-5xl font-bold text-white mb-2 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
                     {{ tournamentName }}
                 </h1>
-                <p class="text-gray-300 text-lg font-medium">Kostur takmičenja</p>
+                <p class="text-gray-300 text-lg font-medium">Mečevi</p>
                 <div class="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-500 mx-auto mt-4 rounded-full"></div>
             </div>
 
@@ -56,10 +56,11 @@
                             </div>
                         </li>
                         <BracketMatch
-                            v-for="game in filterGamesByRound(round.number)"
+                            v-for="(game, gameIndex) in filterGamesByRound(round.number)"
                             :key="game.id"
                             :game="game"
                             :gameTime="game.date"
+                            :gameNumber="getGameNumber(round.number, gameIndex)"
                             :isFinal="round.isFinal"
                             :isWinnerTeam1="game.team1_goals > game.team2_goals"
                             :isWinnerTeam2="game.team2_goals > game.team1_goals"
@@ -74,7 +75,7 @@
             <div v-if="games.length === 0" class="flex justify-center items-center py-12">
                 <div class="text-center">
                     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400 mx-auto mb-4"></div>
-                    <p class="text-gray-400 text-lg">Učitavanje kostura...</p>
+                    <p class="text-gray-400 text-lg">Učitavanje mečeva...</p>
                 </div>
             </div>
         </div>
@@ -133,6 +134,16 @@ const rounds = computed(() => {
 });
 const filterGamesByRound = (round) => {
     return games.value.filter(game => game.round === round);
+};
+
+const getGameNumber = (roundNumber, gameIndex) => {
+    // Calculate the total number of games in previous rounds
+    let totalPreviousGames = 0;
+    for (let i = maxRound.value; i > roundNumber; i--) {
+        totalPreviousGames += filterGamesByRound(i).length;
+    }
+    // Add the current game index + 1 (since we want 1-based numbering)
+    return totalPreviousGames + gameIndex + 1;
 };
 
 </script>

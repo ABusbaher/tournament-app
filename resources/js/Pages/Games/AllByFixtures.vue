@@ -69,6 +69,8 @@ const handleScoreUpdate = () => {
 const { fixtureId } = toRefs(props);
 
 onMounted(async() => {
+    await tournamentStore.getByTournamentById(tournamentId);
+    tournamentName.value = tournamentStore.getName;
     await fetchGames(`/api/tournaments/${tournamentId}/fixtures/${fixtureId.value}`);
     loading.value = false;
 });
@@ -108,7 +110,7 @@ const fetchTable = () => {
                 <!-- Modern Header Section -->
                 <div class="text-center mb-12">
                     <div class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full mb-6">
-                        <span class="text-white font-semibold text-sm uppercase tracking-wider">Kolo {{ currentPage }}</span>
+                        <span class="text-white font-semibold text-lg uppercase tracking-wider">Kolo {{ currentPage }}</span>
                     </div>
                     <div class="relative">
                         <!-- Darker background for better contrast -->
@@ -128,12 +130,10 @@ const fetchTable = () => {
                 <StatusMessage message="Rezultat utakmice uspešno izmenjen" color="green" :show="messages.updateGameScore"
                                @close="messages.updateGameScore = false"/>
 
-                <!-- Admin Controls -->
                 <div class="flex justify-between items-center mb-8">
-                    <!-- Admin Navigation Controls -->
-                    <div v-if="user && user.role === 'admin'" class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-4">
                         <!-- Previous Fixture Button -->
-                        <Link v-if="previousPageLink" 
+                        <Link v-if="previousPageLink"
                               :href="`/tournaments/${tournamentId}/fixtures/${currentPage - 1}`"
                               class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-blue-500/30 hover:border-blue-400/50">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -141,9 +141,9 @@ const fetchTable = () => {
                             </svg>
                             Prethodno kolo
                         </Link>
-                        
+
                         <!-- Next Fixture Button -->
-                        <Link v-if="nextPageLink" 
+                        <Link v-if="nextPageLink"
                               :href="`/tournaments/${tournamentId}/fixtures/${currentPage + 1}`"
                               class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-green-500/30 hover:border-green-400/50">
                             Sledeće kolo
@@ -152,7 +152,7 @@ const fetchTable = () => {
                             </svg>
                         </Link>
                     </div>
-                    
+
                     <!-- Set Fixture Password -->
                     <set-fixture-password v-if="user && user.role === 'admin'" @passwordUpdated="handlePasswordUpdated" :fixture-id="fixtureId" :tournament-id="tournamentId"/>
                 </div>
@@ -195,10 +195,10 @@ const fetchTable = () => {
                                     <!-- Match Details -->
                                     <div v-if="game.guest_team_name" class="flex-1 flex flex-col items-center px-8">
                                         <div class="text-center">
-                                            <!-- Date/Time -->
+                                            <!-- Game Number -->
                                             <div class="mb-4">
                                                 <p class="date-caption text-gray-300 font-medium">
-                                                    {{ game.game_time !== null ? formatDate(new Date(game.game_time)) : '-' }}
+                                                    Utakmica {{ index + 1 }}
                                                 </p>
                                             </div>
 

@@ -181,8 +181,8 @@ const closeModal = () => {
 
                 <!-- Content -->
                 <div class="relative p-8 space-y-6">
-                    <!-- Game Time Section -->
-                    <div class="space-y-3">
+                    <!-- Game Time Section - COMMENTED OUT -->
+                    <!-- <div class="space-y-3">
                         <label class="block text-sm font-semibold text-gray-300">
                             Vreme utakmice
                         </label>
@@ -197,7 +197,7 @@ const closeModal = () => {
                                 <InputError :message="error.$message" class="mt-2" />
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                     <!-- Score Inputs -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

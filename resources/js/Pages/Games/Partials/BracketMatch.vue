@@ -3,9 +3,9 @@
         <div class="tournament-bracket__match" tabindex="0">
             <table class="tournament-bracket__table">
                 <caption class="tournament-bracket__caption">
-                    <time :datetime="gameTime" class="game-time">
-                        {{ game.game_time !== null ? formatDate(new Date(game.game_time)) : '-' }}
-                    </time>
+                    <span class="game-time">
+                        Meč {{ gameNumber }}
+                    </span>
                 </caption>
                 <thead class="sr-only">
                 <tr>
@@ -60,6 +60,10 @@ const props = defineProps({
     gameTime: {
         type: String,
         default: '-'
+    },
+    gameNumber: {
+        type: Number,
+        required: true
     },
     isFinal: {
         type: Boolean,
@@ -136,11 +140,11 @@ const { formatDate } = useDateTimeFormatter();
         width: 1.5rem !important;
         height: 1.5rem !important;
     }
-    
+
     .game-time {
         font-size: 0.75rem !important;
     }
-    
+
     :deep(.tournament-bracket__medal) {
         font-size: 1rem !important;
         margin-left: 0.25rem !important;
