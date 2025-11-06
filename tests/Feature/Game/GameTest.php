@@ -340,7 +340,7 @@ class GameTest extends TestCase
 
         $response->assertJsonFragment([
             'ID' => 1,
-            'team' => $teamWithNegativePoints->name,
+            'team' => $teamWithNegativePoints->shorten_name,
             'tournament_id' => $tournament->id,
             'image_path' => null,
             'negative_points' => $teamWithNegativePoints->negative_points,
