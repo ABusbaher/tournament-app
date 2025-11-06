@@ -32,5 +32,8 @@ export default defineConfig({
         hmr: {
             host: 'localhost',
         },
+        watch: {
+            usePolling: true, // helps in Docker/VM environments
+        },
     },
 });
