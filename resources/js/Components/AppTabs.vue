@@ -59,7 +59,7 @@ const clickEvent = (value) => {
             <div
                 :key="index"
                 v-if="index + 1 === activeTab"
-                class="flex-grow bg-white rounded-lg shadow-xl p-4"
+                class="flex-grow"
             >
                 <slot :name="`tabPanel-${index + 1}`"/>
             </div>

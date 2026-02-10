@@ -1,3 +1,3 @@
 <template>
-    <img src="/images/logo.jpg" alt="Tournament App Logo" />
+    <img src="/images/new_logo.jpg" alt="Tournament App Logo" />
 </template>

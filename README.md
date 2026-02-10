@@ -20,7 +20,7 @@
 - Admin credentials: 
 **email: admin@a.com
 password: zoki**
-- In the main root of app (outside of laravel_app container) you should build FE with next commands:
+- Inside laravel_app container you should build FE with next commands:
 **npm install and
 npm run dev**
 - Check the app on the next link:
