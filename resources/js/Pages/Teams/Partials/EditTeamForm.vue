@@ -119,8 +119,8 @@ const closeModal = () => {
 <template>
     <section class="inline-flex space-x-2 mr-3">
         <!-- Modern Edit Button -->
-        <button 
-            @click="openModal" 
+        <button
+            @click="openModal"
             class="inline-flex items-center px-3 py-2 font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg border bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white border-blue-500/30 hover:border-blue-400/50"
         >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -130,10 +130,10 @@ const closeModal = () => {
 
         <Modal :show="editTeam" @close="closeModal">
             <!-- Modern Modal Content -->
-            <div class="relative bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 rounded-2xl shadow-2xl border border-gray-600/30 backdrop-blur-sm overflow-hidden">
+            <div class="relative bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 shadow-2xl border border-gray-600/30 backdrop-blur-sm overflow-hidden">
                 <!-- Animated Background -->
                 <div class="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-purple-500/10 animate-pulse"></div>
-                
+
                 <!-- Header -->
                 <div class="relative p-8 border-b border-gray-600/30">
                     <div class="flex items-center justify-between">
@@ -150,7 +150,7 @@ const closeModal = () => {
                                 <p class="text-gray-400 text-sm">Ažurirajte informacije o timu</p>
                             </div>
                         </div>
-                        <button 
+                        <button
                             @click="closeModal"
                             class="text-gray-400 hover:text-white transition-colors duration-200 p-2 rounded-lg hover:bg-gray-700/50"
                         >
@@ -239,12 +239,12 @@ const closeModal = () => {
                         <label class="block text-sm font-semibold text-gray-300">
                             Logo tima
                         </label>
-                        
+
                         <!-- Current Logo Display -->
                         <div v-if="state.previous_image" class="mb-4">
                             <p class="text-sm text-gray-400 mb-2">Trenutni logo:</p>
                             <div class="flex items-center space-x-4">
-                                <img :src="state.previous_image" alt="Logo tima" 
+                                <img :src="state.previous_image" alt="Logo tima"
                                      class="h-16 w-16 rounded-lg object-cover border-2 border-gray-600/50 shadow-lg"/>
                                 <div class="text-sm text-gray-400">
                                     <p>Postojeći logo tima</p>
@@ -263,10 +263,10 @@ const closeModal = () => {
                                     <div class="flex text-sm text-gray-400 mt-4">
                                         <label for="file-upload-edit" class="relative cursor-pointer bg-gray-700/50 rounded-md font-medium text-blue-400 hover:text-blue-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
                                             <span>Otpremi novi fajl</span>
-                                            <input 
-                                                id="file-upload-edit" 
-                                                name="file-upload-edit" 
-                                                type="file" 
+                                            <input
+                                                id="file-upload-edit"
+                                                name="file-upload-edit"
+                                                type="file"
                                                 class="sr-only"
                                                 accept=".jpeg,.jpg,.png,.webp"
                                                 @change="state.image = $event.target.files[0]"
@@ -321,13 +321,13 @@ const closeModal = () => {
                 <!-- Footer -->
                 <div class="relative p-8 border-t border-gray-600/30 bg-gray-800/50">
                     <div class="flex justify-end space-x-3">
-                        <button 
+                        <button
                             @click="closeModal"
                             class="px-6 py-3 text-gray-300 hover:text-white bg-gray-700/50 hover:bg-gray-600/50 border border-gray-600/50 hover:border-gray-500/50 rounded-lg font-medium transition-all duration-300 transform hover:scale-105"
                         >
                             Otkaži
                         </button>
-                        <button 
+                        <button
                             @click="submitForm"
                             class="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-blue-500/30 hover:border-blue-400/50 flex items-center space-x-2"
                         >
@@ -413,5 +413,16 @@ input[type="file"] {
     50% {
         opacity: .5;
     }
+}
+
+/* Remove spinner arrows from number inputs in modal */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
 }
 </style>

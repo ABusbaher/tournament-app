@@ -83,8 +83,8 @@ watch(() => state.type, (newType) => {
 <template>
     <section class="space-y-6">
         <!-- Modern Button -->
-        <button 
-            @click="openModal" 
+        <button
+            @click="openModal"
             class="inline-flex items-center px-6 py-3 font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white border-blue-500/30 hover:border-blue-400/50"
         >
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -95,10 +95,10 @@ watch(() => state.type, (newType) => {
 
         <Modal :show="addTournament" @close="closeModal">
             <!-- Modern Modal Content -->
-            <div class="relative bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 rounded-2xl shadow-2xl border border-gray-600/30 backdrop-blur-sm overflow-hidden">
+            <div class="relative bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 shadow-2xl border border-gray-600/30 backdrop-blur-sm overflow-hidden">
                 <!-- Animated Background -->
                 <div class="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-purple-500/10 animate-pulse"></div>
-                
+
                 <!-- Header -->
                 <div class="relative p-8 border-b border-gray-600/30">
                     <div class="flex items-center justify-between">
@@ -115,7 +115,7 @@ watch(() => state.type, (newType) => {
                                 <p class="text-gray-400 text-sm">Kreirajte novi turnir</p>
                             </div>
                         </div>
-                        <button 
+                        <button
                             @click="closeModal"
                             class="text-gray-400 hover:text-white transition-colors duration-200 p-2 rounded-lg hover:bg-gray-700/50"
                         >
@@ -162,9 +162,9 @@ watch(() => state.type, (newType) => {
                                 class="w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all duration-300 appearance-none"
                             >
                                 <option value="" disabled class="bg-gray-700 text-gray-400">Izaberite tip turnira</option>
-                                <option 
-                                    v-for="type in data.types" 
-                                    :key="type.value" 
+                                <option
+                                    v-for="type in data.types"
+                                    :key="type.value"
                                     :value="type.value"
                                     class="bg-gray-700 text-white"
                                 >
@@ -193,9 +193,9 @@ watch(() => state.type, (newType) => {
                                 class="w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all duration-300 appearance-none"
                             >
                                 <option value="" disabled class="bg-gray-700 text-gray-400">Izaberite broj rundi</option>
-                                <option 
-                                    v-for="round in data.roundOptions" 
-                                    :key="round.value" 
+                                <option
+                                    v-for="round in data.roundOptions"
+                                    :key="round.value"
                                     :value="round.value"
                                     class="bg-gray-700 text-white"
                                 >
@@ -231,13 +231,13 @@ watch(() => state.type, (newType) => {
                 <!-- Footer -->
                 <div class="relative p-8 border-t border-gray-600/30 bg-gray-800/50">
                     <div class="flex justify-end space-x-3">
-                        <button 
+                        <button
                             @click="closeModal"
                             class="px-6 py-3 text-gray-300 hover:text-white bg-gray-700/50 hover:bg-gray-600/50 border border-gray-600/50 hover:border-gray-500/50 rounded-lg font-medium transition-all duration-300 transform hover:scale-105"
                         >
                             Otkaži
                         </button>
-                        <button 
+                        <button
                             @click="submitForm"
                             class="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-blue-500/30 hover:border-blue-400/50 flex items-center space-x-2"
                         >

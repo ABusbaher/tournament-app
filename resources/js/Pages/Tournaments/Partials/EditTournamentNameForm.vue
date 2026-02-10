@@ -147,3 +147,16 @@ const getTypeLabel = (type) => {
         </Modal>
     </section>
 </template>
+
+<style scoped>
+/* Remove spinner arrows from number inputs in modal */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+</style>

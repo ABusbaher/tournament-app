@@ -130,13 +130,13 @@ const closeModal = () => {
 <template>
     <section class="space-y-6">
         <!-- Modern Button -->
-        <button 
-            @click="openModal" 
+        <button
+            @click="openModal"
             :disabled="isDisabled"
             :class="[
                 'inline-flex items-center px-4 py-2 font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border',
-                isDisabled 
-                    ? 'bg-gray-600/50 text-gray-400 border-gray-500/30 cursor-not-allowed' 
+                isDisabled
+                    ? 'bg-gray-600/50 text-gray-400 border-gray-500/30 cursor-not-allowed'
                     : 'bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white border-red-500/30 hover:border-red-400/50'
             ]"
         >
@@ -148,10 +148,10 @@ const closeModal = () => {
 
         <Modal :show="modalOpened" @close="closeModal">
             <!-- Modern Modal Content -->
-            <div class="relative bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 rounded-2xl shadow-2xl border border-gray-600/30 backdrop-blur-sm overflow-hidden">
+            <div class="relative bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 shadow-2xl border border-gray-600/30 backdrop-blur-sm overflow-hidden">
                 <!-- Animated Background -->
                 <div class="absolute inset-0 bg-gradient-to-r from-red-500/10 via-orange-500/10 to-yellow-500/10 animate-pulse"></div>
-                
+
                 <!-- Header -->
                 <div class="relative p-8 border-b border-gray-600/30">
                     <div class="flex items-center justify-between">
@@ -168,7 +168,7 @@ const closeModal = () => {
                                 <p class="text-gray-400 text-sm">Eliminacijska utakmica</p>
                             </div>
                         </div>
-                        <button 
+                        <button
                             @click="closeModal"
                             class="text-gray-400 hover:text-white transition-colors duration-200 p-2 rounded-lg hover:bg-gray-700/50"
                         >
@@ -277,13 +277,13 @@ const closeModal = () => {
                 <!-- Footer -->
                 <div class="relative p-8 border-t border-gray-600/30 bg-gray-800/50">
                     <div class="flex justify-end space-x-3">
-                        <button 
+                        <button
                             @click="closeModal"
                             class="px-6 py-3 text-gray-300 hover:text-white bg-gray-700/50 hover:bg-gray-600/50 border border-gray-600/50 hover:border-gray-500/50 rounded-lg font-medium transition-all duration-300 transform hover:scale-105"
                         >
                             Otkaži
                         </button>
-                        <button 
+                        <button
                             @click="submitForm"
                             class="px-6 py-3 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-red-500/30 hover:border-red-400/50 flex items-center space-x-2"
                         >
@@ -552,5 +552,16 @@ button:hover {
 button:disabled {
     transform: none !important;
     cursor: not-allowed;
+}
+
+/* Remove spinner arrows from number inputs in modal */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
 }
 </style>

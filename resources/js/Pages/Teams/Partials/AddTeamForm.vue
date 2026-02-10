@@ -102,8 +102,8 @@ const closeModal = () => {
 <template>
     <section class="space-y-6">
         <!-- Modern Button -->
-        <button 
-            @click="openModal" 
+        <button
+            @click="openModal"
             class="inline-flex items-center px-6 py-3 font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white border-green-500/30 hover:border-green-400/50"
         >
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -114,10 +114,10 @@ const closeModal = () => {
 
         <Modal :show="addTeam" @close="closeModal">
             <!-- Modern Modal Content -->
-            <div class="relative bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 rounded-2xl shadow-2xl border border-gray-600/30 backdrop-blur-sm overflow-hidden">
+            <div class="relative bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 shadow-2xl border border-gray-600/30 backdrop-blur-sm overflow-hidden">
                 <!-- Animated Background -->
                 <div class="absolute inset-0 bg-gradient-to-r from-green-500/10 via-emerald-500/10 to-teal-500/10 animate-pulse"></div>
-                
+
                 <!-- Header -->
                 <div class="relative p-8 border-b border-gray-600/30">
                     <div class="flex items-center justify-between">
@@ -134,7 +134,7 @@ const closeModal = () => {
                                 <p class="text-gray-400 text-sm">Kreirajte novi tim za turnir</p>
                             </div>
                         </div>
-                        <button 
+                        <button
                             @click="closeModal"
                             class="text-gray-400 hover:text-white transition-colors duration-200 p-2 rounded-lg hover:bg-gray-700/50"
                         >
@@ -232,10 +232,10 @@ const closeModal = () => {
                                     <div class="flex text-sm text-gray-400 mt-4">
                                         <label for="file-upload" class="relative cursor-pointer bg-gray-700/50 rounded-md font-medium text-green-400 hover:text-green-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500">
                                             <span>Otpremi fajl</span>
-                                            <input 
-                                                id="file-upload" 
-                                                name="file-upload" 
-                                                type="file" 
+                                            <input
+                                                id="file-upload"
+                                                name="file-upload"
+                                                type="file"
                                                 class="sr-only"
                                                 accept=".jpeg,.jpg,.png,.webp"
                                                 @change="state.image = $event.target.files[0]"
@@ -290,13 +290,13 @@ const closeModal = () => {
                 <!-- Footer -->
                 <div class="relative p-8 border-t border-gray-600/30 bg-gray-800/50">
                     <div class="flex justify-end space-x-3">
-                        <button 
+                        <button
                             @click="closeModal"
                             class="px-6 py-3 text-gray-300 hover:text-white bg-gray-700/50 hover:bg-gray-600/50 border border-gray-600/50 hover:border-gray-500/50 rounded-lg font-medium transition-all duration-300 transform hover:scale-105"
                         >
                             Otkaži
                         </button>
-                        <button 
+                        <button
                             @click="submitForm"
                             class="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-green-500/30 hover:border-green-400/50 flex items-center space-x-2"
                         >
@@ -382,5 +382,16 @@ input[type="file"] {
     50% {
         opacity: .5;
     }
+}
+
+/* Remove spinner arrows from number inputs in modal */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
 }
 </style>

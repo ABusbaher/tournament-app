@@ -27,7 +27,8 @@ body {
 .container {
     width: 90%;
     min-width: 18em;
-    margin: 20px auto;
+    margin: 0 auto;
+    padding-top: 10px;
 }
 h1, h2 {
     text-align: center;
@@ -68,6 +69,9 @@ h2 {
     margin-left: -3px;
     flex: 1;
     padding-bottom: 1em;
+    @media (min-width: 38em) {
+        padding-bottom: 30px;
+    }
 }
 .tournament-bracket__round-title {
     color: #716e6e;
@@ -239,6 +243,11 @@ h2 {
     .tournament-bracket--rounded .tournament-bracket__match::after {
         border-top-left-radius: 0.6em;
     }
+    /* Remove left arrows from first round matches */
+    .tournament-bracket__round:first-child .tournament-bracket__match::before,
+    .tournament-bracket__round:first-child .tournament-bracket__match::after {
+        display: none !important;
+    }
 }
 @media (min-width: 72em) {
     .tournament-bracket__match::before, .tournament-bracket__match::after {
@@ -266,6 +275,16 @@ h2 {
 .tournament-bracket__round:first-child .tournament-bracket__match::before, .tournament-bracket__round:first-child .tournament-bracket__match::after {
     display: none;
 }
+
+.tournament-bracket__round:nth-of-type(2) .tournament-bracket__item:last-child .tournament-bracket__match {
+    margin-bottom: 20px;
+}
+
+/*.tournament-bracket__round:nth-of-type(2):first-child::before,*/
+/*.tournament-bracket__round:nth-of-type(2):first-child::after {*/
+/*    display: none;*/
+/*}*/
+
 .tournament-bracket__content {
     display: flex;
 }

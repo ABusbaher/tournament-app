@@ -46,8 +46,8 @@ const deleteTeam = () => {
 <template>
     <section class="inline-flex space-x-2">
         <!-- Modern Delete Button -->
-        <button 
-            @click="openModal" 
+        <button
+            @click="openModal"
             class="inline-flex items-center px-3 py-2 font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg border bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white border-red-500/30 hover:border-red-400/50"
         >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -57,10 +57,10 @@ const deleteTeam = () => {
 
         <Modal :show="confirmingTournamentDeletion" @close="closeModal">
             <!-- Modern Modal Content -->
-            <div class="relative bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 rounded-2xl shadow-2xl border border-gray-600/30 backdrop-blur-sm overflow-hidden">
+            <div class="relative bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 shadow-2xl border border-gray-600/30 backdrop-blur-sm overflow-hidden">
                 <!-- Animated Background -->
                 <div class="absolute inset-0 bg-gradient-to-r from-red-500/10 via-pink-500/10 to-rose-500/10 animate-pulse"></div>
-                
+
                 <!-- Header -->
                 <div class="relative p-8 border-b border-gray-600/30">
                     <div class="flex items-center justify-between">
@@ -77,7 +77,7 @@ const deleteTeam = () => {
                                 <p class="text-gray-400 text-sm">Potvrdite brisanje tima</p>
                             </div>
                         </div>
-                        <button 
+                        <button
                             @click="closeModal"
                             class="text-gray-400 hover:text-white transition-colors duration-200 p-2 rounded-lg hover:bg-gray-700/50"
                         >
@@ -103,7 +103,7 @@ const deleteTeam = () => {
                                     Da li ste sigurni da želite da obrišete tim?
                                 </h3>
                                 <p class="text-sm text-red-300">
-                                    Ova akcija je nepovratna. Tim će biti trajno obrisan iz turnira, 
+                                    Ova akcija je nepovratna. Tim će biti trajno obrisan iz turnira,
                                     uključujući sve povezane utakmice i rezultate.
                                 </p>
                             </div>
@@ -136,13 +136,13 @@ const deleteTeam = () => {
                 <!-- Footer -->
                 <div class="relative p-8 border-t border-gray-600/30 bg-gray-800/50">
                     <div class="flex justify-end space-x-3">
-                        <button 
+                        <button
                             @click="closeModal"
                             class="px-6 py-3 text-gray-300 hover:text-white bg-gray-700/50 hover:bg-gray-600/50 border border-gray-600/50 hover:border-gray-500/50 rounded-lg font-medium transition-all duration-300 transform hover:scale-105"
                         >
                             Otkaži
                         </button>
-                        <button 
+                        <button
                             @click="deleteTeam"
                             class="px-6 py-3 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-red-500/30 hover:border-red-400/50 flex items-center space-x-2"
                         >

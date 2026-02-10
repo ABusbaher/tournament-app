@@ -19,7 +19,7 @@ const getRowClasses = (index) => {
         <h1 class="text-lg text-gray-400 font-medium px-2 sm:px-0">{{ tournamentName }} tabela</h1>
         <div class="flex flex-col mt-4 sm:mt-6 w-full max-w-7xl mx-auto px-0 sm:px-4">
             <div class="relative overflow-x-auto border-0 sm:border border-gray-800 rounded-none sm:rounded-lg">
-                <table class="table-fixed min-w-[640px] sm:min-w-[800px] text-xs sm:text-sm text-gray-400">
+                <table class="table-fixed w-full min-w-[640px] sm:min-w-[800px] text-xs sm:text-sm text-gray-400">
                     <thead class="bg-gray-800 text-[10px] sm:text-xs uppercase font-medium">
                             <tr>
                                 <th scope="col" class="py-2 px-0.5 sm:py-3 sm:px-1 text-center tracking-wider sticky left-0 bg-gray-800 z-10 border-r border-gray-600 w-6">

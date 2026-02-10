@@ -105,7 +105,7 @@ const fetchTable = () => {
         <div v-else-if="(!user ||(user && user.role !== 'admin')) && isPasswordProtected">
             <fixture-login :fixture-id="fixtureId" :tournament-id="tournamentId" @password-submitted="loginSuccessfully" />
         </div>
-        <app-tabs v-else class="w-11/12 lg:w-10/12 mx-auto mb-16" :tabList="tabList" @handle-click-second-tab="fetchTable">
+        <app-tabs v-else class="w-11/12 lg:w-10/12 mx-auto pb-8" :tabList="tabList" @handle-click-second-tab="fetchTable">
             <template v-slot:tabPanel-1>
                 <!-- Modern Header Section -->
                 <div class="text-center mb-12">

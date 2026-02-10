@@ -73,7 +73,7 @@ onMounted(async () => {
 
         <!-- Create Fixtures Button -->
         <div class="flex justify-center">
-            <button 
+            <button
                 @click="openModal"
                 class="inline-flex items-center px-8 py-4 font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-purple-500/30 hover:border-purple-400/50"
             >
@@ -87,10 +87,10 @@ onMounted(async () => {
         <!-- Confirmation Modal -->
         <Modal :show="modalOpened" @close="closeModal">
             <!-- Modern Modal Content -->
-            <div class="relative bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 rounded-2xl shadow-2xl border border-gray-600/30 backdrop-blur-sm overflow-hidden">
+            <div class="relative bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 shadow-2xl border border-gray-600/30 backdrop-blur-sm overflow-hidden">
                 <!-- Animated Background -->
                 <div class="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-rose-500/10 animate-pulse"></div>
-                
+
                 <!-- Header -->
                 <div class="relative p-8 border-b border-gray-600/30">
                     <div class="flex items-center justify-between">
@@ -107,7 +107,7 @@ onMounted(async () => {
                                 <p class="text-gray-400 text-sm">Potvrdite kreiranje rasporeda utakmica</p>
                             </div>
                         </div>
-                        <button 
+                        <button
                             @click="closeModal"
                             class="text-gray-400 hover:text-white transition-colors duration-200 p-2 rounded-lg hover:bg-gray-700/50"
                         >
@@ -133,7 +133,7 @@ onMounted(async () => {
                                     Važna napomena
                                 </h3>
                                 <p class="text-sm text-yellow-300">
-                                    Nakon potvrde nećete moći dodavati/brisati timove ili menjati broj rundi i tip turnira. 
+                                    Nakon potvrde nećete moći dodavati/brisati timove ili menjati broj rundi i tip turnira.
                                     Ova akcija je nepovratna.
                                 </p>
                             </div>
@@ -171,7 +171,7 @@ onMounted(async () => {
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                             <p class="text-sm text-gray-400">
-                                Raspored će biti generisan automatski na osnovu broja timova i tipa turnira. 
+                                Raspored će biti generisan automatski na osnovu broja timova i tipa turnira.
                                 Možete ga kasnije prilagoditi po potrebi.
                             </p>
                         </div>
@@ -181,13 +181,13 @@ onMounted(async () => {
                 <!-- Footer -->
                 <div class="relative p-8 border-t border-gray-600/30 bg-gray-800/50">
                     <div class="flex justify-end space-x-3">
-                        <button 
+                        <button
                             @click="closeModal"
                             class="px-6 py-3 text-gray-300 hover:text-white bg-gray-700/50 hover:bg-gray-600/50 border border-gray-600/50 hover:border-gray-500/50 rounded-lg font-medium transition-all duration-300 transform hover:scale-105"
                         >
                             Otkaži
                         </button>
-                        <button 
+                        <button
                             @click="createFixtures"
                             class="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-purple-500/30 hover:border-purple-400/50 flex items-center space-x-2"
                         >
