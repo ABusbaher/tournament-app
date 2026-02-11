@@ -69,7 +69,10 @@ h2 {
     margin-left: -3px;
     flex: 1;
     padding-bottom: 1em;
-    @media (min-width: 38em) {
+}
+
+@media (min-width: 38em) {
+    .tournament-bracket__round {
         padding-bottom: 30px;
     }
 }

@@ -254,7 +254,7 @@ onMounted(async() => {
     border: 2px solid rgba(239, 68, 68, 0.3);
     border-radius: 16px;
     padding: 1rem 2rem;
-    //backdrop-filter: blur(10px);
+    /* backdrop-filter: blur(10px); */
     transition: all 0.3s ease;
 }
 
