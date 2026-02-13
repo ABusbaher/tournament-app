@@ -152,3 +152,33 @@ jobs:
         path: |
           storage/logs/
           tests/
+
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    if: github.ref == 'refs/heads/feature/serbian-app'
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            echo "Navigating to project folder..."
+            cd ${{ secrets.APP_PATH }}
+
+            echo "Pulling latest code..."
+            git pull origin feature/serbian-app
+
+            echo "Clearing Laravel cache inside container..."
+            docker exec laravel_app php artisan optimize:clear
+
+            echo "Building frontend..."
+#            docker exec laravel_app npm install --silent
+            docker exec laravel_app npm run build
+
+            echo "Deployment finished successfully!"
