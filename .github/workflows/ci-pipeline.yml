@@ -178,7 +178,6 @@ jobs:
             docker exec laravel_app php artisan optimize:clear
 
             echo "Building frontend..."
-#            docker exec laravel_app npm install --silent
             docker exec laravel_app npm run build
 
             echo "Deployment finished successfully!"
